@@ -1,0 +1,5 @@
+.vscode/.ropeproject/objectdb
+.venv
+
+*.sqlite3
+**/__pycache__/**
