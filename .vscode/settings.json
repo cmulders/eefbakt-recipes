@@ -1,0 +1,16 @@
+{
+  "python.pythonPath": ".venv/bin/python",
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+  "python.linting.pylintArgs": [
+    "--errors-only",
+    "--load-plugins",
+    "pylint_django"
+  ],
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "python.sortImports.args": ["-rc", "-sp isort.cfg"]
+}
