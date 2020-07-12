@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<a class="btn btn-primary" href="{% url 'data:data-index' %}">Terug</a>
+
+<div class="list-group">
+  {% for object in object_list %}
+  <div class="list-group-item" href="{{ object.get_absolute_url }}">
+    <div class="">{{ object }}</div>
+    <a class="btn btn-primary" href="{% url 'data:product-update' object.pk %}">{% trans "Edit" %}</a>
+    <a class="btn btn-primary" href="{% url 'data:product-delete' object.pk %}">{% trans "Delete" %}</a>
+  </div>
+  {% endfor %}
+  <a class="list-group-item" href="{% url 'data:recipe-create' %}">
+    + Nieuw recept
+  </a>
+</div>
+{% endblock %}

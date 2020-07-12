@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<a class="btn btn-primary" href="{% url 'data:data-index' %}">{% trans "Back" %}</a>
+
+<div class="list-group">
+  {% for object in object_list %}
+  <a class="list-group-item" href="{{ object.get_absolute_url }}">
+    {{ object }}
+  </a>
+  {% endfor %}
+  <a class="list-group-item" href="{% url 'data:recipe-create' %}">
+    {% trans "+ Add recipe" %}
+  </a>
+</div>
+{% endblock %}

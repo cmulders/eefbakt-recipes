@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block content %}
+<h1>{{ object.name|default:"New recipe" }}</h1>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form|crispy }}
+
+
+  {% crispy products_formset formset_helper %}
+  {% crispy recipes_formset formset_helper %}
+
+  <input class="btn btn-primary" type="submit" value="Update">
+  <a class="btn btn-primary" href="{{ object.get_absolute_url }}">Cancel</a>
+</form>
+
+{% endblock %}

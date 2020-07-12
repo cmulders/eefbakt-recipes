@@ -1,0 +1,18 @@
+<ul>
+    {% for ingredient in ingredient_tree.ingredients %}
+    <li>{{ ingredient.amount|floatformat:"-2" }} {{ ingredient.unit }} {{ ingredient.product.name }}</li>
+    {% endfor %}
+
+    {% for ingredient in ingredient_tree.base_recipes %}
+    <li>
+        {% if not ingredient.valid %}<del>{% endif %}
+            <i><a href="{{ ingredient.recipe.get_absolute_url }}">{{ ingredient.recipe.name }}</a>
+                {% if ingredient.amount != 1 %}
+                ({{ ingredient.amount|floatformat:"-2" }}x)
+                {% endif %}
+            </i>
+            {% if not ingredient.valid %}</del>{% endif %}
+        {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=ingredient %}
+    </li>
+    {% endfor %}
+</ul>

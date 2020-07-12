@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+
+<a class="btn btn-primary" href="{% url 'data:recipe-list' %}">{% trans "Terug" %}</a>
+
+<h1>{{ object.name }}</h1>
+<a class="btn btn-primary" href="{% url 'data:recipe-update' object.pk %}">{% trans "Edit" %}</a>
+<a class="btn btn-primary" href="{% url 'data:recipe-delete' object.pk %}">{% trans "Delete" %}</a>
+<h2>{% trans "Ingredients" %}</h2>
+{% include './snippets/recipe_ingredients.html' with ingredient_tree=transformed_object %}
+
+{% if object.description %}
+<hr>
+<p>
+  {{ object.description }}
+</p>
+{% endif %}
+{% endblock %}
