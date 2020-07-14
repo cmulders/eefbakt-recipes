@@ -14,7 +14,7 @@ class RecipeIngredientForm(forms.ModelForm):
         while to_visit:
             current = to_visit.pop()
             if current == base_recipe:
-                raise forms.ValidationError(_("Recipe cycle detected"))
+                raise forms.ValidationError(_("Recursive recipe detected"))
 
             to_visit.extendleft(
                 r.base_recipe for r in current.recipeingredient_set.all()
