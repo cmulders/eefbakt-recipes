@@ -22,4 +22,5 @@ urlpatterns = [
     path("home/", generic.TemplateView.as_view(template_name="home.html"), name="home"),
     path("admin/", admin.site.urls),
     path("data/", include("data.urls")),
+    path("baking/", include("baking.urls")),
 ]

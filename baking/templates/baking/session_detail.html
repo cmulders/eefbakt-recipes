@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li> #}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+<li class="breadcrumb-item active" title="{{ object.title }}">{{ object.title|truncatewords:4 }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center">
+    <h1>{{ object.title }}</h1>
+    <div class="btn-group ml-5">
+        <a class="btn btn-outline-secondary btn-sm"
+            href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
+        <a class="btn btn-outline-danger btn-sm"
+            href="{% url 'baking:session-delete' object.pk %}">{% trans "Delete" %}</a>
+    </div>
+</div>
+<small class="text-muted">{{ object.session_date|date }}</small>
+<p>
+    {{ object.description|linebreaks }}
+</p>
+<div class="row">
+    <div class="col-4">
+        <h3>{% trans 'Ingredients' %}</h3>
+        {% for object in recipe_view_objects %}
+        <b>{{ object.recipe.name }}</b>
+        {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=object %}
+        {% endfor %}
+    </div>
+    <div class="col">
+        {% for object in recipe_view_objects %}
+        {% for recipe in object.flatten_recipes %}
+        <div class="my-3">
+            <div><b>{{ recipe.name }}</b></div>
+            <div>{{ recipe.description|default:"..." }}</div>
+        </div>
+        {% endfor %}
+        {% if not forloop.last %}
+        <hr>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+<hr>
+{% comment %}
+{% include 'baking/snippets/session_recipe_row.html' with object=object level=2 only %}
+{% empty %}
+{% trans 'No recipes' context 'Empty recipe list' %}
+{% endfor %}
+{% endcomment %}
+
+{% endblock %}

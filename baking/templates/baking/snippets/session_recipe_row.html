@@ -1,0 +1,16 @@
+{% load i18n %}
+<h{{ level }} class="recipe-heading">
+    {{ object.recipe.name }}
+</h{{ level }}>
+<div class="row">
+    <div class="col">
+        {{ object.recipe.description }}
+    </div>
+    <div class="col-4">
+        <h3>{% trans 'Ingredients' %}</h3>
+        {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=object recursive=False %}
+    </div>
+</div>
+{% for subobject in object.base_recipes %}
+{% include 'baking/snippets/session_recipe_row.html' with object=subobject level=level|add:1 only %}
+{% endfor %}
