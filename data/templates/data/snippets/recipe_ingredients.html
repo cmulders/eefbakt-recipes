@@ -12,7 +12,9 @@
                 {% endif %}
             </i>
             {% if not ingredient.valid %}</del>{% endif %}
+        {% if recursive != False %}
         {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=ingredient %}
+        {% endif %}
     </li>
     {% endfor %}
 </ul>

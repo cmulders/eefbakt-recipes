@@ -53,7 +53,6 @@ class ProductUpdateView(generic.UpdateView):
 class ProductDeleteView(generic.DeleteView):
     model = Product
     success_url = reverse_lazy("data:product-list")
-    template_name = "data/object_confirm_delete.html"
 
     def get_context_data(self, **kwargs):
         collector = Collector(using="default")
@@ -179,7 +178,6 @@ class RecipeUpdateView(RecipeFormsetFormView):
 class RecipeDeleteView(generic.DeleteView):
     model = Recipe
     success_url = reverse_lazy("data:recipe-list")
-    template_name = "data/object_confirm_delete.html"
 
     def get_context_data(self, **kwargs):
         collector = Collector(using="default")

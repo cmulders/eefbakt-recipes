@@ -2,17 +2,30 @@
 
 {% load i18n %}
 
-{% block content %}
-<a class="btn btn-primary" href="{% url 'data:data-index' %}">{% trans "Back" %}</a>
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li>
+<li class="breadcrumb-item active">{% trans 'Recipes' %}</li>
+{% endblock %}
 
-<div class="list-group">
-  {% for object in object_list %}
-  <a class="list-group-item" href="{{ object.get_absolute_url }}">
-    {{ object }}
-  </a>
-  {% endfor %}
+
+{% block content %}
+<div class="list-group col-md-6 offset-md-3">
   <a class="list-group-item" href="{% url 'data:recipe-create' %}">
     {% trans "+ Add recipe" %}
   </a>
+  {% for object in object_list %}
+  <div class="list-group-item">
+    <div class="d-flex">
+      <a class="flex-grow-1" href=" {{ object.get_absolute_url }}">{{ object.name }}</a>
+      <div class="btn-group">
+        <a class="btn btn-outline-secondary btn-sm"
+          href="{% url 'data:recipe-update' object.pk %}">{% trans "Edit" %}</a>
+        <a class="btn btn-outline-danger btn-sm"
+          href="{% url 'data:recipe-delete' object.pk %}">{% trans "Delete" %}</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}

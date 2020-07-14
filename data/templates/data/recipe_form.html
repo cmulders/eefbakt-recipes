@@ -3,6 +3,19 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:recipe-list' %}">{% trans 'Recipes' %}</a></li>
+{% if not object %}
+<li class="breadcrumb-item active">{% trans "New recipe" %}</li>
+{% else %}
+<li class="breadcrumb-item"><a href="{% url 'data:recipe-detail' object.pk %}">{{ object.name }}</a></li>
+</li>
+<li class="breadcrumb-item active">Edit recipe</li>
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <h1>{{ object.name|default:"New recipe" }}</h1>
 
