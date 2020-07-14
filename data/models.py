@@ -10,10 +10,16 @@ __all__ = ["Product", "Recipe", "ProductIngredient", "RecipeIngredient"]
 class Product(models.Model):
     name = models.CharField(max_length=150)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     def get_absolute_url(self):
         return reverse("data:product-detail", args=[self.pk])
 
     def __str__(self):
+        return self.name
+
+    def __repr__(self):
         return _("Product: %(name)s") % {"name": self.name}
 
 
@@ -42,7 +48,7 @@ class RecipeIngredient(models.Model):
 class Recipe(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -55,6 +61,9 @@ class Recipe(models.Model):
     recipeingredient_set: List[RecipeIngredient]
 
     def __str__(self):
+        return self.name
+
+    def __repr__(self):
         return _("Recipe: %(name)s") % {"name": self.name}
 
     def get_absolute_url(self):
