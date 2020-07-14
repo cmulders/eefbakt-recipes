@@ -7,7 +7,7 @@ app_name = "data"
 
 # fmt: off
 urlpatterns = [
-    path("", TemplateView.as_view(template_name='data/index.html'), name="data-index"),
+    path("", views.IndexView.as_view(), name="index"),
     path("recipes/", views.RecipeListView.as_view(), name="recipe-list"),
     path("recipes/new/", views.RecipeCreateView.as_view(), name="recipe-create"),
     path("recipes/<int:pk>/edit/", views.RecipeUpdateView.as_view(), name="recipe-update"),

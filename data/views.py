@@ -12,6 +12,26 @@ from .transformers import RecipeTreeTransformer
 # Create your views here.
 
 
+class IndexView(generic.TemplateView):
+    template_name = "data/index.html"
+
+    def get_last_products(self):
+        return Product.objects.order_by("-updated_at").all()[:5]
+
+    def get_last_recipes(self):
+        return Recipe.objects.order_by("-updated_at").all()[:5]
+
+    def get_context_data(self, **kwargs):
+        kwargs.update(
+            {
+                "last_products": self.get_last_products(),
+                "last_recipes": self.get_last_recipes(),
+            }
+        )
+
+        return super().get_context_data(**kwargs)
+
+
 class ProductListView(generic.ListView):
     model = Product
 
