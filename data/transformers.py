@@ -21,6 +21,14 @@ class Recipe:
     ingredients: List[Ingredient] = field(default_factory=list)
     base_recipes: List["Recipe"] = field(default_factory=list)
 
+    def flatten_recipes(self, yield_self=True) -> Iterable["Recipe"]:
+        if yield_self:
+            yield self.recipe
+
+        for r in self.base_recipes:
+            yield r.recipe
+            yield from r.flatten_recipes(yield_self=False)
+
 
 class RecipeTreeTransformer:
     def _transform_product(
