@@ -12,6 +12,30 @@ class Ingredient:
     unit: str
     product: Product
 
+    def __hash__(self):
+        return hash((self.product, self.unit))
+
+    def __eq__(self, other):
+        if not isinstance(other, Ingredient):
+            return False
+
+        return self.unit == other.unit and self.product == other.product
+
+    def __lt__(self, other):
+        assert isinstance(other, Ingredient)
+        return (self.product.name, self.amount,) < (other.product.name, other.amount,)
+
+    def __add__(self, other):
+        if other is None:
+            return self
+
+        assert self == other
+        return Ingredient(
+            amount=self.amount + other.amount, unit=self.unit, product=self.product
+        )
+
+    __radd__ = __add__
+
 
 @dataclass
 class Recipe:
@@ -21,13 +45,15 @@ class Recipe:
     ingredients: List[Ingredient] = field(default_factory=list)
     base_recipes: List["Recipe"] = field(default_factory=list)
 
-    def flatten_recipes(self, yield_self=True) -> Iterable["Recipe"]:
-        if yield_self:
-            yield self.recipe
+    def __iter__(self) -> Iterable["Recipe"]:
+        yield self
 
         for r in self.base_recipes:
-            yield r.recipe
-            yield from r.flatten_recipes(yield_self=False)
+            yield from iter(r)
+
+    def iter_ingredients(self) -> Iterable["Ingredient"]:
+        for recipe in iter(self):
+            yield from recipe.ingredients
 
 
 class RecipeTreeTransformer:
