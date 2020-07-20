@@ -11,8 +11,7 @@
 {% else %}
 <li class="breadcrumb-item"><a href="{% url 'baking:session-detail' object.pk %}"
     title="{{ object.title }}">{{ object.title|truncatewords:4 }}</a></li>
-</li>
-<li class="breadcrumb-item active">Edit session</li>
+<li class="breadcrumb-item active">{% trans 'Edit' %} session</li>
 {% endif %}
 {% endblock %}
 
@@ -22,7 +21,9 @@
 <form method="post" novalidate>
   {% csrf_token %}
   {{ form|crispy }}
-  <input class="btn btn-primary" type="submit" value="Update">
+
+  {% crispy recipes_formset formset_helper %}
+  <input class="btn btn-primary" type="submit" value="{% if object %}Update{% else %}Create{% endif %}">
   <a class="btn btn-primary" href="{{ object.get_absolute_url }}">Cancel</a>
 </form>
 

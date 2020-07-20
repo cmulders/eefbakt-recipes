@@ -2,6 +2,15 @@
 
 {% load i18n %}
 
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'baking:session-detail' object.pk %}"
+    title="{{ object.title }}">{{ object.title|truncatewords:4 }}</a></li>
+</li>
+<li class="breadcrumb-item active">{% trans 'Delete' %}</li>
+{% endblock %}
+
 {% block content %}
 <h1>Delete - {{ object.name }}</h1>
 <form method="post">{% csrf_token %}

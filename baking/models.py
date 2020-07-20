@@ -28,7 +28,7 @@ class SessionRecipe(models.Model):
 
 class Session(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     session_date = models.DateField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -41,7 +41,7 @@ class Session(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     def __repr__(self):
         return _("Session: %(title)s") % {"title": self.title}
 
