@@ -1,0 +1,31 @@
+{% for ingredient in ingredient_tree.ingredients %}
+{% if forloop.first %}
+<table class="ingredient-table">
+    {% endif %}
+    <tr>
+        <td>{{ ingredient.amount|floatformat:"-2" }}</td>
+        <td>{{ ingredient.unit }}</td>
+        <td>{{ ingredient.product.name }}</td>
+        {# <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td> #}
+    </tr>
+    {% if forloop.last %}
+</table>
+{% endif %}
+{% endfor %}
+
+{% for ingredient in ingredient_tree.base_recipes %}
+<div class="ml-3">
+    <div class="d-flex">
+        <a class="mr-1" href="{{ ingredient.recipe.get_absolute_url }}">#</a>
+        <b class="d-flex-grow">
+            {{ ingredient.recipe.name }}
+            {% if ingredient.amount != 1 %}
+            ({{ ingredient.amount|floatformat:"-2" }}x)
+            {% endif %}
+        </b>
+    </div>
+    {% if recursive != False %}
+    {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=ingredient %}
+    {% endif %}
+</div>
+{% endfor %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li> #}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+<li class="breadcrumb-item active" title="{{ object.title }}">{{ object.title|truncatewords:4 }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <div class="d-flex flex-wrap align-items-center">
+        <h1>{{ object.title }}</h1>
+        <div class="btn-group ml-5 d-print-none">
+            <a href="{%url 'baking:session-ingredients' object.pk%}"
+                class="btn btn-sm btn-outline-success">{% trans 'Grocery list' %}</a>
+            <a class="btn btn-outline-secondary btn-sm"
+                href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
+            <a class="btn btn-outline-danger btn-sm"
+                href="{% url 'baking:session-delete' object.pk %}">{% trans "Delete" %}</a>
+        </div>
+    </div>
+    <small class="text-muted">{{ object.session_date|date }}</small>
+</div>
+<div class="mb-4">
+    {{ object.description|linebreaks }}
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-sm-12">
+        <div class="border rounded-lg p-2 bg-light">
+            <h3>{% trans 'Ingredients' %}</h3>
+            {% for object in recipe_view_objects %}
+            <b>{{ object.recipe.name }}</b>
+            <div class="mb-3">
+                {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=object show_title=True %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col">
+        {% for object in recipe_view_objects %}
+        {% for recipe in object %}
+        <div class="my-3">
+            <div><b>{{ recipe.recipe.name }}</b></div>
+            <div>{{ recipe.recipe.description|default:"..."|linebreaks }}</div>
+        </div>
+        {% endfor %}
+        {% if not forloop.last %}
+        <hr>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

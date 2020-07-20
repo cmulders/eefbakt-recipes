@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+{# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li> #}
+<li class="breadcrumb-item active">{% trans 'Sessions' %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="list-group">
+    <a class="list-group-item" href="{% url 'baking:session-create' %}">
+        {% trans "+ Add session" %}
+    </a>
+    {% for object in object_list %}
+    <a href="{{ object.get_absolute_url }}"
+        class="list-group-item list-group-item-action flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ object.title }}</h5>
+            <small>{{ object.created_at|date }}</small>
+        </div>
+        <div class="mb-1">{{ object.description|linebreaks|truncatewords_html:300 }}
+        </div>
+        {% comment %}
+        <small>Donec id elit non mi porta.</small>
+        {% endcomment %}
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

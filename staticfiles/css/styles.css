@@ -1,0 +1,22 @@
+.ingredient-table {
+  width: 100%;
+}
+
+.ingredient-table td:nth-child(1) {
+  text-align: right;
+  width: 3em;
+  padding: 0 0.1rem;
+}
+.ingredient-table td:nth-child(2) {
+  font-size: smaller;
+  width: 1rem;
+  padding: 0 0.1rem;
+}
+
+.ingredient-table td {
+  padding: 0 0.5rem;
+}
+
+.inline-formset.select2 table {
+  table-layout: fixed;
+}

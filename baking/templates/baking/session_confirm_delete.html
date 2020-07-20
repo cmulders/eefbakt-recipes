@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'baking:session-detail' object.pk %}"
+    title="{{ object.title }}">{{ object.title|truncatewords:4 }}</a></li>
+</li>
+<li class="breadcrumb-item active">{% trans 'Delete' %}</li>
+{% endblock %}
+
+{% block content %}
+<h1>Delete - {{ object.name }}</h1>
+<form method="post">{% csrf_token %}
+  <p>Are you sure you want to delete "{{ object }}"?</p>
+
+  {% if protected_by %}
+  Cannot delete, used in:
+  <ul>
+    {% for obj in protected_by %}
+    <li><a href="{{ obj.recipe.get_absolute_url }}">{{ obj.recipe }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <input class="btn btn-primary" type="submit" value="Confirm">
+  {% endif %}
+  <a class="btn btn-primary" href="{{ object.get_absolute_url }}">Cancel</a>
+</form>
+
+{% endblock %}

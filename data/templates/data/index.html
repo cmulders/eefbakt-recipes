@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="col-md-8 offset-md-2">
+    <div class="card-deck ">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <a href="{% url 'data:product-list'%}">Products</a>
+                </h3>
+                <ul class="list-group list-group-flush">
+                    {% for product in last_products %}
+                    <a class="list-group-item" href="{{ product.get_absolute_url }}">
+                        {{ product }}
+                    </a>
+                    {% empty %}
+                    <a class="list-group-item" href="{% url 'data:product-create' %}">
+                        + {% trans 'New product' %}
+                    </a>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">
+                    <a href="{% url 'data:recipe-list'%}">Recipes</a>
+                </h3>
+                <ul class="list-group list-group-flush">
+                    {% for recipe in last_recipes %}
+                    <a class="list-group-item" href="{{ recipe.get_absolute_url }}">
+                        {{ recipe }}
+                    </a>
+                    {% empty %}
+                    <a class="list-group-item" href="{% url 'data:product-create' %}">
+                        + {% trans 'New recipe' %}
+                    </a>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:recipe-list' %}">{% trans 'Recipes' %}</a></li>
+<li class="breadcrumb-item active">{{ object.name }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center">
+  <h1>{{ object.name }}</h1>
+  <div class="btn-group ml-5 d-print-none">
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'data:recipe-update' object.pk %}">{% trans "Edit" %}</a>
+    <a class="btn btn-outline-danger btn-sm" href="{% url 'data:recipe-delete' object.pk %}">{% trans "Delete" %}</a>
+  </div>
+</div>
+
+<b>{% trans "Ingredients" %}</b>
+{% include './snippets/recipe_ingredients.html' with ingredient_tree=transformed_object %}
+
+{% if object.description %}
+<hr>
+<p>
+  {{ object.description|linebreaks }}
+</p>
+{% endif %}
+{% endblock %}

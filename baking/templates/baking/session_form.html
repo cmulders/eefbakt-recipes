@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+{% if not object %}
+<li class="breadcrumb-item active">{% trans "New session" %}</li>
+{% else %}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-detail' object.pk %}"
+    title="{{ object.title }}">{{ object.title|truncatewords:4 }}</a></li>
+<li class="breadcrumb-item active">{% trans 'Edit' %} session</li>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ object.title|default:"New session" }}</h1>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form|crispy }}
+
+  <div class="inline-formset select2">
+    {% crispy recipes_formset formset_helper %}
+  </div>
+  <input class="btn btn-primary" type="submit" value="{% if object %}Update{% else %}Create{% endif %}">
+  <a class="btn btn-primary" href="{{ object.get_absolute_url }}">Cancel</a>
+</form>
+
+{% endblock %}

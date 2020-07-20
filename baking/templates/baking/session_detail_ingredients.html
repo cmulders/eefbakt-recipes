@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'baking:session-detail' object.pk %}"
+        title="{{ object.title }}">{{ object.title|truncatewords:4 }}</a></li>
+<li class="breadcrumb-item active">{% trans 'Ingredients' %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center">
+    <h1></h1>
+</div>
+<small class="text-muted"></small>
+<div class="col-lg-6 offset-lg-3">
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ object.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ object.session_date|date }}</h6>
+        </div>
+        <div class="px-4">
+            <table class="ingredient-table">
+                {% for ingredient in ingredients %}
+                <tr>
+                    <td class="text-right pr-1">{{ ingredient.amount|floatformat:"-2" }}</td>
+                    <td class="pr-2 pl-1">{{ ingredient.unit }}</td>
+                    <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

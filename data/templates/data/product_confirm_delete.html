@@ -1,0 +1,12 @@
+{% extends './object_confirm_delete.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:product-list' %}">{% trans 'Products' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:product-detail' object.pk %}">{{ object.name }}</a></li>
+</li>
+<li class="breadcrumb-item active">{% trans 'Delete' %}</li>
+{% endblock %}

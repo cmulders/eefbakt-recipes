@@ -1,0 +1,44 @@
+{% extends 'skeleton.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block head %}
+{{ block.super }}
+<link rel="icon" href="{% static 'images/icon.svg' %}">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
+{% block title %}
+Recepten{% if page_title %} - {{ page_title }}{% endif %}
+{% endblock %}
+
+{% block body %}
+
+{% include 'navigation.html' %}
+
+<div class="container py-2">
+  {% block breadcrumb_container %}
+  <nav aria-label="breadcrumb" class="navbar">
+    <ol class="breadcrumb bg-light">
+      {% block breadcrumbs %}
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
+      {% endblock %}
+    </ol>
+  </nav>
+  {% endblock %}
+
+  {% block content %}{% endblock %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{% if debug %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.js" integrity="sha256-dZQGyR/WIscd3lFxVjbKCIeJqRuBitt9yoQ7R7ZwKbc=" crossorigin="anonymous"></script>
+{% else %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js" integrity="sha256-nAS1wDQBPBqa1fnZq8wd1Z6CN+PgmHXLFdMo0g2pYf0=" crossorigin="anonymous"></script>
+{% endif %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
