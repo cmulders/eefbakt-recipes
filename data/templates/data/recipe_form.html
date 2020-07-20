@@ -24,10 +24,14 @@
   {{ form|crispy }}
 
 
-  {% crispy products_formset formset_helper %}
-  {% crispy recipes_formset formset_helper %}
+  <div class="inline-formset select2">
+    {% crispy products_formset formset_helper %}
+  </div>
+  <div class="inline-formset select2">
+    {% crispy recipes_formset formset_helper %}
+  </div>
 
-  <input class="btn btn-primary" type="submit" value="Update">
+  <input class="btn btn-primary" type="submit" value="{% if object %}Update{% else %}Create{% endif %}">
   <a class="btn btn-primary" href="{{ object.get_absolute_url }}">Cancel</a>
 </form>
 
