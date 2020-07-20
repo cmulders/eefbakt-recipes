@@ -84,6 +84,6 @@ class RecipeTreeTransformer:
             ],
         )
 
-    def transform(self, recipe: RecipeModel):
+    def transform(self, recipe: RecipeModel, scale: int = 1):
         self.visited = set()
-        return self._transform_recipe(recipe)
+        return self._transform_recipe(recipe, scale)

@@ -24,7 +24,7 @@ class SessionDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         transformer = RecipeTreeTransformer()
         kwargs["recipe_view_objects"] = [
-            transformer.transform(r) for r in self.object.recipes.all()
+            transformer.transform(r.recipe, r.amount) for r in self.object.sessionrecipe_set.select_related('recipe').all()
         ]
         return super().get_context_data(**kwargs)
 

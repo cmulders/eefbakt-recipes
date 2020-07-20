@@ -24,6 +24,10 @@ class SessionRecipe(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.PROTECT)
 
     amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
+    sort_key = models.IntegerField(default=1)
+
+    class Meta:
+        ordering = ["sort_key"]
 
 
 class Session(models.Model):
@@ -47,3 +51,6 @@ class Session(models.Model):
 
     def get_absolute_url(self):
         return reverse("baking:session-detail", args=[self.pk])
+
+    class Meta:
+        ordering = ["-session_date", "-updated_at"]
