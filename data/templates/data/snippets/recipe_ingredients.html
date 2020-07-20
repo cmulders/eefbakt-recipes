@@ -14,18 +14,18 @@
 {% endfor %}
 
 {% for ingredient in ingredient_tree.base_recipes %}
-<div class="ml-2 d-flex">
-    <a class="mr-1" href="{{ ingredient.recipe.get_absolute_url }}">#</a>
-    <i class="d-flex-grow">
-        {{ ingredient.recipe.name }}
-        {% if ingredient.amount != 1 %}
-        ({{ ingredient.amount|floatformat:"-2" }}x)
-        {% endif %}
-    </i>
-</div>
-{% if recursive != False %}
-<div class="ml-2 mb-3">
+<div class="ml-3">
+    <div class="d-flex">
+        <a class="mr-1" href="{{ ingredient.recipe.get_absolute_url }}">#</a>
+        <b class="d-flex-grow">
+            {{ ingredient.recipe.name }}
+            {% if ingredient.amount != 1 %}
+            ({{ ingredient.amount|floatformat:"-2" }}x)
+            {% endif %}
+        </b>
+    </div>
+    {% if recursive != False %}
     {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=ingredient %}
+    {% endif %}
 </div>
-{% endif %}
 {% endfor %}

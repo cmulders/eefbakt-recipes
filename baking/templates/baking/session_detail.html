@@ -11,9 +11,9 @@
 
 {% block content %}
 <div class="mb-3">
-    <div class="d-flex align-items-center">
+    <div class="d-flex flex-wrap align-items-center">
         <h1>{{ object.title }}</h1>
-        <div class="btn-group ml-5">
+        <div class="btn-group ml-5 d-print-none">
             <a href="{%url 'baking:session-ingredients' object.pk%}"
                 class="btn btn-sm btn-outline-success">{% trans 'Grocery list' %}</a>
             <a class="btn btn-outline-secondary btn-sm"
@@ -24,26 +24,28 @@
     </div>
     <small class="text-muted">{{ object.session_date|date }}</small>
 </div>
-
-<p>
+<div class="mb-4">
     {{ object.description|linebreaks }}
-</p>
+</div>
+
 <div class="row">
     <div class="col-md-4 col-sm-12">
-        <h3>{% trans 'Ingredients' %}</h3>
-        {% for object in recipe_view_objects %}
-        <b>{{ object.recipe.name }}</b>
-        <div class="ml-3">
-            {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=object show_title=True %}
+        <div class="border rounded-lg p-2 bg-light">
+            <h3>{% trans 'Ingredients' %}</h3>
+            {% for object in recipe_view_objects %}
+            <b>{{ object.recipe.name }}</b>
+            <div class="mb-3">
+                {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=object show_title=True %}
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     <div class="col">
         {% for object in recipe_view_objects %}
         {% for recipe in object %}
         <div class="my-3">
-            <div><b>{{ recipe.name }}</b></div>
-            <div>{{ recipe.description|default:"..." }}</div>
+            <div><b>{{ recipe.recipe.name }}</b></div>
+            <div>{{ recipe.recipe.description|default:"..."|linebreaks }}</div>
         </div>
         {% endfor %}
         {% if not forloop.last %}
@@ -52,13 +54,4 @@
         {% endfor %}
     </div>
 </div>
-
-<hr>
-{% comment %}
-{% include 'baking/snippets/session_recipe_row.html' with object=object level=2 only %}
-{% empty %}
-{% trans 'No recipes' context 'Empty recipe list' %}
-{% endfor %}
-{% endcomment %}
-
 {% endblock %}

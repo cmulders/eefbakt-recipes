@@ -28,7 +28,10 @@ DEBUG = os.getenv("DEBUG", True)
 
 INTERNAL_IPS = ["127.0.0.1"]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "192.168.178.13",
+    "eefbakt-recipes.azurewebsites.net",
+]
 
 
 # Application definition
