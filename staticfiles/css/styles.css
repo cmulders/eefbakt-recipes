@@ -20,3 +20,60 @@
 .inline-formset.select2 table {
   table-layout: fixed;
 }
+
+#recipe-inline-formset_table [for="id_recipes-0-ORDER"] {
+  width: 5rem;
+}
+
+#recipe-inline-formset_table [for="id_recipes-0-amount"] {
+  width: 10rem;
+}
+
+#recipe-inline-formset_table [for="id_recipes-0-DELETE"] {
+  width: 5rem;
+}
+
+.inline-formset .sortable tbody td[id$="-ORDER"] {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  cursor: move;
+  cursor: -webkit-grabbing;
+}
+
+.inline-formset .sortable tbody td[id$="-ORDER"] input {
+  display: none;
+}
+
+.inline-formset .sortable tbody td[id$="-ORDER"] div {
+  padding: 0.25rem 0.75rem;
+  height: calc(1.5em + 0.75rem + 2px);
+  background-image: url("data:image/svg+xml,%3Csvg width='1em' height='1em' viewBox='0 0 16 16' class='bi bi-chevron-bar-expand' fill='currentColor' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' d='M3.646 10.146a.5.5 0 0 1 .708 0L8 13.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708zm0-4.292a.5.5 0 0 0 .708 0L8 2.207l3.646 3.647a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 0 0 0 .708zM1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 1.5rem;
+  background-position: 50% 50%;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background-color: #fff;
+}
+
+tr.sortable-ghost {
+  background-color: gray !important;
+}
+
+/* Make Select2 boxes match Bootstrap3 heights: */
+.select2-selection__arrow {
+  top: 0.3rem !important;
+}
+
+.select2-selection__rendered {
+  line-height: 1.5;
+  padding: 0.25rem 0.75rem;
+}
+
+.select2-selection {
+  height: calc(1.5em + 0.75rem + 2px) !important;
+  border-color: #ced4da !important;
+}

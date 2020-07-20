@@ -16,9 +16,22 @@ class SessionRecipeForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         self.instance.sort_key = self.cleaned_data.get("ORDER", 1) or 1
 
-        super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
+
+
+class SessionRecipeFormSet(forms.BaseInlineFormSet):
+    def _construct_form(self, i, **kwargs):
+        form = super()._construct_form(i, **kwargs)
+
+        # Make the Ordering field the first, 
+        form.order_fields(["ORDER"])
+        return form
 
 
 SessionRecipeInlineFormset = forms.inlineformset_factory(
-    Session, SessionRecipe, form=SessionRecipeForm, can_order=True,
+    Session,
+    SessionRecipe,
+    formset=SessionRecipeFormSet,
+    form=SessionRecipeForm,
+    can_order=True,
 )

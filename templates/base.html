@@ -37,8 +37,10 @@ Recepten{% if page_title %} - {{ page_title }}{% endif %}
 {% block scripts %}
 {% if debug %}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.js" integrity="sha256-dZQGyR/WIscd3lFxVjbKCIeJqRuBitt9yoQ7R7ZwKbc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.js" integrity="sha256-JD6G73byZ/9SX4l9TIcaOPIwmX0oapf5ledVBG6rkS0=" crossorigin="anonymous"></script>
 {% else %}
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js" integrity="sha256-nAS1wDQBPBqa1fnZq8wd1Z6CN+PgmHXLFdMo0g2pYf0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js" integrity="sha256-8Ww0c1qKDMdHT2+3s3369kzSXcgIrvqzSwzjdZ5qHDs=" crossorigin="anonymous"></script>
 {% endif %}
 <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}

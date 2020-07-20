@@ -20,7 +20,15 @@
 
 <form method="post" novalidate>
   {% csrf_token %}
-  {{ form|crispy }}
+  <div class="form-row">
+    <div class="col-8">
+      {{ form.title|as_crispy_field }}
+    </div>
+    <div class="col-4">
+      {{ form.session_date|as_crispy_field }}
+    </div>
+  </div>
+  {{ form.description|as_crispy_field }}
 
   <div class="inline-formset select2">
     {% crispy recipes_formset formset_helper %}
@@ -29,4 +37,41 @@
   <a class="btn btn-primary" href="{{ object.get_absolute_url }}">Cancel</a>
 </form>
 
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+  $(() => {
+    try {
+      let recipe_formset = document.getElementById('recipe-inline-formset_table');
+      let tbody = Array.from(recipe_formset.children).find((ele) => ele.tagName.toLowerCase() == 'tbody');
+
+      function onSorted(ev) {
+        // Update the order input with the current value
+        let tbody = ev.to
+        Array.from(tbody.children)
+          .map((ele, idx) => ele.querySelector('input[id$="-ORDER"]:not([id*="__prefix__"])'))
+          .filter(Boolean)
+          .forEach((ele, idx) => {
+            if (!!ele.value) {
+              // idx is zero based, increase by 1 to get one-based
+              ele.value = (idx + 1).toString()
+            }
+          })
+      }
+      Sortable.create(tbody, {
+        handle: 'td[id$="-ORDER"]',
+        animation: 100,
+        swapThreshold: .7,
+        onUpdate: onSorted
+      });
+      recipe_formset.classList.add('sortable');
+
+    } catch (error) {
+      console.error(error)
+      // We tried to initialize, but failed, no worries
+    }
+  })
+</script>
 {% endblock %}
