@@ -11,6 +11,7 @@ urlpatterns = [
     path("sessions/", views.SessionList.as_view(), name="session-list"),
     path("sessions/new/", views.SessionCreateView.as_view(), name="session-create"),
     path("sessions/<int:pk>/", views.SessionDetailView.as_view(), name="session-detail"),
+    path("sessions/<int:pk>/ingredients/", views.SessionIngredientsDetailView.as_view(), name="session-ingredients"),
     path("sessions/<int:pk>/edit/", views.SessionUpdateView.as_view(), name="session-update"),
     path("sessions/<int:pk>/delete/", views.SessionDeleteView.as_view(), name="session-delete"),
 ]

@@ -8,6 +8,8 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import edit
 
+from data.transformers import Ingredient, RecipeTreeTransformer
+
 from .forms import SessionRecipeInlineFormset
 from .models import Session
 
@@ -24,6 +26,31 @@ class SessionDetailView(generic.DetailView):
         kwargs["recipe_view_objects"] = [
             transformer.transform(r) for r in self.object.recipes.all()
         ]
+        return super().get_context_data(**kwargs)
+
+
+class SessionIngredientsDetailView(generic.DetailView):
+    model = Session
+    template_name = "baking/session_detail_ingredients.html"
+
+    def get_context_data(self, **kwargs):
+        transformer = RecipeTreeTransformer()
+        flattened_recipes = [
+            recipe
+            for recipe_tree in self.object.recipes.all()
+            for recipe in transformer.transform(recipe_tree)
+        ]
+        groups = itertools.groupby(
+            sorted(
+                ingredient
+                for recipe in flattened_recipes
+                for ingredient in recipe.ingredients
+            ),
+            key=lambda x: x.product,
+        )
+        from pprint import pprint
+
+        kwargs["ingredients"] = [functools.reduce(operator.add, g) for _, g in groups]
         return super().get_context_data(**kwargs)
 
 
