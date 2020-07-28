@@ -23,7 +23,11 @@ class Ingredient:
 
     def __lt__(self, other):
         assert isinstance(other, Ingredient)
-        return (self.product.name, self.amount,) < (other.product.name, other.amount,)
+        return (self.product.name, self.unit, self.amount,) < (
+            other.product.name,
+            other.unit,
+            other.amount,
+        )
 
     def __add__(self, other):
         if other is None:

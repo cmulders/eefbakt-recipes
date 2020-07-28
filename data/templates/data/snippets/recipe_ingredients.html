@@ -1,17 +1,4 @@
-{% for ingredient in ingredient_tree.ingredients %}
-{% if forloop.first %}
-<table class="ingredient-table">
-    {% endif %}
-    <tr>
-        <td>{{ ingredient.amount|floatformat:"-2" }}</td>
-        <td>{{ ingredient.unit }}</td>
-        <td>{{ ingredient.product.name }}</td>
-        {# <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td> #}
-    </tr>
-    {% if forloop.last %}
-</table>
-{% endif %}
-{% endfor %}
+{% include 'data/snippets/ingredients_table.html' with ingredients=ingredient_tree.ingredients %}
 
 {% for ingredient in ingredient_tree.base_recipes %}
 <div class="ml-3">

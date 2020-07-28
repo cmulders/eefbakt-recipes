@@ -21,15 +21,15 @@
   table-layout: fixed;
 }
 
-#recipe-inline-formset_table [for="id_recipes-0-ORDER"] {
+.inline-formset [for$="-ORDER"] {
   width: 5rem;
 }
 
-#recipe-inline-formset_table [for="id_recipes-0-amount"] {
+.inline-formset [for$="-amount"] {
   width: 10rem;
 }
 
-#recipe-inline-formset_table [for="id_recipes-0-DELETE"] {
+.inline-formset [for$="-DELETE"] {
   width: 5rem;
 }
 

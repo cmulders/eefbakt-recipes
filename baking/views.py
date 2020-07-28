@@ -3,6 +3,7 @@ import itertools
 import operator
 
 from crispy_forms.helper import FormHelper
+from django.db import transaction
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -10,7 +11,7 @@ from django.views.generic import edit
 
 from data.transformers import Ingredient, RecipeTreeTransformer
 
-from .forms import SessionRecipeInlineFormset
+from .forms import SessionProductInlineFormset, SessionRecipeInlineFormset
 from .models import Session
 
 
@@ -23,8 +24,15 @@ class SessionDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         transformer = RecipeTreeTransformer()
+        kwargs["ingredient_view_objects"] = [
+            Ingredient(
+                amount=product.amount, unit=product.unit, product=product.product,
+            )
+            for product in (self.object.ingredients.select_related("product").all())
+        ]
         kwargs["recipe_view_objects"] = [
-            transformer.transform(r.recipe, r.amount) for r in self.object.sessionrecipe_set.select_related('recipe').all()
+            transformer.transform(r.recipe, r.amount)
+            for r in self.object.session_recipes.select_related("recipe").all()
         ]
         return super().get_context_data(**kwargs)
 
@@ -35,20 +43,22 @@ class SessionIngredientsDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         transformer = RecipeTreeTransformer()
-        flattened_recipes = [
-            recipe
-            for recipe_tree in self.object.recipes.all()
-            for recipe in transformer.transform(recipe_tree)
+        ingredients = [
+            ingredient
+            for session_recipe in self.object.session_recipes.all()
+            for ingredient in transformer.transform(
+                session_recipe.recipe, session_recipe.amount
+            ).iter_ingredients()
         ]
-        groups = itertools.groupby(
-            sorted(
-                ingredient
-                for recipe in flattened_recipes
-                for ingredient in recipe.ingredients
-            ),
-            key=lambda x: x.product,
+        ingredients.extend(
+            Ingredient(
+                amount=product.amount, unit=product.unit, product=product.product,
+            )
+            for product in (self.object.ingredients.select_related("product").all())
         )
-        from pprint import pprint
+        groups = itertools.groupby(
+            sorted(ingredients), key=lambda x: (x.unit, x.product,)
+        )
 
         kwargs["ingredients"] = [functools.reduce(operator.add, g) for _, g in groups]
         return super().get_context_data(**kwargs)
@@ -78,6 +88,19 @@ class SessionFormsetFormView(
 
         return SessionRecipeInlineFormset(**kwargs)
 
+    def get_product_formset(self):
+        kwargs = {
+            "prefix": "products",
+            "instance": self.object,
+        }
+
+        if self.request.method in ("POST", "PUT"):
+            kwargs.update(
+                {"data": self.request.POST, "files": self.request.FILES,}
+            )
+
+        return SessionProductInlineFormset(**kwargs)
+
     def get_formset_helper(self):
         helper = FormHelper()
         helper.form_tag = False
@@ -91,21 +114,31 @@ class SessionFormsetFormView(
             {
                 "formset_helper": self.get_formset_helper(),
                 "recipes_formset": self.get_recipe_formset(),
+                "products_formset": self.get_product_formset(),
             }
         )
         return super().get_context_data(**kwargs)
 
-    def form_valid(self, form, recipes_formset):
+    @transaction.atomic
+    def form_valid(self, form, recipes_formset, products_formset):
         response = super().form_valid(form)
 
         recipes_formset.instance = self.object
         recipes_formset.save()
+
+        products_formset.instance = self.object
+        products_formset.save()
+
         return response
 
-    def form_invalid(self, form, recipes_formset):
+    def form_invalid(self, form, recipes_formset, products_formset):
         """If the form is invalid, render the invalid form and formsets."""
         return self.render_to_response(
-            self.get_context_data(form=form, recipes_formset=recipes_formset,)
+            self.get_context_data(
+                form=form,
+                recipes_formset=recipes_formset,
+                products_formset=products_formset,
+            )
         )
 
     def post(self, request, *args, **kwargs):
@@ -115,10 +148,15 @@ class SessionFormsetFormView(
         """
         form = self.get_form()
         recipes_formset = self.get_recipe_formset()
-        if form.is_valid() and recipes_formset.is_valid():
-            return self.form_valid(form, recipes_formset)
+        products_formset = self.get_product_formset()
+        if (
+            form.is_valid()
+            and recipes_formset.is_valid()
+            and products_formset.is_valid()
+        ):
+            return self.form_valid(form, recipes_formset, products_formset)
         else:
-            return self.form_invalid(form, recipes_formset)
+            return self.form_invalid(form, recipes_formset, products_formset)
 
 
 class SessionCreateView(SessionFormsetFormView):

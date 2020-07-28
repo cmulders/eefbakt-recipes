@@ -38,6 +38,10 @@
                 {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=object show_title=True %}
             </div>
             {% endfor %}
+            {% if ingredient_view_objects %}
+            <i><b>Extra</b></i>
+            {% include 'data/snippets/ingredients_table.html' with ingredients=ingredient_view_objects %}
+            {% endif %}
         </div>
     </div>
     <div class="col">

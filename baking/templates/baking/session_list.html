@@ -18,9 +18,9 @@
         class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ object.title }}</h5>
-            <small>{{ object.created_at|date }}</small>
+            <small>{{ object.session_date|date }}</small>
         </div>
-        <div class="mb-1">{{ object.description|linebreaks|truncatewords_html:300 }}
+        <div class="mb-1">{{ object.description|linebreaks|truncatewords_html:30 }}
         </div>
         {% comment %}
         <small>Donec id elit non mi porta.</small>

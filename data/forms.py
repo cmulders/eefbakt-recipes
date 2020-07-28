@@ -36,6 +36,7 @@ RecipeIngredientInlineFormset = forms.inlineformset_factory(
     form=RecipeIngredientForm,
     formset=IngredientInlineFormset,
     fk_name="recipe",
+    extra=1,
 )
 
 ProductIngredientInlineFormset = forms.inlineformset_factory(
@@ -44,4 +45,5 @@ ProductIngredientInlineFormset = forms.inlineformset_factory(
     formset=IngredientInlineFormset,
     fk_name="recipe",
     fields="__all__",
+    extra=1,
 )

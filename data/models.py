@@ -4,11 +4,17 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+
+from .constants import Unit
+
 __all__ = ["Product", "Recipe", "ProductIngredient", "RecipeIngredient"]
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=150)
+    class Meta:
+        ordering = ["name"]
+
+    name = models.CharField(max_length=150, unique=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -24,10 +30,6 @@ class Product(models.Model):
 
 
 class ProductIngredient(models.Model):
-    class Unit(models.TextChoices):
-        ML = "mL", _("milliliter")
-        GR = "g", _("gram")
-        PIECE = "pcs", _("pieces")
 
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     product = models.ForeignKey("Product", on_delete=models.PROTECT)
@@ -46,6 +48,9 @@ class RecipeIngredient(models.Model):
 
 
 class Recipe(models.Model):
+    class Meta:
+        ordering = ["name"]
+
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
 

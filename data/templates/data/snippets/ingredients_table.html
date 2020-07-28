@@ -1,0 +1,14 @@
+{% for ingredient in ingredients %}
+{% if forloop.first %}
+<table class="ingredient-table">
+    {% endif %}
+    <tr>
+        <td>{{ ingredient.amount|floatformat:"-2" }}</td>
+        <td>{{ ingredient.unit }}</td>
+        <td>{{ ingredient.product.name }}</td>
+        {# <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td> #}
+    </tr>
+    {% if forloop.last %}
+</table>
+{% endif %}
+{% endfor %}
