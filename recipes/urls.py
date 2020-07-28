@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from django.views import generic
+from django.views import generic, static
+
+from recipes.views import IndexView
 
 urlpatterns = [
     path("", generic.RedirectView.as_view(pattern_name="home"), name="root"),
-    path("home/", generic.TemplateView.as_view(template_name="home.html"), name="home"),
+    path("home/", IndexView.as_view(), name="home"),
     path("admin/", admin.site.urls),
     path("data/", include("data.urls")),
     path("baking/", include("baking.urls")),

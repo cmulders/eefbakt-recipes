@@ -1,5 +1,5 @@
 from django.urls import path
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
 
 from . import views
 
@@ -7,7 +7,7 @@ app_name = "data"
 
 # fmt: off
 urlpatterns = [
-    path("", views.IndexView.as_view(), name="index"),
+    path("", RedirectView.as_view(pattern_name="root"), name="index"),
     path("recipes/", views.RecipeListView.as_view(), name="recipe-list"),
     path("recipes/new/", views.RecipeCreateView.as_view(), name="recipe-create"),
     path("recipes/<int:pk>/edit/", views.RecipeUpdateView.as_view(), name="recipe-update"),

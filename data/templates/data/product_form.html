@@ -5,7 +5,6 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li>
 <li class="breadcrumb-item"><a href="{% url 'data:product-list' %}">{% trans 'Products' %}</a></li>
 {% if not object %}
 <li class="breadcrumb-item active">{% trans "New product" %}</li>
