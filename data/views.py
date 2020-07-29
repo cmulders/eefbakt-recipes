@@ -1,4 +1,5 @@
 from crispy_forms.helper import FormHelper
+from django.db import transaction
 from django.db.models.deletion import Collector, ProtectedError
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -54,9 +55,9 @@ class RecipeFormsetFormView(
     fields = ["name", "description"]
     template_name_suffix = "_form"
 
-    def get_product_formset(self):
+    def get_inline(self, prefix, cls):
         kwargs = {
-            "prefix": "products",
+            "prefix": prefix,
             "instance": self.object,
         }
 
@@ -65,57 +66,45 @@ class RecipeFormsetFormView(
                 {"data": self.request.POST, "files": self.request.FILES,}
             )
 
-        return ProductIngredientInlineFormset(**kwargs)
+        return cls(**kwargs)
 
-    def get_recipe_formset(self):
-        kwargs = {
-            "prefix": "recipes",
-            "instance": self.object,
+    def get_inlines(self):
+        return {
+            "products_formset": self.get_inline(
+                prefix="products", cls=ProductIngredientInlineFormset
+            ),
+            "recipes_formset": self.get_inline(
+                prefix="recipes", cls=RecipeIngredientInlineFormset
+            ),
         }
-
-        if self.request.method in ("POST", "PUT"):
-            kwargs.update(
-                {"data": self.request.POST, "files": self.request.FILES,}
-            )
-
-        return RecipeIngredientInlineFormset(**kwargs)
 
     def get_formset_helper(self):
         helper = FormHelper()
         helper.form_tag = False
         helper.disable_csrf = True
+        helper.use_custom_control = False
         helper.template = "bootstrap4/table_inline_formset.html"
         return helper
 
     def get_context_data(self, **kwargs):
         kwargs.update(
-            {
-                "formset_helper": self.get_formset_helper(),
-                "products_formset": self.get_product_formset(),
-                "recipes_formset": self.get_recipe_formset(),
-            }
+            {"formset_helper": self.get_formset_helper(), "inlines": self.get_inlines()}
         )
         return super().get_context_data(**kwargs)
 
-    def form_valid(self, form, products_formset, recipes_formset):
+    @transaction.atomic
+    def form_valid(self, form, inlines={}):
         response = super().form_valid(form)
 
-        products_formset.instance = self.object
-        products_formset.save()
+        for inline in inlines.values():
+            inline.instance = self.object
+            inline.save()
 
-        recipes_formset.instance = self.object
-        recipes_formset.save()
         return response
 
-    def form_invalid(self, form, products_formset, recipes_formset):
+    def form_invalid(self, form, inlines={}):
         """If the form is invalid, render the invalid form and formsets."""
-        return self.render_to_response(
-            self.get_context_data(
-                form=form,
-                products_formset=products_formset,
-                recipes_formset=recipes_formset,
-            )
-        )
+        return self.render_to_response(self.get_context_data(form=form, **inlines,))
 
     def post(self, request, *args, **kwargs):
         """
@@ -123,16 +112,11 @@ class RecipeFormsetFormView(
         POST variables and then check if it's valid.
         """
         form = self.get_form()
-        products_formset = self.get_product_formset()
-        recipes_formset = self.get_recipe_formset()
-        if (
-            form.is_valid()
-            and products_formset.is_valid()
-            and recipes_formset.is_valid()
-        ):
-            return self.form_valid(form, products_formset, recipes_formset)
+        inlines = self.get_inlines()
+        if form.is_valid() and all(inline.is_valid() for inline in inlines.values()):
+            return self.form_valid(form, inlines)
         else:
-            return self.form_invalid(form, products_formset, recipes_formset)
+            return self.form_invalid(form, inlines)
 
 
 class RecipeCreateView(RecipeFormsetFormView):

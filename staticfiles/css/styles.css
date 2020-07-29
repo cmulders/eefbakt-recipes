@@ -29,6 +29,10 @@
   width: 10rem;
 }
 
+.inline-formset [for$="-unit"] {
+  width: 10rem;
+}
+
 .inline-formset [for$="-DELETE"] {
   width: 5rem;
 }
