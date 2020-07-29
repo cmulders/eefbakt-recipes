@@ -17,13 +17,15 @@
   </div>
 </div>
 
-<b>{% trans "Ingredients" %}</b>
-{% include './snippets/recipe_ingredients.html' with ingredient_tree=transformed_object %}
-
-{% if object.description %}
-<hr>
-<p>
-  {{ object.description|linebreaks }}
-</p>
-{% endif %}
+<div class="row">
+  <div class="col-md-4 col-sm-12">
+    <div class="border rounded-lg p-2 bg-light">
+      <h3>{% trans 'Ingredients' %}</h3>
+      {% include './snippets/recipe_ingredients.html' with ingredient_tree=transformed_object %}
+    </div>
+  </div>
+  <div class="col">
+    {{ object.description|default:"No description"|linebreaks }}
+  </div>
+</div>
 {% endblock %}
