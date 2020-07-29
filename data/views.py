@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import edit
 
+from common.forms import ImageTagInlineFormset
+
 from .forms import ProductIngredientInlineFormset, RecipeIngredientInlineFormset
 from .models import Product, Recipe
 from .transformers import RecipeTreeTransformer
@@ -75,6 +77,9 @@ class RecipeFormsetFormView(
             ),
             "recipes_formset": self.get_inline(
                 prefix="recipes", cls=RecipeIngredientInlineFormset
+            ),
+            "imagetags_formset": self.get_inline(
+                prefix="images", cls=ImageTagInlineFormset
             ),
         }
 

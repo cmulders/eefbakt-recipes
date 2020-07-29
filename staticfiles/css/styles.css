@@ -81,3 +81,8 @@ tr.sortable-ghost {
   height: calc(1.5em + 0.75rem + 2px) !important;
   border-color: #ced4da !important;
 }
+
+.image-square-thumbnail {
+  max-height: 20rem;
+  max-width: 20rem;
+}

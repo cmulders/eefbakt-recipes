@@ -101,9 +101,22 @@ function try_upgrade_inlineformset_add_button() {
   });
 }
 
+function make_bootstrap_fileinput() {
+  $(".inline-formset").on("change", ".custom-file-input", (ev) => {
+    var filenames = "";
+    for (let i = 0; i < ev.target.files.length; i++) {
+      filenames += (i > 0 ? ", " : "") + ev.target.files[i].name;
+    }
+    ev.target.parentNode.querySelector(
+      ".custom-file-label"
+    ).textContent = filenames;
+  });
+}
+
 $(() => {
   try_upgrade_select2();
   try_upgrade_dateinput();
   try_upgrade_inlineformset_ordering();
   try_upgrade_inlineformset_add_button();
+  make_bootstrap_fileinput();
 });

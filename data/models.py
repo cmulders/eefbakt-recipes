@@ -1,9 +1,11 @@
 from typing import *
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from common.models import ImageTag
 
 from .constants import Unit
 
@@ -64,6 +66,8 @@ class Recipe(models.Model):
         "Recipe", through=RecipeIngredient, through_fields=("recipe", "base_recipe",),
     )
     recipeingredient_set: List[RecipeIngredient]
+
+    images = GenericRelation(ImageTag, related_name="+")
 
     def __str__(self):
         return self.name

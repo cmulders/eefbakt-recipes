@@ -28,6 +28,14 @@
     {{ object.description|linebreaks }}
 </div>
 
+<div class="d-flex">
+    {% for image in object.images.all %}
+    <div class="p-2">
+        <img src="{{ image.image.url }}" alt="{{ image.name }}" class="img-thumbnail image-square-thumbnail">
+    </div>
+    {% endfor %}
+</div>
+
 <div class="row">
     <div class="col-md-4 col-sm-12">
         <div class="border rounded-lg p-2 bg-light">

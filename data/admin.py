@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericStackedInline
 from django.contrib.contenttypes.models import ContentType
 
-from .models import Product, ProductIngredient, Recipe, RecipeIngredient
+from .models import ImageTag, Product, ProductIngredient, Recipe, RecipeIngredient
 
 
 class ProductIngredientInline(admin.TabularInline):
@@ -14,9 +15,13 @@ class RecipeIngredientInline(admin.TabularInline):
     fk_name = "recipe"
 
 
+class ImageTagInline(GenericStackedInline):
+    model = ImageTag
+
+
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    inlines = [ProductIngredientInline, RecipeIngredientInline]
+    inlines = [ProductIngredientInline, RecipeIngredientInline, ImageTagInline]
 
 
 @admin.register(Product)

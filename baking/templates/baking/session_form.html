@@ -18,7 +18,7 @@
 {% block content %}
 <h1>{{ object.title|default:"New session" }}</h1>
 
-<form method="post" novalidate>
+<form method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
   <div class="form-row">
     <div class="col-8">

@@ -1,10 +1,12 @@
 from typing import *
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from common.models import ImageTag
 from data.constants import Unit
 from data.models import Product, Recipe
 
@@ -50,6 +52,8 @@ class Session(models.Model):
     products = models.ManyToManyField(
         Product, through=SessionProduct, related_name="sessions"
     )
+
+    images = GenericRelation(ImageTag, related_name="+")
 
     def __str__(self):
         return self.title

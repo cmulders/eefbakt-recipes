@@ -23,6 +23,11 @@
       <h3>{% trans 'Ingredients' %}</h3>
       {% include './snippets/recipe_ingredients.html' with ingredient_tree=transformed_object %}
     </div>
+    {% for image in object.images.all %}
+    <div class="m-4">
+      <img src="{{ image.image.url }}" alt="{{ image.name }}" class="img-thumbnail image-square-thumbnail">
+    </div>
+    {% endfor %}
   </div>
   <div class="col">
     {{ object.description|default:"No description"|linebreaks }}
