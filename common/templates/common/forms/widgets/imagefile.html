@@ -1,5 +1,5 @@
 {% if widget.value %}
-<img src="{{ widget.value.url }}" alt="Uploaded image" class="img-thumbnail image-square-thumbnail mx-auto d-block">
+<img src="{{ widget.value.url }}" alt="Uploaded image" class="img-thumbnail image-square-thumbnail-sm mx-auto d-block">
 {% else %}
 <div class="form-control custom-file{% if field.errors %} is-invalid{%endif%}" style="border:0">
     <input type="{{ widget.type }}" name="{{ widget.name }}"
