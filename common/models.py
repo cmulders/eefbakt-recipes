@@ -15,7 +15,7 @@ def model_directory_path(instance, filename):
 class ImageTag(models.Model):
     image = models.ImageField(upload_to=model_directory_path)
 
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, blank=True)
     caption = models.TextField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
