@@ -30,10 +30,7 @@ DEBUG = os.getenv("DEBUG", True)
 
 INTERNAL_IPS = ["127.0.0.1"]
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "192.168.178.13",
-]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -126,6 +123,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "staticfiles"),
+]
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
