@@ -82,11 +82,17 @@ tr.sortable-ghost {
   border-color: #ced4da !important;
 }
 
+.image-square-thumbnail-md {
+  max-height: 12rem;
+  max-width: 12rem;
+}
+
 .image-square-thumbnail-sm {
   max-height: 8rem;
   max-width: 8rem;
 }
 
+.image-square-thumbnail-lg,
 .image-square-thumbnail {
   max-height: 20rem;
   max-width: 20rem;
