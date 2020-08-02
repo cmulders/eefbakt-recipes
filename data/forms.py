@@ -22,19 +22,12 @@ class RecipeIngredientForm(forms.ModelForm):
 
         return base_recipe
 
-    class Meta:
-        fields = "__all__"
-
-
-class IngredientInlineFormset(forms.BaseInlineFormSet):
-    pass
-
 
 RecipeIngredientInlineFormset = forms.inlineformset_factory(
     Recipe,
     RecipeIngredient,
     form=RecipeIngredientForm,
-    formset=IngredientInlineFormset,
+    fields="__all__",
     fk_name="recipe",
     extra=1,
 )
@@ -42,7 +35,6 @@ RecipeIngredientInlineFormset = forms.inlineformset_factory(
 ProductIngredientInlineFormset = forms.inlineformset_factory(
     Recipe,
     ProductIngredient,
-    formset=IngredientInlineFormset,
     fk_name="recipe",
     fields="__all__",
     extra=1,
