@@ -5,11 +5,13 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext as _
 
 from utils.fields import CreatingModelChoiceField
+from utils.forms import OrderdedModelForm
+from utils.formsets import OrderFirstInlineFormSet
 
 from .models import Product, ProductIngredient, Recipe, RecipeIngredient
 
 
-class RecipeIngredientForm(forms.ModelForm):
+class RecipeIngredientForm(OrderdedModelForm):
     def clean_base_recipe(self):
         base_recipe = self.cleaned_data.get("base_recipe")
 
@@ -42,16 +44,21 @@ RecipeIngredientInlineFormset = forms.inlineformset_factory(
     Recipe,
     RecipeIngredient,
     form=RecipeIngredientForm,
+    formset=OrderFirstInlineFormSet,
     fields="__all__",
     fk_name="recipe",
+    can_order=True,
     extra=1,
 )
 
 ProductIngredientInlineFormset = forms.inlineformset_factory(
     Recipe,
     ProductIngredient,
+    form=OrderdedModelForm,
+    formset=OrderFirstInlineFormSet,
     fk_name="recipe",
     fields="__all__",
+    can_order=True,
     extra=1,
     formfield_callback=product_formfield_callback,
 )
