@@ -18,7 +18,7 @@ class SessionProduct(models.Model):
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
 
     amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
-    unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.PIECE)
+    unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.GR)
     sort_key = models.IntegerField(default=1)
 
     class Meta:
