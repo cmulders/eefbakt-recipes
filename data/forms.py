@@ -48,7 +48,7 @@ RecipeIngredientInlineFormset = forms.inlineformset_factory(
     fields=["base_recipe", "amount"],
     fk_name="recipe",
     can_order=True,
-    extra=1,
+    extra=3,
 )
 
 ProductIngredientInlineFormset = forms.inlineformset_factory(
@@ -59,6 +59,6 @@ ProductIngredientInlineFormset = forms.inlineformset_factory(
     fk_name="recipe",
     fields=["product", "amount", "unit"],
     can_order=True,
-    extra=1,
+    extra=3,
     formfield_callback=product_formfield_callback,
 )

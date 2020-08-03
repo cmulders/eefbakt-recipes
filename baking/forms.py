@@ -29,7 +29,7 @@ SessionRecipeInlineFormset = forms.inlineformset_factory(
     form=OrderdedModelForm,
     fields=["recipe", "amount",],
     can_order=True,
-    extra=1,
+    extra=3,
 )
 
 SessionProductInlineFormset = forms.inlineformset_factory(
@@ -40,5 +40,5 @@ SessionProductInlineFormset = forms.inlineformset_factory(
     formfield_callback=product_formfield_callback,
     fields=["product", "amount", "unit",],
     can_order=True,
-    extra=1,
+    extra=3,
 )
