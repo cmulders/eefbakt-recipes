@@ -2,6 +2,7 @@ from collections import deque
 
 from django import forms
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models import Count
 from django.utils.translation import gettext as _
 
 from utils.fields import CreatingModelChoiceField
@@ -35,6 +36,11 @@ def product_formfield_callback(f, **kwargs):
                 "form_class": CreatingModelChoiceField,
                 "creation_field": "name",
                 "widget": forms.Select(attrs={"data-tags": "true"}),
+                "queryset": Product.objects.annotate(
+                    use_count=Count("sessionproduct")
+                    + Count("productingredient")
+                    + Count("sessions")
+                ).order_by("-use_count", "name"),
             }
         )
     return f.formfield(**kwargs)
