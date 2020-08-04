@@ -62,6 +62,9 @@ class SessionIngredientsDetailView(generic.DetailView):
         )
 
         kwargs["ingredients"] = [functools.reduce(operator.add, g) for _, g in groups]
+        kwargs["ingredients_total"] = sum(
+            p.price for p in kwargs["ingredients"] if p.price is not None
+        )
         return super().get_context_data(**kwargs)
 
 

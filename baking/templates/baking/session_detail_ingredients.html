@@ -24,13 +24,34 @@
         </div>
         <div class="px-4">
             <table class="ingredient-table">
-                {% for ingredient in ingredients %}
-                <tr>
-                    <td class="text-right pr-1">{{ ingredient.amount|floatformat:"-2" }}</td>
-                    <td class="pr-2 pl-1">{{ ingredient.unit }}</td>
-                    <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td>
-                </tr>
-                {% endfor %}
+                <tbody>
+                    {% for ingredient in ingredients %}
+                    <tr>
+                        <td class="text-right pr-1">{{ ingredient.amount|floatformat:"-2" }}</td>
+                        <td class="pr-2 pl-1">{{ ingredient.unit }}</td>
+                        <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td>
+                        <td class="d-flex">
+                            {% if ingredient.price %}
+                            <span class="flex-grow-1">€</span>
+                            <span>{{ ingredient.price|floatformat:"2" }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% if ingredients_total %}
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right">Totaal</td>
+                        <td class="d-flex border-top">
+                            <span class="flex-grow-1">€</span>
+                            <span>{{ ingredients_total|floatformat:"2" }}</span>
+                        </td>
+                    </tr>
+                </tfoot>
+                {% endif %}
             </table>
         </div>
     </div>

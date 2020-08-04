@@ -40,6 +40,19 @@ class Ingredient:
 
     __radd__ = __add__
 
+    @property
+    def price(self):
+        if not self.product or not self.product.prices.all():
+            return None
+
+        min_norm_price = min(
+            price.normalized_price
+            for price in self.product.prices.all()
+            if price.unit == self.unit
+        )
+
+        return min_norm_price * self.amount
+
 
 @dataclass
 class Recipe:

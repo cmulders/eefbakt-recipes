@@ -21,6 +21,8 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    prices: List["ProductPrice"]
+
     def get_absolute_url(self):
         return reverse("data:product-detail", args=[self.pk])
 
@@ -32,13 +34,19 @@ class Product(models.Model):
 
 
 class ProductPrice(models.Model):
-    product = models.ForeignKey("Product", on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        "Product", on_delete=models.CASCADE, related_name="prices"
+    )
 
     store = models.CharField(max_length=80, blank=True)
 
     amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
     unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.GR)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+
+    @property
+    def normalized_price(self) -> "Decimal":
+        return self.price / self.amount
 
 
 class ProductIngredient(models.Model):
