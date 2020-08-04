@@ -9,7 +9,7 @@ from utils.fields import CreatingModelChoiceField
 from utils.forms import OrderdedModelForm
 from utils.formsets import OrderFirstInlineFormSet
 
-from .models import Product, ProductIngredient, Recipe, RecipeIngredient
+from .models import Product, ProductIngredient, ProductPrice, Recipe, RecipeIngredient
 
 
 class RecipeIngredientForm(OrderdedModelForm):
@@ -67,4 +67,8 @@ ProductIngredientInlineFormset = forms.inlineformset_factory(
     can_order=True,
     extra=3,
     formfield_callback=product_formfield_callback,
+)
+
+ProductPriceInlineFormset = forms.inlineformset_factory(
+    Product, ProductPrice, fields="__all__", max_num=1,
 )

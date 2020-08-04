@@ -9,7 +9,11 @@ from django.views.generic import edit
 from common.forms import ImageTagInlineFormset
 from utils.views import ModelFormWithInlinesView
 
-from .forms import ProductIngredientInlineFormset, RecipeIngredientInlineFormset
+from .forms import (
+    ProductIngredientInlineFormset,
+    ProductPriceInlineFormset,
+    RecipeIngredientInlineFormset,
+)
 from .models import Product, Recipe
 from .transformers import RecipeTreeTransformer
 
@@ -24,14 +28,30 @@ class ProductDetailView(generic.DetailView):
     model = Product
 
 
-class ProductCreateView(generic.CreateView):
+class ProductFormsetFormView(ModelFormWithInlinesView):
     model = Product
     fields = "__all__"
+    inlines = {"prices": ProductPriceInlineFormset}
 
 
-class ProductUpdateView(generic.UpdateView):
-    model = Product
-    fields = "__all__"
+class ProductCreateView(ProductFormsetFormView):
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        return super().post(request, *args, **kwargs)
+
+
+class ProductUpdateView(ProductFormsetFormView):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
 
 
 class ProductDeleteView(generic.DeleteView):
@@ -59,7 +79,7 @@ class RecipeFormsetFormView(ModelFormWithInlinesView):
         "products": ProductIngredientInlineFormset,
         "recipes": RecipeIngredientInlineFormset,
         "imagetags": ImageTagInlineFormset,
-        }
+    }
 
 
 class RecipeCreateView(RecipeFormsetFormView):
