@@ -57,9 +57,7 @@ class SessionIngredientsDetailView(generic.DetailView):
             )
             for product in (self.object.ingredients.select_related("product").all())
         )
-        groups = itertools.groupby(
-            sorted(ingredients), key=lambda x: (x.unit, x.product,)
-        )
+        groups = itertools.groupby(sorted(ingredients))
 
         kwargs["ingredients"] = [functools.reduce(operator.add, g) for _, g in groups]
         kwargs["ingredients_total"] = sum(

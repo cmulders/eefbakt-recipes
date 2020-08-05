@@ -2,6 +2,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import *
 
+from .constants import Unit
 from .models import Product, ProductIngredient
 from .models import Recipe as RecipeModel
 
@@ -19,13 +20,13 @@ class Ingredient:
         if not isinstance(other, Ingredient):
             return False
 
-        return self.unit == other.unit and self.product == other.product
+        return self.norm_unit == other.norm_unit and self.product == other.product
 
     def __lt__(self, other):
         assert isinstance(other, Ingredient)
-        return (self.product.name, self.unit, self.amount,) < (
+        return (self.product.name, self.norm_unit, self.amount,) < (
             other.product.name,
-            other.unit,
+            other.norm_unit,
             other.amount,
         )
 
@@ -48,13 +49,17 @@ class Ingredient:
         prices = [
             price.normalized_price
             for price in self.product.prices.all()
-            if price.unit == self.unit
+            if Unit.norm_unit(price.unit) == self.norm_unit
         ]
 
         if not prices:
             return None
 
         return min(prices) * self.amount
+
+    @property
+    def norm_unit(self):
+        return Unit.norm_unit(self.unit)
 
 
 @dataclass

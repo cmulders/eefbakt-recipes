@@ -8,3 +8,11 @@ class Unit(models.TextChoices):
     PIECE = "pcs", _("stuk")
     TBSP = "el", _("eetlepel")
     TSP = "tl", _("theelepel")
+
+    @staticmethod
+    def norm_unit(value):
+        casted = Unit(value)
+        if casted in [Unit.GR, Unit.ML]:
+            return (Unit.GR, Unit.ML)
+        else:
+            return casted
