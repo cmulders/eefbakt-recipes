@@ -15,4 +15,4 @@ class Unit(models.TextChoices):
         if casted in [Unit.GR, Unit.ML]:
             return (Unit.GR, Unit.ML)
         else:
-            return casted
+            return (casted,)
