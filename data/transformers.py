@@ -45,13 +45,16 @@ class Ingredient:
         if not self.product or not self.product.prices.all():
             return None
 
-        min_norm_price = min(
+        prices = [
             price.normalized_price
             for price in self.product.prices.all()
             if price.unit == self.unit
-        )
+        ]
 
-        return min_norm_price * self.amount
+        if not prices:
+            return None
+
+        return min(prices) * self.amount
 
 
 @dataclass
