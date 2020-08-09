@@ -10,10 +10,36 @@ from django.views import generic
 from django.views.generic import edit
 
 from common.forms import ImageTagInlineFormset
-from data.transformers import Ingredient, RecipeTreeTransformer
+from data.transformers import Ingredient, Recipe, RecipeTreeTransformer
 
 from .forms import SessionProductInlineFormset, SessionRecipeInlineFormset
 from .models import Session
+
+
+def create_session_recipe(session: Session):
+    transformer = RecipeTreeTransformer()
+    # kwargs["ingredient_view_objects"] = [
+    #     Ingredient(
+    #         amount=product.amount, unit=product.unit, product=product.product,
+    #     )
+    #     for product in (self.object.ingredients.select_related("product").all())
+    # ]
+    # kwargs["recipe_view_objects"] = [
+    #     transformer.transform(r.recipe, r.amount)
+    #     for r in self.object.session_recipes.select_related("recipe").all()
+    # ]
+
+    return Recipe(
+        recipe=None,
+        ingredients=[
+            transformer.transform_product(product)
+            for product in (session.ingredients.select_related("product").all())
+        ],
+        base_recipes=[
+            transformer.transform_recipe(r.recipe, scale=r.amount)
+            for r in session.session_recipes.select_related("recipe").all()
+        ],
+    )
 
 
 class SessionList(generic.ListView):
@@ -24,17 +50,7 @@ class SessionDetailView(generic.DetailView):
     model = Session
 
     def get_context_data(self, **kwargs):
-        transformer = RecipeTreeTransformer()
-        kwargs["ingredient_view_objects"] = [
-            Ingredient(
-                amount=product.amount, unit=product.unit, product=product.product,
-            )
-            for product in (self.object.ingredients.select_related("product").all())
-        ]
-        kwargs["recipe_view_objects"] = [
-            transformer.transform(r.recipe, r.amount)
-            for r in self.object.session_recipes.select_related("recipe").all()
-        ]
+        kwargs["session_recipe"] = create_session_recipe(self.object)
         return super().get_context_data(**kwargs)
 
 

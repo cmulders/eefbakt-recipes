@@ -82,7 +82,10 @@ class Recipe:
 
 
 class RecipeTreeTransformer:
-    def _transform_product(
+    def __init__(self):
+        self.visited = set()
+
+    def transform_product(
         self, ingredient: ProductIngredient, scale: int = 1
     ) -> Ingredient:
         return Ingredient(
@@ -91,7 +94,7 @@ class RecipeTreeTransformer:
             product=ingredient.product,
         )
 
-    def _transform_recipe(self, recipe: RecipeModel, scale: int = 1) -> Recipe:
+    def transform_recipe(self, recipe: RecipeModel, scale: int = 1) -> Recipe:
         if recipe in self.visited:
             return Recipe(recipe=recipe, valid=False)
         self.visited.add(recipe)
@@ -100,15 +103,14 @@ class RecipeTreeTransformer:
             amount=scale,
             recipe=recipe,
             ingredients=[
-                self._transform_product(p, scale=scale)
+                self.transform_product(p, scale=scale)
                 for p in recipe.productingredient_set.all()
             ],
             base_recipes=[
-                self._transform_recipe(r.base_recipe, scale=scale * r.amount)
+                self.transform_recipe(r.base_recipe, scale=scale * r.amount)
                 for r in recipe.recipeingredient_set.all()
             ],
         )
 
     def transform(self, recipe: RecipeModel, scale: int = 1):
-        self.visited = set()
-        return self._transform_recipe(recipe, scale)
+        return self.transform_recipe(recipe, scale)

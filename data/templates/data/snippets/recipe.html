@@ -1,0 +1,10 @@
+<div class="d-flex">
+    <a class="mr-1" href="{{ recipe.recipe.get_absolute_url }}">#</a>
+    <b class="d-flex-grow">
+        {{recipe.recipe.name }}
+        {% if recipe.amount != 1 %}
+        ({{ recipe.amount|floatformat:"-2" }}x)
+        {% endif %}
+    </b>
+</div>
+{% include 'data/snippets/recipe_ingredients.html' with recipe=recipe %}

@@ -21,7 +21,7 @@
   <div class="col-md-4 col-sm-12">
     <div class="border rounded-lg p-2 bg-light">
       <h3>{% trans 'Ingredients' %}</h3>
-      {% include './snippets/recipe_ingredients.html' with ingredient_tree=transformed_object %}
+      {% include 'data/snippets/recipe_ingredients.html' with recipe=transformed_object only %}
     </div>
     {% for image in object.images.all %}
     <div class="m-4">

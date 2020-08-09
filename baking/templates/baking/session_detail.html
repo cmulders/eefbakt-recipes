@@ -40,16 +40,8 @@
     <div class="col-md-4 col-sm-12">
         <div class="border rounded-lg p-2 bg-light">
             <h3>{% trans 'Ingredients' %}</h3>
-            {% for object in recipe_view_objects %}
-            <b>{{ object.recipe.name }}</b>
-            <div class="mb-3">
-                {% include 'data/snippets/recipe_ingredients.html' with ingredient_tree=object show_title=True %}
+            {% include 'data/snippets/recipe_ingredients.html' with recipe=session_recipe  %}
             </div>
-            {% endfor %}
-            {% if ingredient_view_objects %}
-            <i><b>Extra</b></i>
-            {% include 'data/snippets/ingredients_table.html' with ingredients=ingredient_view_objects %}
-            {% endif %}
         </div>
     </div>
     <div class="col">
