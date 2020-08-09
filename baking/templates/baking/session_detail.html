@@ -64,6 +64,14 @@
         <hr>
         {% endif %}
         {% endfor %}
+
+            {% if object.recipe_description %}
+            <hr>
+            <section>
+                <p class="my-3">{{ object.recipe_description|linebreaks }}
+                </p>
+            </section>
+            {% endif %}
     </div>
 </div>
 {% endblock %}

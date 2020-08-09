@@ -29,6 +29,7 @@
     </div>
   </div>
   {{ form.description|as_crispy_field }}
+  {{ form.recipe_description|as_crispy_field }}
 
 
   {% for name, formset in inlines.items %}

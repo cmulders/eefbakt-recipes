@@ -73,6 +73,7 @@ class SessionFormsetFormView(
     fields = [
         "title",
         "description",
+        "recipe_description",
         "session_date",
     ]
     template_name_suffix = "_form"
