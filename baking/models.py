@@ -42,7 +42,7 @@ class Session(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
 
-    recipe_description = models.TextField(blank=True)
+    recipe_description = models.TextField("Session recipe", blank=True)
 
     session_date = models.DateField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
