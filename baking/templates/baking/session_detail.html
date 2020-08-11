@@ -10,52 +10,58 @@
 {% endblock %}
 
 {% block content %}
-<div class="mb-3">
-    <div class="d-flex flex-wrap align-items-center">
-        <h1>{{ object.title }}</h1>
-        <div class="btn-group ml-5 d-print-none">
-            <a href="{%url 'baking:session-ingredients' object.pk%}"
-                class="btn btn-sm btn-outline-success">{% trans 'Grocery list' %}</a>
-            <a class="btn btn-outline-secondary btn-sm"
-                href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
-            <a class="btn btn-outline-danger btn-sm"
-                href="{% url 'baking:session-delete' object.pk %}">{% trans "Delete" %}</a>
+<article>
+    <div class="btn-group d-print-none float-right">
+        <a href="{%url 'baking:session-ingredients' object.pk%}"
+            class="btn btn-sm btn-outline-success">{% trans 'Grocery list' %}</a>
+        <a class="btn btn-outline-secondary btn-sm"
+            href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
+        <a class="btn btn-outline-danger btn-sm"
+            href="{% url 'baking:session-delete' object.pk %}">{% trans "Delete" %}</a>
+    </div>
+
+    <h1>{{ object.title }}</h1>
+    <div>
+        <small class="text-muted">
+            <time datetime="{{ object.session_date|date:'c' }}">
+                {{ object.session_date|date }}
+            </time>
+        </small>
+    </div>
+
+    <section class="mb-4">
+        {{ object.description|linebreaks }}
+    </section>
+
+    <div class="d-flex">
+        {% for image in object.images.all %}
+        <div class="p-2">
+            <img src="{{ image.image.url }}" alt="{{ image.name }}" class="img-thumbnail image-square-thumbnail">
         </div>
+        {% endfor %}
     </div>
-    <small class="text-muted">{{ object.session_date|date }}</small>
-</div>
-<div class="mb-4">
-    {{ object.description|linebreaks }}
-</div>
 
-<div class="d-flex">
-    {% for image in object.images.all %}
-    <div class="p-2">
-        <img src="{{ image.image.url }}" alt="{{ image.name }}" class="img-thumbnail image-square-thumbnail">
-    </div>
-    {% endfor %}
-</div>
+    <div class="row">
+        <aside class="col-md-5 col-sm-12">
 
-<div class="row">
-    <div class="col-md-4 col-sm-12">
-        <div class="border rounded-lg p-2 bg-light">
-            <h3>{% trans 'Ingredients' %}</h3>
-            {% include 'data/snippets/recipe_ingredients.html' with recipe=session_recipe  %}
+            <div class="border rounded-lg p-2 bg-light">
+                <h3>{% trans 'Ingredients' %}</h3>
+                {% include 'data/snippets/recipe_ingredients.html' with recipe=session_recipe  %}
             </div>
-        </div>
-    </div>
-    <div class="col">
-        {% for object in recipe_view_objects %}
-        {% for recipe in object %}
-        <div class="my-3">
-            <div><b>{{ recipe.recipe.name }}</b></div>
-            <div>{{ recipe.recipe.description|default:"..."|linebreaks }}</div>
-        </div>
-        {% endfor %}
-        {% if not forloop.last %}
-        <hr>
-        {% endif %}
-        {% endfor %}
+        </aside>
+        <div class="col">
+            {% for object in session_recipe.base_recipes %}
+            <section>
+                {% for recipe in object %}
+                <div><b>{{ recipe.recipe.name }}</b></div>
+                <p class="my-3">{{ recipe.recipe.description|default:"..."|linebreaks }}
+                </p>
+                {% endfor %}
+            </section>
+            {% if not forloop.last %}
+            <hr>
+            {% endif %}
+            {% endfor %}
 
             {% if object.recipe_description %}
             <hr>
@@ -64,6 +70,7 @@
                 </p>
             </section>
             {% endif %}
+        </div>
     </div>
-</div>
+</article>
 {% endblock %}
