@@ -70,5 +70,5 @@ ProductIngredientInlineFormset = forms.inlineformset_factory(
 )
 
 ProductPriceInlineFormset = forms.inlineformset_factory(
-    Product, ProductPrice, fields="__all__", max_num=1,
+    Product, ProductPrice, fields="__all__"
 )

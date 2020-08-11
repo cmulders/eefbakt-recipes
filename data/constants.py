@@ -19,9 +19,6 @@ class Unit(models.TextChoices):
         else:
             return (casted,)
 
-    def __eq__(self, other):
-        return super().__eq__(other) or self.norm_unit == other.norm_unit
-
     @property
     def short_name(self):
         return {self.PIECE.value: "stk",}.get(self.value, self.value)
