@@ -59,26 +59,12 @@ class SessionIngredientsDetailView(generic.DetailView):
     template_name = "baking/session_detail_ingredients.html"
 
     def get_context_data(self, **kwargs):
-        transformer = RecipeTreeTransformer()
-        ingredients = [
-            ingredient
-            for session_recipe in self.object.session_recipes.all()
-            for ingredient in transformer.transform(
-                session_recipe.recipe, session_recipe.amount
-            ).iter_ingredients()
-        ]
-        ingredients.extend(
-            Ingredient(
-                amount=product.amount, unit=product.unit, product=product.product,
-            )
-            for product in (self.object.ingredients.select_related("product").all())
-        )
+        session_recipe = create_session_recipe(self.object)
+        ingredients = list(session_recipe.iter_ingredients())
         groups = itertools.groupby(sorted(ingredients))
 
         kwargs["ingredients"] = [functools.reduce(operator.add, g) for _, g in groups]
-        kwargs["ingredients_total"] = sum(
-            p.price for p in kwargs["ingredients"] if p.price is not None
-        )
+        kwargs["ingredients_total"] = sum(p.price or 0 for p in ingredients)
         return super().get_context_data(**kwargs)
 
 
