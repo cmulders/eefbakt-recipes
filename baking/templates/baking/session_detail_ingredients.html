@@ -28,7 +28,7 @@
                     {% for ingredient in ingredients %}
                     <tr>
                         <td class="text-right pr-1">{{ ingredient.amount|floatformat:"-2" }}</td>
-                        <td class="pr-2 pl-1">{{ ingredient.unit }}</td>
+                        <td class="pr-2 pl-1">{{ ingredient.unit.short_name }}</td>
                         <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td>
                         <td class="d-flex">
                             {% if ingredient.price %}

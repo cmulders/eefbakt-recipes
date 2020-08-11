@@ -10,7 +10,7 @@ from .models import Recipe as RecipeModel
 @dataclass(frozen=True)
 class Ingredient:
     amount: int
-    unit: str
+    unit: Unit
     product: Product
 
     def __hash__(self):
@@ -90,7 +90,7 @@ class RecipeTreeTransformer:
     ) -> Ingredient:
         return Ingredient(
             amount=ingredient.amount * scale,
-            unit=ingredient.unit,
+            unit=Unit(ingredient.unit),
             product=ingredient.product,
         )
 
