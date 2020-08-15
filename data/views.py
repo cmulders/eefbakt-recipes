@@ -9,11 +9,8 @@ from django.views.generic import edit
 from common.forms import ImageTagInlineFormset
 from utils.views import ModelFormWithInlinesView
 
-from .forms import (
-    ProductIngredientInlineFormset,
-    ProductPriceInlineFormset,
-    RecipeIngredientInlineFormset,
-)
+from .forms import (ProductIngredientInlineFormset, ProductPriceInlineFormset,
+                    RecipeIngredientInlineFormset)
 from .models import Product, Recipe
 from .transformers import RecipeTreeTransformer
 
@@ -45,6 +42,8 @@ class ProductCreateView(ProductFormsetFormView):
 
 
 class ProductUpdateView(ProductFormsetFormView):
+    success_url = reverse_lazy('data:product-list')
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().get(request, *args, **kwargs)
