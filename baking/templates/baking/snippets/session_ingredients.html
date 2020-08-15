@@ -1,0 +1,10 @@
+{% for base_recipe in recipe.base_recipes %}
+<div class="ml-3 mt-2">
+    {% include 'data/snippets/recipe.html' with recipe=base_recipe only %}
+</div>
+{% endfor %}
+
+{% if recipe.ingredients %}
+<b>Extra</b>
+{% include 'data/snippets/ingredients_table.html' with ingredients=recipe.ingredients only %}
+{% endif %}
