@@ -1,0 +1,8 @@
+-r requirements.txt
+
+black
+isort<5,>=4.2.5
+pylint
+pylint-django
+rope
+ipython
