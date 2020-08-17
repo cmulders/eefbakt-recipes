@@ -18,4 +18,18 @@
             href="{% url 'data:product-delete' object.pk %}">{% trans "Delete" %}</a>
     </div>
 </div>
+<div>
+    <h3>Prices</h3>
+    <ul>
+        {% for price in object.prices.all %}
+        <li>€ {{ price.normalized_price|floatformat:"2" }} per {{ price.unit }}
+            ({{ price.store|default:'<i>Unkown</i>' }}:
+            {{ price.amount }} {{ price.unit }} for
+            €
+            {{ price.price }})</li>
+        {% empty %}
+        <li><i>No prices known</i></li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}
