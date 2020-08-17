@@ -1,8 +1,10 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
+from functools import cached_property
 from typing import *
 
 from common.constants import Unit
+from common.converters import UnitConverter
 from data.models import Product, ProductIngredient
 from data.models import Recipe as RecipeModel
 
@@ -41,21 +43,30 @@ class Ingredient:
 
     __radd__ = __add__
 
+    @cached_property
+    def unit_converter(self):
+        return UnitConverter(self.product.unit_conversions.all())
+
     @property
     def price(self):
         if not self.product or not self.product.prices.all():
             return None
 
         prices = [
-            price.normalized_price
+            price
             for price in self.product.prices.all()
             if Unit(price.unit) == self.unit
+            or self.unit_converter.has_conversion(price.unit, self.unit)
         ]
 
         if not prices:
             return None
 
-        return min(prices) * self.amount
+        return min(
+            float(price.normalized_price * self.amount)
+            * self.unit_converter.scale(self.unit, price.unit)
+            for price in prices
+        )
 
 
 @dataclass

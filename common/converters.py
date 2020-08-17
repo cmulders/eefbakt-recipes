@@ -41,6 +41,9 @@ class UnitConverter:
 
         return dfs_paths(self._graph, from_unit, to_unit)
 
+    def has_conversion(self, from_unit: Unit, to_unit: Unit) -> bool:
+        return self.search_conversion(from_unit, to_unit) is not None
+
     def scale(self, from_unit: Unit, to_unit: Unit) -> float:
         if from_unit == to_unit:
             return 1
