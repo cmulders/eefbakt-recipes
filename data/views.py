@@ -42,7 +42,7 @@ class ProductCreateView(ProductFormsetFormView):
 
 
 class ProductUpdateView(ProductFormsetFormView):
-    success_url = reverse_lazy('data:product-list')
+    success_url = reverse_lazy("data:product-list")
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
