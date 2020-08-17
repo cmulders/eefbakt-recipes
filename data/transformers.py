@@ -20,13 +20,13 @@ class Ingredient:
         if not isinstance(other, Ingredient):
             return False
 
-        return self.norm_unit == other.norm_unit and self.product == other.product
+        return self.unit == other.unit and self.product == other.product
 
     def __lt__(self, other):
         assert isinstance(other, Ingredient)
-        return (self.product.name, self.norm_unit, self.amount,) < (
+        return (self.product.name, self.unit, self.amount,) < (
             other.product.name,
-            other.norm_unit,
+            other.unit,
             other.amount,
         )
 
@@ -49,17 +49,13 @@ class Ingredient:
         prices = [
             price.normalized_price
             for price in self.product.prices.all()
-            if Unit.norm_unit(price.unit) == self.norm_unit
+            if Unit(price.unit) == self.unit
         ]
 
         if not prices:
             return None
 
         return min(prices) * self.amount
-
-    @property
-    def norm_unit(self):
-        return Unit.norm_unit(self.unit)
 
 
 @dataclass

@@ -11,14 +11,6 @@ class Unit(models.TextChoices):
     TBSP = "el", _("eetlepel")
     TSP = "tl", _("theelepel")
 
-    @staticmethod
-    def norm_unit(value):
-        casted = Unit(value)
-        if casted in [Unit.GR, Unit.ML]:
-            return (Unit.GR, Unit.ML)
-        else:
-            return (casted,)
-
     @property
     def short_name(self):
         return {self.PIECE.value: "stk",}.get(self.value, self.value)
