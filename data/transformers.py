@@ -2,9 +2,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import *
 
-from .constants import Unit
-from .models import Product, ProductIngredient
-from .models import Recipe as RecipeModel
+from common.constants import Unit
+from data.models import Product, ProductIngredient
+from data.models import Recipe as RecipeModel
 
 
 @dataclass(frozen=True)

@@ -5,9 +5,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from common.constants import Unit
 from common.models import ImageTag
-
-from .constants import Unit
 
 __all__ = ["Product", "Recipe", "ProductIngredient", "RecipeIngredient"]
 

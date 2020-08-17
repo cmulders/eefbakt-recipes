@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from common.constants import Unit
 from common.models import ImageTag
-from data.constants import Unit
 from data.models import Product, Recipe
 
 
