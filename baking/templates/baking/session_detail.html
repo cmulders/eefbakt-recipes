@@ -36,7 +36,8 @@
     <div class="d-flex">
         {% for image in object.images.all %}
         <div class="p-2">
-            <img src="{{ image.image.url }}" alt="{{ image.name }}" class="img-thumbnail image-square-thumbnail">
+            <img src="{{ image.image.url }}" alt="{{ image.name }}" width="{{ image.width|default:25 }}px"
+                height="{{ image.height|default:25 }}px" class="img-thumbnail image-square-thumbnail">
         </div>
         {% endfor %}
     </div>

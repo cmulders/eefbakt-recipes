@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.dispatch import receiver
 
+from common.constants import Unit
+
 
 def model_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
@@ -13,7 +15,12 @@ def model_directory_path(instance, filename):
 
 
 class ImageTag(models.Model):
-    image = models.ImageField(upload_to=model_directory_path)
+    image = models.ImageField(
+        width_field="width", height_field="height", upload_to=model_directory_path
+    )
+
+    width = models.IntegerField(blank=True, null=True)
+    height = models.IntegerField(blank=True, null=True)
 
     name = models.CharField(max_length=150, blank=True)
     caption = models.TextField(blank=True)
