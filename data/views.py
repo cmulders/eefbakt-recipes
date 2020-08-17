@@ -6,7 +6,9 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import edit
 
-from common.forms import ImageTagInlineFormset
+from common.constants import Unit
+from common.converters import UnitConverter
+from common.forms import ImageTagInlineFormset, UnitConversionInlineFormset
 from utils.views import ModelFormWithInlinesView
 
 from .forms import (ProductIngredientInlineFormset, ProductPriceInlineFormset,
@@ -24,11 +26,27 @@ class ProductListView(generic.ListView):
 class ProductDetailView(generic.DetailView):
     model = Product
 
+    def get_context_data(self, **kwargs):
+        converter = UnitConverter(self.object.unit_conversions.all())
+        kwargs.update(
+            {
+                "conversions": {
+                    from_unit: [(converter.scale(from_unit, to_unit), to_unit) for to_unit in Unit]
+                    for from_unit in Unit
+                }
+            }
+        )
+        print(kwargs)
+        return super().get_context_data(**kwargs)
+
 
 class ProductFormsetFormView(ModelFormWithInlinesView):
     model = Product
     fields = "__all__"
-    inlines = {"prices": ProductPriceInlineFormset}
+    inlines = {
+        "prices": ProductPriceInlineFormset,
+        "conversions": UnitConversionInlineFormset,
+    }
 
 
 class ProductCreateView(ProductFormsetFormView):

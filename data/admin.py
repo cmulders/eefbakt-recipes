@@ -3,11 +3,22 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
 from django.contrib.contenttypes.models import ContentType
 
-from .models import ImageTag, Product, ProductIngredient, Recipe, RecipeIngredient
+from .models import (
+    ImageTag,
+    Product,
+    ProductIngredient,
+    ProductPrice,
+    Recipe,
+    RecipeIngredient,
+)
 
 
 class ProductIngredientInline(admin.TabularInline):
     model = ProductIngredient
+
+
+class ProductPriceInline(admin.TabularInline):
+    model = ProductPrice
 
 
 class RecipeIngredientInline(admin.TabularInline):
@@ -26,4 +37,4 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    inlines = [ProductPriceInline]

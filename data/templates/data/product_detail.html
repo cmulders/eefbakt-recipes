@@ -31,5 +31,22 @@
         <li><i>No prices known</i></li>
         {% endfor %}
     </ul>
+
+    <h3>Conversions</h3>
+    <table class="table table-sm d-inline text-right">
+        {% for from_unit, to_units in conversions.items %}
+        <tr>
+            <th>1 {{ from_unit.short_name }} </th>
+            {% for to_unit in to_units %}
+            <td>{{ to_unit.0|floatformat:'-2' }} {{ to_unit.1.short_name }}</td>
+            {% endfor %}
+            </ul>
+        </tr>
+        {% empty %}
+        <tr>
+            <td>No prices known</td>
+        </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}

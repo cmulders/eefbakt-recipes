@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from common.constants import Unit
-from common.models import ImageTag
+from common.models import ImageTag, UnitConversion
 
 __all__ = ["Product", "Recipe", "ProductIngredient", "RecipeIngredient"]
 
@@ -21,6 +21,8 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     prices: List["ProductPrice"]
+
+    unit_conversions = GenericRelation(UnitConversion, related_name="+")
 
     def get_absolute_url(self):
         return reverse("data:product-detail", args=[self.pk])

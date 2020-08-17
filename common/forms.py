@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.contenttypes import forms as generic_forms
 
-from .models import ImageTag
+from .models import ImageTag, UnitConversion
 
 
 class ImageInput(forms.FileInput):
@@ -37,4 +37,8 @@ class ImageTagForm(forms.ModelForm):
 
 ImageTagInlineFormset = generic_forms.generic_inlineformset_factory(
     ImageTag, form=ImageTagForm, extra=1, max_num=3,
+)
+
+UnitConversionInlineFormset = generic_forms.generic_inlineformset_factory(
+    UnitConversion, extra=2,
 )
