@@ -16,8 +16,6 @@ from .forms import (ProductIngredientInlineFormset, ProductPriceInlineFormset,
 from .models import Product, Recipe
 from .transformers import RecipeTreeTransformer
 
-# Create your views here.
-
 
 class ProductListView(generic.ListView):
     model = Product
@@ -31,12 +29,14 @@ class ProductDetailView(generic.DetailView):
         kwargs.update(
             {
                 "conversions": {
-                    from_unit: [(converter.scale(from_unit, to_unit), to_unit) for to_unit in Unit]
+                    from_unit: [
+                        (converter.scale(from_unit, to_unit), to_unit)
+                        for to_unit in Unit
+                    ]
                     for from_unit in Unit
                 }
             }
         )
-        print(kwargs)
         return super().get_context_data(**kwargs)
 
 

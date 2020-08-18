@@ -22,7 +22,7 @@
     <h3>Prices</h3>
     <ul>
         {% for price in object.prices.all %}
-        <li>€ {{ price.normalized_price|floatformat:"2" }} per {{ price.unit }}
+        <li>€ {{ price.normalized_price|floatformat:"3" }} per {{ price.unit }}
             ({{ price.store|default:'<i>Unkown</i>' }}:
             {{ price.amount }} {{ price.unit }} for
             €
