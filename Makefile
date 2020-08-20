@@ -36,6 +36,10 @@ runserver: venv
 makemigrations: check
 	$(VENV)/python manage.py makemigrations
 
+.PHONY: test
+test: check
+	$(VENV)/python manage.py test
+
 .PHONY: migrate
 migrate: makemigrations
 	$(VENV)/python manage.py migrate
