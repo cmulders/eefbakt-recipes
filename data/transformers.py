@@ -1,11 +1,12 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
+from decimal import Decimal
 from functools import cached_property
 from typing import *
 
 from common.constants import Unit
 from common.converters import UnitConverter
-from data.models import Product, ProductIngredient
+from data.models import Product, ProductIngredient, ProductPrice
 from data.models import Recipe as RecipeModel
 
 
@@ -22,7 +23,10 @@ class Ingredient:
         if not isinstance(other, Ingredient):
             return False
 
-        return self.unit == other.unit and self.product == other.product
+        return (
+            self.unit == other.unit
+            or self.unit_converter.has_conversion(self.unit, other.unit)
+        ) and self.product == other.product
 
     def __lt__(self, other):
         assert isinstance(other, Ingredient)
@@ -32,13 +36,18 @@ class Ingredient:
             other.amount,
         )
 
-    def __add__(self, other):
+    def __add__(self, other: Optional["Ingredient"]):
         if other is None:
             return self
 
-        assert self == other
+        assert isinstance(other, Ingredient) and self == other
+
+        other_amount = other.amount * Decimal(
+            self.unit_converter.scale(self.unit, other.unit)
+        )
+
         return Ingredient(
-            amount=self.amount + other.amount, unit=self.unit, product=self.product
+            amount=self.amount + other_amount, unit=self.unit, product=self.product
         )
 
     __radd__ = __add__
@@ -52,7 +61,7 @@ class Ingredient:
         if not self.product or not self.product.prices.all():
             return None
 
-        prices = [
+        prices: List[ProductPrice] = [
             price
             for price in self.product.prices.all()
             if Unit(price.unit) == self.unit

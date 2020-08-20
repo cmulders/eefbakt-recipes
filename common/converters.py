@@ -1,14 +1,13 @@
 from collections import defaultdict
-from functools import reduce
-from operator import itemgetter, mul
-from typing import Dict, List, Set, Tuple
+from typing import List, Mapping, Optional, Set, Tuple
 
 from common.constants import Unit
 from common.models import UnitConversion
 
 
 class UnitConverter:
-    _graph: Dict[Unit, Set[Unit]]
+    _graph: Mapping[Unit, Set[Unit]]
+    _conversions: Mapping[Tuple[Unit, Unit], float]
 
     def __init__(self, conversions: List[UnitConversion]):
         self._conversions = {}
@@ -24,22 +23,20 @@ class UnitConverter:
             self._conversions[(from_unit, to_unit)] = convert.scale
             self._conversions[(to_unit, from_unit)] = 1 / convert.scale
 
-    def search_conversion(
-        self, from_unit: Unit, to_unit: Unit
-    ) -> List[Tuple[Unit, Unit]]:
-        def dfs_paths(graph, start, goal):
-            stack = [(start, [start])]
-            visited = set()
-            while stack:
-                (vertex, path) = stack.pop()
-                if vertex not in visited:
-                    if vertex == goal:
-                        return path
-                    visited.add(vertex)
-                    for neighbor in graph[vertex]:
-                        stack.append((neighbor, path + [neighbor]))
-
-        return dfs_paths(self._graph, from_unit, to_unit)
+    def search_conversion(self, from_unit: Unit, to_unit: Unit) -> Optional[List[Unit]]:
+        """
+        Depth first search algorithm to find a path between units
+        """
+        stack = [(from_unit, [from_unit])]
+        visited = set()
+        while stack:
+            (vertex, path) = stack.pop()
+            if vertex not in visited:
+                if vertex == to_unit:
+                    return path
+                visited.add(vertex)
+                for neighbor in self._graph[vertex]:
+                    stack.append((neighbor, path + [neighbor]))
 
     def has_conversion(self, from_unit: Unit, to_unit: Unit) -> bool:
         return self.search_conversion(from_unit, to_unit) is not None
@@ -53,7 +50,7 @@ class UnitConverter:
         if not path:
             return None
 
-        scale = 1
+        scale: float = 1
         for conversion in zip(path, path[1:]):
             scale *= self._conversions.get(conversion, 1)
 

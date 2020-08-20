@@ -1,3 +1,4 @@
+from decimal import Decimal
 from typing import *
 
 from django.contrib.contenttypes.fields import GenericRelation
@@ -46,7 +47,7 @@ class ProductPrice(models.Model):
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 
     @property
-    def normalized_price(self) -> "Decimal":
+    def normalized_price(self) -> Decimal:
         return self.price / self.amount
 
 
