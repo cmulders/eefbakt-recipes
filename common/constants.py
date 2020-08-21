@@ -14,3 +14,13 @@ class Unit(models.TextChoices):
     @property
     def short_name(self):
         return {self.PIECE.value: "stk",}.get(self.value, self.value)
+
+    def __lt__(self, other: "Unit") -> bool:
+        """
+        Sort the enum value on index
+        """
+        if isinstance(other, type(self)):
+            member_list = list(self.__class__)
+            return member_list.index(self) < member_list.index(other)
+
+        return super().__lt__(other)
