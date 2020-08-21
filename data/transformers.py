@@ -42,12 +42,13 @@ class Ingredient:
 
         assert isinstance(other, Ingredient) and self == other
 
-        other_amount = other.amount * Decimal(
-            self.unit_converter.scale(self.unit, other.unit)
-        )
+        # Select most appropiate unit to convert to
+        to_unit = max(self.unit, other.unit)
 
         return Ingredient(
-            amount=self.amount + other_amount, unit=self.unit, product=self.product
+            amount=other._convert_amount(to_unit) + self._convert_amount(to_unit), 
+            unit=to_unit, 
+            product=self.product
         )
 
     __radd__ = __add__
@@ -55,6 +56,11 @@ class Ingredient:
     @cached_property
     def unit_converter(self):
         return UnitConverter(self.product.unit_conversions.all())
+
+    def _convert_amount(self, to_unit: Unit) -> Decimal:
+        assert self.unit_converter.has_conversion(self.unit, to_unit)
+
+        return self.amount * Decimal(self.unit_converter.scale(self.unit, to_unit))
 
     @property
     def price(self):
