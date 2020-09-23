@@ -26,6 +26,7 @@ class ImageTagForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if self.instance and self.instance.pk:
+            # Only allow uploads for new images, no replacement of existing
             self.fields["image"].disabled = True
 
     class Meta:
