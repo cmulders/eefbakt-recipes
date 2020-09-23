@@ -46,8 +46,8 @@ class Ingredient:
         to_unit = max(self.unit, other.unit)
 
         return Ingredient(
-            amount=other._convert_amount(to_unit) + self._convert_amount(to_unit), 
-            unit=to_unit, 
+            amount=other._convert_amount(to_unit) + self._convert_amount(to_unit),
+            unit=to_unit,
             product=self.product
         )
 
@@ -117,10 +117,6 @@ class RecipeTreeTransformer:
         )
 
     def transform_recipe(self, recipe: RecipeModel, scale: int = 1) -> Recipe:
-        if recipe in self.visited:
-            return Recipe(recipe=recipe, valid=False)
-        self.visited.add(recipe)
-
         return Recipe(
             amount=scale,
             recipe=recipe,
