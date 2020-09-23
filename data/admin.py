@@ -33,8 +33,10 @@ class ImageTagInline(GenericStackedInline):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = [ProductIngredientInline, RecipeIngredientInline, ImageTagInline]
+    readonly_fields = ["created_at", "updated_at"]
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ProductPriceInline]
+    readonly_fields = ["created_at", "updated_at"]
