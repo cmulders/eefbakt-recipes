@@ -13,7 +13,9 @@
 <article>
     <div class="btn-group d-print-none float-right">
         <a href="{%url 'baking:session-ingredients' object.pk%}"
-            class="btn btn-sm btn-outline-success">{% trans 'Grocery list' %}</a>
+            class="btn btn-sm btn-outline-primary">{% trans 'Grocery list' %}</a>
+        <a class="btn btn-outline-success btn-sm"
+            href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
         <a class="btn btn-outline-secondary btn-sm"
             href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
         <a class="btn btn-outline-danger btn-sm"
@@ -67,6 +69,7 @@
             {% if object.recipe_description %}
             <hr>
             <section>
+                <div><b>Extra</b></div>
                 <p class="my-3">{{ object.recipe_description|linebreaks }}
                 </p>
             </section>

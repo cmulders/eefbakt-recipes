@@ -11,8 +11,11 @@ from common.converters import UnitConverter
 from common.forms import ImageTagInlineFormset, UnitConversionInlineFormset
 from utils.views import ModelFormWithInlinesView
 
-from .forms import (ProductIngredientInlineFormset, ProductPriceInlineFormset,
-                    RecipeIngredientInlineFormset)
+from .forms import (
+    ProductIngredientInlineFormset,
+    ProductPriceInlineFormset,
+    RecipeIngredientInlineFormset,
+)
 from .models import Product, Recipe
 from .transformers import RecipeTreeTransformer
 

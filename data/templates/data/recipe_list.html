@@ -18,6 +18,7 @@
     <div class="d-flex flex-wrap">
       <a class="flex-grow-1" href=" {{ object.get_absolute_url }}">{{ object.name }}</a>
       <div class="btn-group align-self-center">
+        <a class="btn btn-outline-success btn-sm" href="{% url 'data:recipe-update' object.pk %}">{% trans "Edit" %}</a>
         <a class="btn btn-outline-secondary btn-sm"
           href="{% url 'data:recipe-update' object.pk %}">{% trans "Edit" %}</a>
         <a class="btn btn-outline-danger btn-sm"

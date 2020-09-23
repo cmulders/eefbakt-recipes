@@ -19,16 +19,6 @@ from .models import Session
 
 def create_session_recipe(session: Session):
     transformer = RecipeTreeTransformer()
-    # kwargs["ingredient_view_objects"] = [
-    #     Ingredient(
-    #         amount=product.amount, unit=product.unit, product=product.product,
-    #     )
-    #     for product in (self.object.ingredients.select_related("product").all())
-    # ]
-    # kwargs["recipe_view_objects"] = [
-    #     transformer.transform(r.recipe, r.amount)
-    #     for r in self.object.session_recipes.select_related("recipe").all()
-    # ]
 
     return Recipe(
         recipe=None,
