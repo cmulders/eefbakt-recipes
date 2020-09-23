@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'baking:session-detail' object.pk %}"
+    title="{{ object.title }}">{{ object.title|truncatewords:4 }}</a></li>
+</li>
+<li class="breadcrumb-item active">{% trans 'Duplicate' %}</li>
+{% endblock %}
+
+{% block content %}
+<h1>Duplicate - {{ object }}</h1>
+<form method="post">{% csrf_token %}
+  <p>Are you sure you want to duplicate "{{ object }}"?</p>
+
+  <input class="btn btn-primary" type="submit" value="Confirm">
+  <a class="btn btn-primary" href="{{ object.get_absolute_url }}">Cancel</a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends './object_confirm_duplicate.html' %}
+
+{% load i18n %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'data:recipe-list' %}">{% trans 'Recipes' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:recipe-detail' object.pk %}">{{ object.name }}</a></li>
+</li>
+<li class="breadcrumb-item active">{% trans 'Duplicate' %}</li>
+{% endblock %}

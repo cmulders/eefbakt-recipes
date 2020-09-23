@@ -9,7 +9,7 @@ from django.views.generic import edit
 from common.constants import Unit
 from common.converters import UnitConverter
 from common.forms import ImageTagInlineFormset, UnitConversionInlineFormset
-from utils.views import ModelFormWithInlinesView
+from utils.views import DuplicateView, ModelFormWithInlinesView
 
 from .forms import (
     ProductIngredientInlineFormset,
@@ -133,6 +133,10 @@ class RecipeDeleteView(generic.DeleteView):
         except ProtectedError as err:
             kwargs.update({"protected_by": err.protected_objects})
         return super().get_context_data(**kwargs)
+
+
+class RecipeDuplicateView(DuplicateView):
+    model = Recipe
 
 
 class RecipeDetailView(generic.DetailView):

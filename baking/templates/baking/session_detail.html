@@ -17,7 +17,7 @@
         <a class="btn btn-outline-success btn-sm"
             href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
         <a class="btn btn-outline-secondary btn-sm"
-            href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
+            href="{% url 'baking:session-duplicate' object.pk %}">{% trans "Duplicate" %}</a>
         <a class="btn btn-outline-danger btn-sm"
             href="{% url 'baking:session-delete' object.pk %}">{% trans "Delete" %}</a>
     </div>

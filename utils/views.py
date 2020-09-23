@@ -1,6 +1,8 @@
 from crispy_forms.helper import FormHelper
-from django.db import transaction
-from django.views.generic import edit
+from django.core.exceptions import ImproperlyConfigured
+from django.db import models, transaction
+from django.http import HttpResponseRedirect
+from django.views.generic import detail, edit
 
 
 class ModelFormWithInlinesView(
@@ -67,3 +69,57 @@ class ModelFormWithInlinesView(
             return self.form_valid(form, inlines)
         else:
             return self.form_invalid(form, inlines)
+
+
+class DuplicateView(detail.SingleObjectTemplateResponseMixin, detail.BaseDetailView):
+    """Provide the ability to duplicate objects."""
+
+    template_name_suffix = "_confirm_duplicate"
+    success_url = None
+
+    def clone_relations(self, target):
+        source = self.get_object()
+
+        for rel in source._meta.get_fields():
+            if rel.many_to_many and rel.concrete:
+                ThroughModel = rel.remote_field.through
+                field_name = rel.m2m_field_name()
+                filter = {field_name: source.pk}
+                for obj in ThroughModel.objects.filter(**filter).all():
+                    obj.pk = None
+                    setattr(obj, field_name, target)
+                    obj.save(force_insert=True)
+
+    @transaction.atomic
+    def duplicate(self, request, *args, **kwargs):
+        """
+        Call the duplicate() method on the fetched object and then redirect to the
+        success URL.
+        """
+        self.object = self.get_object()
+
+        self.object.pk = None
+        self.object.save(force_insert=True)
+
+        self.clone_relations(self.object)
+
+        success_url = self.get_success_url()
+
+        return HttpResponseRedirect(success_url)
+
+    def post(self, request, *args, **kwargs):
+        return self.duplicate(request, *args, **kwargs)
+
+    def get_success_url(self):
+        """Return the URL to redirect to after processing a valid form."""
+        if self.success_url:
+            url = self.success_url.format(**self.object.__dict__)
+        else:
+            try:
+                url = self.object.get_absolute_url()
+            except AttributeError:
+                raise ImproperlyConfigured(
+                    "No URL to redirect to.  Either provide a url or define"
+                    " a get_absolute_url method on the Model."
+                )
+        return url

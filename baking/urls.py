@@ -13,5 +13,6 @@ urlpatterns = [
     path("sessions/<int:pk>/", views.SessionDetailView.as_view(), name="session-detail"),
     path("sessions/<int:pk>/ingredients/", views.SessionIngredientsDetailView.as_view(), name="session-ingredients"),
     path("sessions/<int:pk>/edit/", views.SessionUpdateView.as_view(), name="session-update"),
+    path("sessions/<int:pk>/duplicate/", views.SessionDuplicateView.as_view(), name="session-duplicate"),
     path("sessions/<int:pk>/delete/", views.SessionDeleteView.as_view(), name="session-delete"),
 ]

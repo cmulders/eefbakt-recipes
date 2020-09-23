@@ -10,8 +10,8 @@ from django.views import generic
 from django.views.generic import edit
 
 from common.forms import ImageTagInlineFormset
-from data.transformers import Ingredient, Recipe, RecipeTreeTransformer
-from utils.views import ModelFormWithInlinesView
+from data.transformers import Recipe, RecipeTreeTransformer
+from utils.views import DuplicateView, ModelFormWithInlinesView
 
 from .forms import SessionProductInlineFormset, SessionRecipeInlineFormset
 from .models import Session
@@ -92,6 +92,10 @@ class SessionUpdateView(SessionFormsetFormView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().post(request, *args, **kwargs)
+
+
+class SessionDuplicateView(DuplicateView):
+    model = Session
 
 
 class SessionDeleteView(generic.DeleteView):
