@@ -123,3 +123,11 @@ class DuplicateView(detail.SingleObjectTemplateResponseMixin, detail.BaseDetailV
                     " a get_absolute_url method on the Model."
                 )
         return url
+
+
+class MixinObjectPageTitle:
+    def get_context_data(self, **kwargs):
+        if hasattr(self, "object"):
+            kwargs["page_title"] = str(self.object)
+
+        return super().get_context_data(**kwargs)

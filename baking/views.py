@@ -2,16 +2,15 @@ import functools
 import itertools
 import operator
 
+from common.forms import ImageTagInlineFormset
 from crispy_forms.helper import FormHelper
+from data.transformers import Recipe, RecipeTreeTransformer
 from django.db import transaction
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import edit
-
-from common.forms import ImageTagInlineFormset
-from data.transformers import Recipe, RecipeTreeTransformer
-from utils.views import DuplicateView, ModelFormWithInlinesView
+from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
 
 from .forms import SessionProductInlineFormset, SessionRecipeInlineFormset
 from .models import Session
@@ -37,7 +36,7 @@ class SessionList(generic.ListView):
     model = Session
 
 
-class SessionDetailView(generic.DetailView):
+class SessionDetailView(MixinObjectPageTitle, generic.DetailView):
     model = Session
 
     def get_context_data(self, **kwargs):
@@ -45,8 +44,7 @@ class SessionDetailView(generic.DetailView):
         return super().get_context_data(**kwargs)
 
 
-class SessionIngredientsDetailView(generic.DetailView):
-    model = Session
+class SessionIngredientsDetailView(SessionDetailView):
     template_name = "baking/session_detail_ingredients.html"
 
     def get_context_data(self, **kwargs):
@@ -59,7 +57,7 @@ class SessionIngredientsDetailView(generic.DetailView):
         return super().get_context_data(**kwargs)
 
 
-class SessionFormsetFormView(ModelFormWithInlinesView):
+class SessionFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
     model = Session
     fields = [
         "title",

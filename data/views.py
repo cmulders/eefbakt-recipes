@@ -1,3 +1,6 @@
+from common.constants import Unit
+from common.converters import UnitConverter
+from common.forms import ImageTagInlineFormset, UnitConversionInlineFormset
 from crispy_forms.helper import FormHelper
 from django.db import transaction
 from django.db.models.deletion import Collector, ProtectedError
@@ -5,11 +8,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import edit
-
-from common.constants import Unit
-from common.converters import UnitConverter
-from common.forms import ImageTagInlineFormset, UnitConversionInlineFormset
-from utils.views import DuplicateView, ModelFormWithInlinesView
+from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
 
 from .forms import (
     ProductIngredientInlineFormset,
@@ -24,7 +23,7 @@ class ProductListView(generic.ListView):
     model = Product
 
 
-class ProductDetailView(generic.DetailView):
+class ProductDetailView(MixinObjectPageTitle, generic.DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
@@ -43,7 +42,7 @@ class ProductDetailView(generic.DetailView):
         return super().get_context_data(**kwargs)
 
 
-class ProductFormsetFormView(ModelFormWithInlinesView):
+class ProductFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
     model = Product
     fields = "__all__"
     inlines = {
@@ -91,7 +90,7 @@ class RecipeListView(generic.ListView):
     model = Recipe
 
 
-class RecipeFormsetFormView(ModelFormWithInlinesView):
+class RecipeFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
     model = Recipe
     fields = ["name", "description"]
 
@@ -139,7 +138,7 @@ class RecipeDuplicateView(DuplicateView):
     model = Recipe
 
 
-class RecipeDetailView(generic.DetailView):
+class RecipeDetailView(MixinObjectPageTitle, generic.DetailView):
     model = Recipe
 
     def get_context_data(self, **kwargs):
