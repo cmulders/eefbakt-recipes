@@ -97,3 +97,7 @@ tr.sortable-ghost {
   max-height: 20rem;
   max-width: 20rem;
 }
+
+.export .recipe-amount {
+  display: none;
+}

@@ -3,7 +3,7 @@
     <b class="d-flex-grow">
         {{recipe.recipe.name }}
         {% if recipe.amount != 1 %}
-        ({{ recipe.amount|floatformat:"-2" }}x)
+        <span class="recipe-amount">({{ recipe.amount|floatformat:"-2" }}x)</span>
         {% endif %}
     </b>
 </div>

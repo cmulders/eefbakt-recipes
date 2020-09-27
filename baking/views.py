@@ -44,6 +44,10 @@ class SessionDetailView(MixinObjectPageTitle, generic.DetailView):
         return super().get_context_data(**kwargs)
 
 
+class SessionExportView(SessionDetailView):
+    template_name = "baking/session_export.html"
+
+
 class SessionIngredientsDetailView(SessionDetailView):
     template_name = "baking/session_detail_ingredients.html"
 

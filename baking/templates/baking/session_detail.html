@@ -11,7 +11,10 @@
 
 {% block content %}
 <article>
+    {% block session_actions %}
     <div class="btn-group d-print-none float-right">
+        <a href="{%url 'baking:session-export' object.pk%}"
+            class="btn btn-sm btn-outline-primary">{% trans 'Export' %}</a>
         <a href="{%url 'baking:session-ingredients' object.pk%}"
             class="btn btn-sm btn-outline-primary">{% trans 'Grocery list' %}</a>
         <a class="btn btn-outline-success btn-sm"
@@ -21,6 +24,7 @@
         <a class="btn btn-outline-danger btn-sm"
             href="{% url 'baking:session-delete' object.pk %}">{% trans "Delete" %}</a>
     </div>
+    {% endblock %}
 
     <h1>{{ object.title }}</h1>
     <div>
