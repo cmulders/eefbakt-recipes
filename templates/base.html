@@ -17,17 +17,13 @@ Recepten{% if page_title %} - {{ page_title }}{% endif %}
 
 {% block body %}
 
+{% block navigation %}
 {% include 'navigation.html' %}
+{% endblock %}
 
 <div class="container py-2">
-  {% block breadcrumb_container %}
-  <nav aria-label="breadcrumb" class="navbar">
-    <ol class="breadcrumb bg-light">
       {% block breadcrumbs %}
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
-      {% endblock %}
-    </ol>
-  </nav>
+  {% include 'breadcrumbs.html' %}
   {% endblock %}
 
   <main>{% block content %}{% endblock %}</main>
