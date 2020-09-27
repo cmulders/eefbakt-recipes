@@ -12,5 +12,5 @@
       "source.organizeImports": true
     }
   },
-  "python.sortImports.args": ["-rc", "-sp isort.cfg"]
+  "python.sortImports.args": ["-sp isort.cfg"]
 }
