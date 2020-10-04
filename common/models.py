@@ -19,8 +19,8 @@ class ImageTag(models.Model):
         width_field="width", height_field="height", upload_to=model_directory_path
     )
 
-    width = models.IntegerField(blank=True, null=True)
-    height = models.IntegerField(blank=True, null=True)
+    width = models.IntegerField(blank=True, null=True, editable=False)
+    height = models.IntegerField(blank=True, null=True, editable=False)
 
     name = models.CharField(max_length=150, blank=True)
     caption = models.TextField(blank=True)
@@ -28,8 +28,10 @@ class ImageTag(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    object_id = models.IntegerField()
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.IntegerField(editable=False)
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, editable=False
+    )
     object = GenericForeignKey()
 
 
