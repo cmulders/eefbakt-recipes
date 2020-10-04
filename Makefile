@@ -24,8 +24,8 @@ $(MARKER): $(REQUIREMENTS_TXT) | $(VENV)
 check: venv
 	$(VENV)/python manage.py check
 
-.PHONY: django-shell
-django-shell: check
+.PHONY: shell
+shell: check
 	$(VENV)/python manage.py shell
 
 .PHONY: runserver
@@ -43,3 +43,8 @@ test: check
 .PHONY: migrate
 migrate: makemigrations
 	$(VENV)/python manage.py migrate
+
+.PHONY: backup
+backup:
+	-rm -r remote
+	scp -r cesar.local:/var/opt/recipes/ remote

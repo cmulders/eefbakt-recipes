@@ -2,6 +2,7 @@
 .venv
 
 /media/
+/remote/
 
 *.sqlite3
 **/__pycache__/**
