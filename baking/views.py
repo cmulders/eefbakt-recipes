@@ -35,6 +35,12 @@ def create_session_recipe(session: Session):
 class SessionList(generic.ListView):
     model = Session
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if "q" in self.request.GET:
+            qs = qs.filter(title__icontains=self.request.GET["q"])
+        return qs
+
 
 class SessionDetailView(MixinObjectPageTitle, generic.DetailView):
     model = Session

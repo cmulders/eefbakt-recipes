@@ -22,6 +22,12 @@ from .transformers import RecipeTreeTransformer
 class ProductListView(generic.ListView):
     model = Product
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if "q" in self.request.GET:
+            qs = qs.filter(name__icontains=self.request.GET["q"])
+        return qs
+
 
 class ProductDetailView(MixinObjectPageTitle, generic.DetailView):
     model = Product
@@ -88,6 +94,12 @@ class ProductDeleteView(generic.DeleteView):
 
 class RecipeListView(generic.ListView):
     model = Recipe
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if "q" in self.request.GET:
+            qs = qs.filter(name__icontains=self.request.GET["q"])
+        return qs
 
 
 class RecipeFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
