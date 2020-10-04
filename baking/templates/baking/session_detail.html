@@ -42,9 +42,11 @@
     <div class="d-flex overflow-auto">
         {% for image in object.images.all %}
         <div class="p-2">
-            <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
-                width="{{ image.width|default:25 }}px" height="{{ image.height|default:25 }}px"
-                class="img-thumbnail image-square-thumbnail">
+            <a href="{{ image.image.url }}">
+                <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
+                    width="{{ image.width|default:25 }}px" height="{{ image.height|default:25 }}px"
+                    class="img-thumbnail image-square-thumbnail">
+            </a>
         </div>
         {% endfor %}
     </div>

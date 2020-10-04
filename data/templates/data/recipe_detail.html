@@ -27,8 +27,11 @@
     </div>
     {% for image in object.images.all %}
     <div class="m-4">
-      <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
-        width="{{image.image.width}}px" height="{{image.image.height}}px" class="img-thumbnail image-square-thumbnail">
+      <a href="{{ image.image.url }}">
+        <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
+          width="{{image.image.width}}px" height="{{image.image.height}}px"
+          class="img-thumbnail image-square-thumbnail">
+      </a>
     </div>
     {% endfor %}
   </div>
