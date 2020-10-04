@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load i18n image_tags %}
 
 {% block breadcrumbs %}
 {{ block.super }}
@@ -23,8 +23,9 @@
         <div class="d-flex w-100">
             {% for image in object.images.all|slice:"0:1" %}
             <div class="p-2">
-                <img src="{{ image.image.url }}" alt="{{ image.name }}" width="{{image.image.width}}px"
-                    height="{{image.image.height}}px" class="img-thumbnail image-square-thumbnail-md">
+                <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="12rem" alt="{{ image.name }}"
+                    width="{{image.image.width}}px" height="{{image.image.height}}px"
+                    class="img-thumbnail image-square-thumbnail-md">
             </div>
             {% endfor %}
             <div class="mb-1 flex-grow-1">{{ object.description|linebreaks|truncatewords_html:30 }}
