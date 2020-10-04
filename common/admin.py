@@ -2,8 +2,9 @@ from functools import partial
 from os import read
 
 from django.contrib import admin
-from django.template.defaultfilters import filesizeformat
+from django.template.defaultfilters import filesizeformat, unordered_list
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from .models import AlternateImageTag, ImageTag, UnitConversion
 
@@ -59,6 +60,7 @@ class ImageTagAdmin(admin.ModelAdmin):
         "related_object",
         small_thumbnail,
         image_spec,
+        "alternatives",
         "name",
     )
     list_display_links = (small_thumbnail, image_spec, "name")
@@ -66,10 +68,26 @@ class ImageTagAdmin(admin.ModelAdmin):
     fields = (thumbnail, "image", image_spec, "name", "caption")
     readonly_fields = (thumbnail, image_spec)
 
+    actions = ["make_thumbnails"]
+
     def related_object(self, obj):
         return str(obj.object)
 
     related_object.short_description = "Object"
+
+    def alternatives(self, obj):
+        return mark_safe(
+            "<ul>"
+            + unordered_list([image_spec(alt) for alt in obj.alternates.all()])
+            + "</ul>"
+        )
+
+    def make_thumbnails(self, request, queryset):
+        instance: ImageTag
+        for instance in queryset.prefetch_related("alternates").all():
+            instance.create_thumbnails()
+
+    make_thumbnails.short_description = "Create thumbnails for selected images"
 
 
 @admin.register(UnitConversion)

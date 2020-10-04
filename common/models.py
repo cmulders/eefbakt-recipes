@@ -36,6 +36,15 @@ class ImageTag(models.Model):
     )
     object = GenericForeignKey()
 
+    def create_thumbnails(self):
+        sizes = {128, 256, 512, 1024, 2048}
+        for alternate in self.alternates.all():
+            sizes.discard(alternate.width)
+            sizes.discard(alternate.height)
+
+        for size in sizes:
+            self.make_alternate(size)
+
     def make_alternate(self, size):
         from io import BytesIO
 
@@ -89,14 +98,7 @@ def cleanup_removed(sender, **kwargs):
 @receiver(models.signals.post_save, sender=ImageTag)
 def create_thumbnails(sender, **kwargs):
     instance = kwargs["instance"]
-
-    sizes = {128, 256, 512, 1024, 2048}
-    for alternate in instance.alternates.all():
-        sizes.discard(alternate.width)
-        sizes.discard(alternate.height)
-
-    for size in sizes:
-        instance.make_alternate(size)
+    instance.create_thumbnails()
 
 
 class UnitConversion(models.Model):
