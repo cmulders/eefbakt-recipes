@@ -1,7 +1,9 @@
 import os
+from pathlib import Path, PurePath
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.files.images import ImageFile
 from django.db import models
 from django.dispatch import receiver
 
@@ -34,7 +36,38 @@ class ImageTag(models.Model):
     )
     object = GenericForeignKey()
 
+    def make_alternate(self, size):
+        from io import BytesIO
 
+        from PIL import Image
+
+        im = Image.open(self.image.open())
+        im.thumbnail((size, size))
+        thumb_image = BytesIO()
+        im.save(thumb_image, im.format)
+
+        original_path = PurePath(self.image.name)
+        new_name = f"{original_path.stem}_{im.width}x{im.width}{original_path.suffix}"
+
+        image_file = ImageFile(thumb_image, name=new_name)
+
+        self.alternates.create(image=image_file)
+
+
+class AlternateImageTag(models.Model):
+    original = models.ForeignKey(
+        ImageTag, related_name="alternates", on_delete=models.CASCADE, editable=False
+    )
+
+    image = models.ImageField(
+        width_field="width", height_field="height", upload_to="imagetags/alternates"
+    )
+
+    width = models.IntegerField(blank=True, null=True, editable=False)
+    height = models.IntegerField(blank=True, null=True, editable=False)
+
+
+@receiver(models.signals.post_delete, sender=AlternateImageTag)
 @receiver(models.signals.post_delete, sender=ImageTag)
 def delete_image(sender, **kwargs):
     """
@@ -44,6 +77,26 @@ def delete_image(sender, **kwargs):
 
     if instance.image:
         instance.image.delete(save=False)
+
+
+@receiver(models.signals.post_init, sender=AlternateImageTag)
+def cleanup_removed(sender, **kwargs):
+    instance = kwargs["instance"]
+    if instance.pk and not Path(instance.image.path).exists():
+        instance.delete()
+
+
+@receiver(models.signals.post_save, sender=ImageTag)
+def create_thumbnails(sender, **kwargs):
+    instance = kwargs["instance"]
+
+    sizes = {128, 256, 512, 1024, 2048}
+    for alternate in instance.alternates.all():
+        sizes.discard(alternate.width)
+        sizes.discard(alternate.height)
+
+    for size in sizes:
+        instance.make_alternate(size)
 
 
 class UnitConversion(models.Model):

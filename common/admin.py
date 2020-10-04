@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.template.defaultfilters import filesizeformat
 from django.utils.html import format_html
 
-from .models import ImageTag, UnitConversion
+from .models import AlternateImageTag, ImageTag, UnitConversion
 
 
 def thumbnail(obj, width=500, height=500):
@@ -36,8 +36,25 @@ def image_spec(obj):
 
 
 # Register your models here.
+class AlternateImageTagInline(admin.TabularInline):
+    extra = 0
+    model = AlternateImageTag
+
+    fields = (
+        tiny_thumbnail,
+        image_spec,
+        "image",
+    )
+    readonly_fields = (
+        tiny_thumbnail,
+        image_spec,
+    )
+
+
 @admin.register(ImageTag)
 class ImageTagAdmin(admin.ModelAdmin):
+    inlines = [AlternateImageTagInline]
+
     list_display = (
         "related_object",
         small_thumbnail,
