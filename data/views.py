@@ -1,21 +1,27 @@
-from common.constants import Unit
-from common.converters import UnitConverter
-from common.forms import ImageTagInlineFormset, UnitConversionInlineFormset
-from crispy_forms.helper import FormHelper
-from django.db import transaction
+import functools
+import itertools
+import operator
+
 from django.db.models.deletion import Collector, ProtectedError
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
-from django.views.generic import edit
 from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
 
+from data.transformers import Recipe as RecipeViewModel
+from data.transformers import RecipeTreeTransformer
+
+from .constants import Unit
+from .converters import UnitConverter
 from .forms import (
+    ImageTagInlineFormset,
     ProductIngredientInlineFormset,
     ProductPriceInlineFormset,
     RecipeIngredientInlineFormset,
+    SessionProductInlineFormset,
+    SessionRecipeInlineFormset,
+    UnitConversionInlineFormset,
 )
-from .models import Product, Recipe
+from .models import Product, Recipe, Session
 from .transformers import RecipeTreeTransformer
 
 
@@ -157,3 +163,98 @@ class RecipeDetailView(MixinObjectPageTitle, generic.DetailView):
         transformer = RecipeTreeTransformer()
         kwargs["transformed_object"] = transformer.transform(self.object)
         return super().get_context_data(**kwargs)
+
+
+class SessionList(generic.ListView):
+    model = Session
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if "q" in self.request.GET:
+            qs = qs.filter(title__icontains=self.request.GET["q"])
+        return qs
+
+
+class SessionDetailView(MixinObjectPageTitle, generic.DetailView):
+    model = Session
+
+    def session_recipe_viewmodel(self):
+        session = self.object
+        transformer = RecipeTreeTransformer()
+
+        return RecipeViewModel(
+            recipe=None,
+            ingredients=[
+                transformer.transform_product(product)
+                for product in (session.ingredients.select_related("product").all())
+            ],
+            base_recipes=[
+                transformer.transform_recipe(r.recipe, scale=r.amount)
+                for r in session.session_recipes.select_related("recipe").all()
+            ],
+        )
+
+    def get_context_data(self, **kwargs):
+        kwargs["session_recipe"] = self.session_recipe_viewmodel()
+        return super().get_context_data(**kwargs)
+
+
+class SessionExportView(SessionDetailView):
+    template_name = "baking/session_export.html"
+
+
+class SessionIngredientsDetailView(SessionDetailView):
+    template_name = "baking/session_detail_ingredients.html"
+
+    def get_context_data(self, **kwargs):
+        session_recipe = self.session_recipe_viewmodel()
+        ingredients = list(session_recipe.iter_ingredients())
+        groups = itertools.groupby(sorted(ingredients))
+
+        kwargs["ingredients"] = [functools.reduce(operator.add, g) for _, g in groups]
+        kwargs["ingredients_total"] = sum(p.price or 0 for p in ingredients)
+        return super().get_context_data(**kwargs)
+
+
+class SessionFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
+    model = Session
+    fields = [
+        "title",
+        "description",
+        "recipe_description",
+        "session_date",
+    ]
+    inlines = {
+        "products": SessionProductInlineFormset,
+        "recipes": SessionRecipeInlineFormset,
+        "images": ImageTagInlineFormset,
+    }
+
+
+class SessionCreateView(SessionFormsetFormView):
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        return super().post(request, *args, **kwargs)
+
+
+class SessionUpdateView(SessionFormsetFormView):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+
+class SessionDuplicateView(DuplicateView):
+    model = Session
+
+
+class SessionDeleteView(generic.DeleteView):
+    model = Session
+    success_url = reverse_lazy("data:session-list")

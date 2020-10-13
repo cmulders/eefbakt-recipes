@@ -5,7 +5,7 @@
 {% block breadcrumbs %}
 {{ block.super }}
 {# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li> #}
-<li class="breadcrumb-item"><a href="{% url 'baking:session-list' %}">{% trans 'Sessions' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:session-list' %}">{% trans 'Sessions' %}</a></li>
 <li class="breadcrumb-item active" title="{{ object.title }}">{{ object.title|truncatewords:4 }}</li>
 {% endblock %}
 
@@ -13,16 +13,16 @@
 <article>
     {% block session_actions %}
     <div class="btn-group d-print-none float-right">
-        <a href="{%url 'baking:session-export' object.pk%}"
+        <a href="{%url 'data:session-export' object.pk%}"
             class="btn btn-sm btn-outline-primary">{% trans 'Export' %}</a>
-        <a href="{%url 'baking:session-ingredients' object.pk%}"
+        <a href="{%url 'data:session-ingredients' object.pk%}"
             class="btn btn-sm btn-outline-primary">{% trans 'Grocery list' %}</a>
         <a class="btn btn-outline-success btn-sm"
-            href="{% url 'baking:session-update' object.pk %}">{% trans "Edit" %}</a>
+            href="{% url 'data:session-update' object.pk %}">{% trans "Edit" %}</a>
         <a class="btn btn-outline-secondary btn-sm"
-            href="{% url 'baking:session-duplicate' object.pk %}">{% trans "Duplicate" %}</a>
+            href="{% url 'data:session-duplicate' object.pk %}">{% trans "Duplicate" %}</a>
         <a class="btn btn-outline-danger btn-sm"
-            href="{% url 'baking:session-delete' object.pk %}">{% trans "Delete" %}</a>
+            href="{% url 'data:session-delete' object.pk %}">{% trans "Delete" %}</a>
     </div>
     {% endblock %}
 
@@ -56,7 +56,7 @@
 
             <div class="border rounded-lg p-2 bg-light">
                 <h3>{% trans 'Ingredients' %}</h3>
-                {% include 'baking/snippets/session_ingredients.html' with recipe=session_recipe  %}
+                {% include 'data/snippets/session_ingredients.html' with recipe=session_recipe  %}
             </div>
         </aside>
         <div class="col">

@@ -26,5 +26,4 @@ urlpatterns = [
     path("home/", IndexView.as_view(), name="home"),
     path("admin/", admin.site.urls),
     path("data/", include("data.urls")),
-    path("baking/", include("baking.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True)

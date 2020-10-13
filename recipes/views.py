@@ -1,7 +1,5 @@
+from data.models import Product, Recipe, Session
 from django.views import generic
-
-from baking.models import Session
-from data.models import Product, Recipe
 
 
 class IndexView(generic.TemplateView):

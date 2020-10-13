@@ -19,4 +19,12 @@ urlpatterns = [
     path("products/new/", views.ProductCreateView.as_view(), name="product-create"),
     path("products/<int:pk>/edit/", views.ProductUpdateView.as_view(), name="product-update"),
     path("products/<int:pk>/delete/", views.ProductDeleteView.as_view(), name="product-delete"),
+    path("sessions/", views.SessionList.as_view(), name="session-list"),
+    path("sessions/new/", views.SessionCreateView.as_view(), name="session-create"),
+    path("sessions/<int:pk>/", views.SessionDetailView.as_view(), name="session-detail"),
+    path("sessions/<int:pk>/ingredients/", views.SessionIngredientsDetailView.as_view(), name="session-ingredients"),
+    path("sessions/<int:pk>/export/", views.SessionExportView.as_view(), name="session-export"),
+    path("sessions/<int:pk>/edit/", views.SessionUpdateView.as_view(), name="session-update"),
+    path("sessions/<int:pk>/duplicate/", views.SessionDuplicateView.as_view(), name="session-duplicate"),
+    path("sessions/<int:pk>/delete/", views.SessionDeleteView.as_view(), name="session-delete"),
 ]

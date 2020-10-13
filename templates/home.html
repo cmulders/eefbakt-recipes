@@ -44,7 +44,7 @@
         <div class="card">
             <div class="card-body">
                 <h3 class="card-title">
-                    <a href="{% url 'baking:session-list'%}">Sessions</a>
+                    <a href="{% url 'data:session-list'%}">Sessions</a>
                 </h3>
                 <ul class="list-group list-group-flush">
                     {% for session in last_sessions %}
@@ -52,7 +52,7 @@
                         {{ session.title }}
                     </a>
                     {% empty %}
-                    <a class="list-group-item" href="{% url 'baking:session-create' %}">
+                    <a class="list-group-item" href="{% url 'data:session-create' %}">
                         + {% trans 'New Session' %}
                     </a>
                     {% endfor %}
