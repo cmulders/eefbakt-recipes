@@ -1,8 +1,8 @@
 from collections import defaultdict
 from typing import List, Mapping, Optional, Set, Tuple
 
-from common.constants import Unit
-from common.models import UnitConversion
+from .constants import Unit
+from .models import UnitConversion
 
 
 class UnitConverter:

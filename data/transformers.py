@@ -1,13 +1,13 @@
-from collections import defaultdict
 from dataclasses import dataclass, field
 from decimal import Decimal
 from functools import cached_property
 from typing import *
 
-from common.constants import Unit
-from common.converters import UnitConverter
 from data.models import Product, ProductIngredient, ProductPrice
 from data.models import Recipe as RecipeModel
+
+from .constants import Unit
+from .converters import UnitConverter
 
 
 @dataclass(frozen=True)
@@ -48,7 +48,7 @@ class Ingredient:
         return Ingredient(
             amount=other._convert_amount(to_unit) + self._convert_amount(to_unit),
             unit=to_unit,
-            product=self.product
+            product=self.product,
         )
 
     __radd__ = __add__
