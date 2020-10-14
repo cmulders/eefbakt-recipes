@@ -4,7 +4,8 @@ import operator
 
 from django.db.models.deletion import Collector, ProtectedError
 from django.urls import reverse_lazy
-from django.views import generic
+from django.views.generic import DetailView, ListView
+from django.views.generic.edit import DeleteView
 from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
 
 from data.transformers import Recipe as RecipeViewModel
@@ -25,7 +26,7 @@ from .models import Product, Recipe, Session
 from .transformers import RecipeTreeTransformer
 
 
-class ProductListView(generic.ListView):
+class ProductListView(ListView):
     model = Product
 
     def get_queryset(self):
@@ -35,22 +36,12 @@ class ProductListView(generic.ListView):
         return qs
 
 
-class ProductDetailView(MixinObjectPageTitle, generic.DetailView):
+class ProductDetailView(MixinObjectPageTitle, DetailView):
     model = Product
 
     def get_context_data(self, **kwargs):
         converter = UnitConverter(self.object.unit_conversions.all())
-        kwargs.update(
-            {
-                "conversions": {
-                    from_unit: [
-                        (converter.scale(from_unit, to_unit), to_unit)
-                        for to_unit in Unit
-                    ]
-                    for from_unit in Unit
-                }
-            }
-        )
+        kwargs.update({"conversions": converter.conversion_matrix})
         return super().get_context_data(**kwargs)
 
 
@@ -85,7 +76,7 @@ class ProductUpdateView(ProductFormsetFormView):
         return super().post(request, *args, **kwargs)
 
 
-class ProductDeleteView(generic.DeleteView):
+class ProductDeleteView(DeleteView):
     model = Product
     success_url = reverse_lazy("data:product-list")
 
@@ -98,7 +89,7 @@ class ProductDeleteView(generic.DeleteView):
         return super().get_context_data(**kwargs)
 
 
-class RecipeListView(generic.ListView):
+class RecipeListView(ListView):
     model = Recipe
 
     def get_queryset(self):
@@ -139,7 +130,7 @@ class RecipeUpdateView(RecipeFormsetFormView):
         return super().post(request, *args, **kwargs)
 
 
-class RecipeDeleteView(generic.DeleteView):
+class RecipeDeleteView(DeleteView):
     model = Recipe
     success_url = reverse_lazy("data:recipe-list")
 
@@ -156,7 +147,7 @@ class RecipeDuplicateView(DuplicateView):
     model = Recipe
 
 
-class RecipeDetailView(MixinObjectPageTitle, generic.DetailView):
+class RecipeDetailView(MixinObjectPageTitle, DetailView):
     model = Recipe
 
     def get_context_data(self, **kwargs):
@@ -165,7 +156,7 @@ class RecipeDetailView(MixinObjectPageTitle, generic.DetailView):
         return super().get_context_data(**kwargs)
 
 
-class SessionList(generic.ListView):
+class SessionList(ListView):
     model = Session
 
     def get_queryset(self):
@@ -175,7 +166,7 @@ class SessionList(generic.ListView):
         return qs
 
 
-class SessionDetailView(MixinObjectPageTitle, generic.DetailView):
+class SessionDetailView(MixinObjectPageTitle, DetailView):
     model = Session
 
     def session_recipe_viewmodel(self):
@@ -200,19 +191,19 @@ class SessionDetailView(MixinObjectPageTitle, generic.DetailView):
 
 
 class SessionExportView(SessionDetailView):
-    template_name = "baking/session_export.html"
+    template_name = "data/session_export.html"
 
 
 class SessionIngredientsDetailView(SessionDetailView):
-    template_name = "baking/session_detail_ingredients.html"
+    template_name = "data/session_detail_ingredients.html"
 
     def get_context_data(self, **kwargs):
         session_recipe = self.session_recipe_viewmodel()
-        ingredients = list(session_recipe.iter_ingredients())
-        groups = itertools.groupby(sorted(ingredients))
+        ingredients = sorted(session_recipe.iter_ingredients())
+        groups = itertools.groupby(ingredients)
 
         kwargs["ingredients"] = [functools.reduce(operator.add, g) for _, g in groups]
-        kwargs["ingredients_total"] = sum(p.price or 0 for p in ingredients)
+        kwargs["ingredients_total"] = sum(p.price for p in ingredients if p.price)
         return super().get_context_data(**kwargs)
 
 
@@ -255,6 +246,6 @@ class SessionDuplicateView(DuplicateView):
     model = Session
 
 
-class SessionDeleteView(generic.DeleteView):
+class SessionDeleteView(DeleteView):
     model = Session
     success_url = reverse_lazy("data:session-list")

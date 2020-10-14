@@ -1,15 +1,15 @@
 from collections import defaultdict
+from functools import cached_property
 from typing import List, Mapping, Optional, Set, Tuple
 
 from .constants import Unit
-from .models import UnitConversion
 
 
 class UnitConverter:
     _graph: Mapping[Unit, Set[Unit]]
     _conversions: Mapping[Tuple[Unit, Unit], float]
 
-    def __init__(self, conversions: List[UnitConversion]):
+    def __init__(self, conversions: List):
         self._conversions = {}
 
         self._graph = defaultdict(set)
@@ -47,11 +47,23 @@ class UnitConverter:
 
         path = self.search_conversion(from_unit, to_unit)
 
-        if not path:
-            return None
+        if path is None:
+            raise ValueError(f"No conversion available from {from_unit} to {to_unit}")
 
         scale: float = 1
         for conversion in zip(path, path[1:]):
             scale *= self._conversions.get(conversion, 1)
 
         return scale
+
+    @cached_property
+    def conversion_matrix(self) -> Mapping[Unit, Mapping[Unit, int]]:
+        return {
+            from_unit: {
+                to_unit: self.scale(from_unit, to_unit)
+                if self.has_conversion(from_unit, to_unit)
+                else None
+                for to_unit in Unit
+            }
+            for from_unit in Unit
+        }

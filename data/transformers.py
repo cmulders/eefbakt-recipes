@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from decimal import Decimal
 from functools import cached_property
 from typing import *
@@ -10,45 +10,39 @@ from .constants import Unit
 from .converters import UnitConverter
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, order=True, eq=True)
 class Ingredient:
-    amount: int
+    name: str = field(init=False)
+    amount: int = field(hash=False)
     unit: Unit
-    product: Product
+    product: Product = field(compare=False)
 
-    def __hash__(self):
-        return hash((self.product, self.unit))
+    def __post_init__(self):
+        object.__setattr__(self, "name", self.product.name)
 
     def __eq__(self, other):
         if not isinstance(other, Ingredient):
-            return False
+            return NotImplemented
 
         return (
             self.unit == other.unit
             or self.unit_converter.has_conversion(self.unit, other.unit)
         ) and self.product == other.product
 
-    def __lt__(self, other):
-        assert isinstance(other, Ingredient)
-        return (self.product.name, self.unit, self.amount,) < (
-            other.product.name,
-            other.unit,
-            other.amount,
-        )
-
     def __add__(self, other: Optional["Ingredient"]):
         if other is None:
             return self
-
+        print(self)
+        print(other)
         assert isinstance(other, Ingredient) and self == other
 
         # Select most appropiate unit to convert to
         to_unit = max(self.unit, other.unit)
 
-        return Ingredient(
+        return replace(
+            self,
             amount=other._convert_amount(to_unit) + self._convert_amount(to_unit),
             unit=to_unit,
-            product=self.product,
         )
 
     __radd__ = __add__
@@ -64,24 +58,13 @@ class Ingredient:
 
     @property
     def price(self):
-        if not self.product or not self.product.prices.all():
-            return None
-
-        prices: List[ProductPrice] = [
-            price
-            for price in self.product.prices.all()
-            if Unit(price.unit) == self.unit
-            or self.unit_converter.has_conversion(price.unit, self.unit)
-        ]
-
-        if not prices:
-            return None
-
-        return min(
+        prices = [
             float(price.normalized_price * self.amount)
             * self.unit_converter.scale(self.unit, price.unit)
-            for price in prices
-        )
+            for price in self.product.prices.all()
+            if self.unit_converter.has_conversion(price.unit, self.unit)
+        ]
+        return min(prices, default=None,)
 
 
 @dataclass

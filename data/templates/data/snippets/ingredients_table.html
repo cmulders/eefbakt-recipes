@@ -5,8 +5,8 @@
     <tr>
         <td>{{ ingredient.amount|floatformat:"-2" }}</td>
         <td>{{ ingredient.unit.short_name }}</td>
-        <td>{{ ingredient.product.name }}</td>
-        {# <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.product.name }}</a> </td> #}
+        <td>{{ ingredient.name }}</td>
+        {# <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.name }}</a> </td> #}
     </tr>
     {% if forloop.last %}
 </table>

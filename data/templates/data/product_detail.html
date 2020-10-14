@@ -37,8 +37,8 @@
         {% for from_unit, to_units in conversions.items %}
         <tr>
             <th>1 {{ from_unit.short_name }} </th>
-            {% for to_unit in to_units %}
-            <td>{{ to_unit.0|floatformat:'-2' }} {{ to_unit.1.short_name }}</td>
+            {% for to_unit, scale in to_units.items %}
+            <td>{{ scale|floatformat:'-2'|default:'-' }} {{ to_unit.short_name }}</td>
             {% endfor %}
             </ul>
         </tr>

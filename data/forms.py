@@ -86,23 +86,6 @@ ProductPriceInlineFormset = forms.inlineformset_factory(
 )
 
 
-def product_formfield_callback(f, **kwargs):
-    if f.name == "product":
-        kwargs.update(
-            {
-                "form_class": CreatingModelChoiceField,
-                "creation_field": "name",
-                "widget": forms.Select(attrs={"data-tags": "true"}),
-                "queryset": Product.objects.annotate(
-                    use_count=Count("sessionproduct")
-                    + Count("productingredient")
-                    + Count("sessions")
-                ).order_by("-use_count", "name"),
-            }
-        )
-    return f.formfield(**kwargs)
-
-
 SessionRecipeInlineFormset = forms.inlineformset_factory(
     Session,
     SessionRecipe,
