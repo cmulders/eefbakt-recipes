@@ -1,7 +1,7 @@
 PY?=python3
 WORKDIR?=.
 VENVDIR?=$(WORKDIR)/.venv
-REQUIREMENTS_TXT?=$(wildcard requirements-dev.txt)  # Multiple paths are supported (space separated)
+REQUIREMENTS_TXT?=$(wildcard requirements*.txt)  # Multiple paths are supported (space separated)
 MARKER=$(VENVDIR)/pyvenv.cfg
 
 
@@ -16,7 +16,7 @@ $(VENV):
 	$(VENV)/python -m pip install --upgrade pip setuptools wheel
 
 $(MARKER): $(REQUIREMENTS_TXT) | $(VENV)
-	$(VENV)/python -m pip install -r $(REQUIREMENTS_TXT) --no-warn-script-location
+	$(VENV)/python -m pip install $(foreach path,$(REQUIREMENTS_TXT),-r $(path)) --no-warn-script-location
 	touch $(MARKER)
 
 
