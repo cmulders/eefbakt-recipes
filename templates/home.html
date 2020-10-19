@@ -1,64 +1,24 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
+{% load i18n image_tags %}
+
+{% block breadcrumbs_container %}
+{% endblock %}
 
 {% block content %}
-<div class="col-md-10 offset-md-1">
-    <div class="card-deck ">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">
-                    <a href="{% url 'data:product-list'%}">Products</a>
-                </h3>
-                <ul class="list-group list-group-flush">
-                    {% for product in last_products %}
-                    <a class="list-group-item" href="{{ product.get_absolute_url }}">
-                        {{ product }}
-                    </a>
-                    {% empty %}
-                    <a class="list-group-item" href="{% url 'data:product-create' %}">
-                        + {% trans 'New product' %}
-                    </a>
-                    {% endfor %}
-                </ul>
+<div class="d-flex flex-wrap">
+    {% for session in last_sessions|slice:":60" %}
+    <div class="col-6 col-md-4 col-lg-3 p-2">
+        <a class="card text-white hover-shadow" href="{{ session.get_absolute_url }}">
+            {% with image=session.images.first %}
+            <img class="card-img img-fluid" src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem"
+                alt="{{ image.name }}" width="{{image.image.width}}px" height="{{image.image.height}}px">
+            {% endwith %}
+            <div class="card-img-overlay title-gradient">
+                <h5 class="card-title">{{ session }}</h5>
             </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">
-                    <a href="{% url 'data:recipe-list'%}">Recipes</a>
-                </h3>
-                <ul class="list-group list-group-flush">
-                    {% for recipe in last_recipes %}
-                    <a class="list-group-item" href="{{ recipe.get_absolute_url }}">
-                        {{ recipe }}
-                    </a>
-                    {% empty %}
-                    <a class="list-group-item" href="{% url 'data:recipe-create' %}">
-                        + {% trans 'New recipe' %}
-                    </a>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">
-                    <a href="{% url 'data:session-list'%}">Sessions</a>
-                </h3>
-                <ul class="list-group list-group-flush">
-                    {% for session in last_sessions %}
-                    <a class="list-group-item" href="{{ session.get_absolute_url }}">
-                        {{ session.title }}
-                    </a>
-                    {% empty %}
-                    <a class="list-group-item" href="{% url 'data:session-create' %}">
-                        + {% trans 'New Session' %}
-                    </a>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+        </a>
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -101,3 +101,26 @@ tr.sortable-ghost {
 .export .recipe-amount {
   display: none;
 }
+
+.title-gradient {
+  transition: background-position 0.2s ease-in-out;
+  background-size: 100% 200%;
+  background-image: linear-gradient(
+    rgba(35, 35, 35, 0.6) 0%,
+    rgba(200, 200, 200, 0) 75%,
+    rgba(255, 255, 255, 0) 50%
+  );
+  background-position-y: 50%;
+}
+
+.title-gradient:hover {
+  background-position-y: 10%;
+}
+
+.hover-shadow {
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
