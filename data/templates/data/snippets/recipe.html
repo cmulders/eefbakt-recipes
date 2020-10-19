@@ -1,5 +1,5 @@
 <div class="d-flex">
-    <a class="mr-1" href="{{ recipe.recipe.get_absolute_url }}">#</a>
+    <a class="mr-1" href="{{ recipe.recipe.get_absolute_url }}?reftype={{reftype|iriencode}}&refid={{refid}}">#</a>
     <b class="d-flex-grow">
         {{recipe.recipe.name }}
         {% if recipe.amount != 1 %}

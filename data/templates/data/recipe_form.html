@@ -20,6 +20,10 @@
 
 <form method="post" enctype="multipart/form-data" novalidate>
   {% csrf_token %}
+  {% if request.GET.reftype and request.GET.refid %}
+  <input type="hidden" name="ref" value="{{request.GET.reftype}}">
+  <input type="hidden" name="refid" value="{{request.GET.refid}}">
+  {% endif %}
   {{ form|crispy }}
 
 

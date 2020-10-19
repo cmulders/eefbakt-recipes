@@ -1,6 +1,6 @@
 {% for base_recipe in recipe.base_recipes %}
 <div class="ml-3 mt-2">
-    {% include 'data/snippets/recipe.html' with recipe=base_recipe only %}
+    {% include 'data/snippets/recipe.html' with recipe=base_recipe reftype="data:session-detail" refid=recipe.recipe.pk only %}
 </div>
 {% endfor %}
 

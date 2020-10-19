@@ -3,7 +3,8 @@ import itertools
 import operator
 
 from django.db.models.deletion import Collector, ProtectedError
-from django.urls import reverse_lazy
+from django.urls import NoReverseMatch, reverse_lazy
+from django.urls.base import reverse
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import DeleteView
 from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
@@ -121,6 +122,18 @@ class RecipeCreateView(RecipeFormsetFormView):
 
 
 class RecipeUpdateView(RecipeFormsetFormView):
+    def get_success_url(self) -> str:
+        refid = self.request.POST.get("refid", None)
+        ref = self.request.POST.get("ref", None)
+
+        if ref and refid:
+            try:
+                return reverse(ref, args=[refid])
+            except NoReverseMatch:
+                pass  # just use the regular success url
+
+        return super().get_success_url()
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super().get(request, *args, **kwargs)
@@ -174,7 +187,7 @@ class SessionDetailView(MixinObjectPageTitle, DetailView):
         transformer = RecipeTreeTransformer()
 
         return RecipeViewModel(
-            recipe=None,
+            recipe=session,
             ingredients=[
                 transformer.transform_product(product)
                 for product in (session.ingredients.select_related("product").all())
