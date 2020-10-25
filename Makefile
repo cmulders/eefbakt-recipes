@@ -16,9 +16,13 @@ $(VENV):
 	$(VENV)/python -m pip install --upgrade pip setuptools wheel
 
 $(MARKER): $(REQUIREMENTS_TXT) | $(VENV)
-	$(VENV)/python -m pip install $(foreach path,$(REQUIREMENTS_TXT),-r $(path)) --no-warn-script-location
+	$(VENV)/python -m pip install $(foreach path,$(REQUIREMENTS_TXT),-r $(path)) --no-warn-script-location --upgrade
 	touch $(MARKER)
 
+.PHONY: upgrade
+upgrade: $(REQUIREMENTS_TXT) | $(VENV)
+	touch $(REQUIREMENTS_TXT)
+	$(MAKE) venv
 
 .PHONY: check
 check: venv
@@ -46,5 +50,4 @@ migrate: makemigrations
 
 .PHONY: backup
 backup:
-	-rm -r remote
-	scp -r cesar.local:/var/opt/recipes/ remote
+	rsync -rt --delete --progress cesar.local:/var/opt/recipes/ remote
