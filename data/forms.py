@@ -9,6 +9,7 @@ from utils.forms import OrderdedModelForm
 from utils.formsets import OrderFirstInlineFormSet
 
 from data.models import Product
+from data.widgets import ImageInput
 
 from .models import (
     ImageTag,
@@ -91,7 +92,10 @@ SessionRecipeInlineFormset = forms.inlineformset_factory(
     SessionRecipe,
     formset=OrderFirstInlineFormSet,
     form=OrderdedModelForm,
-    fields=["recipe", "amount",],
+    fields=[
+        "recipe",
+        "amount",
+    ],
     can_order=True,
     extra=3,
 )
@@ -102,27 +106,14 @@ SessionProductInlineFormset = forms.inlineformset_factory(
     formset=OrderFirstInlineFormSet,
     form=OrderdedModelForm,
     formfield_callback=product_formfield_callback,
-    fields=["product", "amount", "unit",],
+    fields=[
+        "product",
+        "amount",
+        "unit",
+    ],
     can_order=True,
     extra=3,
 )
-
-
-class ImageInput(forms.FileInput):
-    template_name = "data/forms/widgets/imagefile.html"
-
-    def is_initial(self, value):
-        """
-        Return whether value is considered to be initial value.
-        """
-        return bool(value and getattr(value, "url", False))
-
-    def format_value(self, value):
-        """
-        Return the file object if it has a defined url attribute.
-        """
-        if self.is_initial(value):
-            return value
 
 
 class ImageTagForm(forms.ModelForm):
@@ -141,9 +132,13 @@ class ImageTagForm(forms.ModelForm):
 
 
 ImageTagInlineFormset = generic_forms.generic_inlineformset_factory(
-    ImageTag, form=ImageTagForm, extra=1, max_num=3,
+    ImageTag,
+    form=ImageTagForm,
+    extra=1,
+    max_num=3,
 )
 
 UnitConversionInlineFormset = generic_forms.generic_inlineformset_factory(
-    UnitConversion, extra=2,
+    UnitConversion,
+    extra=2,
 )

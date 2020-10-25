@@ -94,6 +94,7 @@ def delete_image(sender, **kwargs):
         instance.image.delete(save=False)
 
 
+@receiver(models.signals.post_init, sender=ImageTag)
 @receiver(models.signals.post_init, sender=AlternateImageTag)
 def cleanup_removed(sender, **kwargs):
     instance = kwargs["instance"]
