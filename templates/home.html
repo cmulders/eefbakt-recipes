@@ -9,15 +9,26 @@
 <div class="d-flex flex-wrap">
     {% for session in last_sessions|slice:":60" %}
     <div class="col-6 col-md-4 col-lg-3 p-2">
-        <a class="card text-white hover-shadow" href="{{ session.get_absolute_url }}">
-            {% with image=session.images.first %}
-            <img class="card-img img-fluid" src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem"
-                alt="{{ image.name }}" width="{{image.image.width}}px" height="{{image.image.height}}px">
-            {% endwith %}
-            <div class="card-img-overlay title-gradient">
-                <h5 class="card-title">{{ session }}</h5>
-            </div>
-        </a>
+        <div class="square-container">
+            <a class="square-element overflow-hidden card text-white hover-shadow"
+                href="{{ session.get_absolute_url }}">
+                {% if session.images.exists %}
+                {% with image=session.images.first %}
+                <img class="card-img img-fluid" src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem"
+                    alt="{{ image.name }}" width="{{image.image.width}}px" height="{{image.image.height}}px">
+                {% endwith %}
+                {% else %}
+                {% with image=random_images.0 %}
+                <img class="card-img img-fluid blurred-image" src="{{ image.image.url }}" srcset="{{ image|srcset }}"
+                    sizes="20rem" alt="{{ image.name }}" width="{{image.image.width}}px"
+                    height="{{image.image.height}}px">
+                {% endwith %}
+                {% endif %}
+                <div class="card-img-overlay title-gradient">
+                    <h5 class="card-title">{{ session }}</h5>
+                </div>
+            </a>
+        </div>
     </div>
     {% endfor %}
 </div>
