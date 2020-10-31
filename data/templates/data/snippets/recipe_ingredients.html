@@ -1,6 +1,6 @@
 {% include 'data/snippets/ingredients_table.html' with ingredients=recipe.ingredients only %}
 {% for base_recipe in recipe.base_recipes %}
 <div class="ml-3 mt-2">
-    {% include 'data/snippets/recipe.html' with recipe=base_recipe only %}
+    {% include 'data/snippets/recipe.html' with recipe=base_recipe reftype=reftype refid=refid only %}
 </div>
 {% endfor %}

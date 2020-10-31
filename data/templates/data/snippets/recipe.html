@@ -1,9 +1,9 @@
 <div class="d-flex">
-    <a class="mr-1" href="{{ recipe.recipe.get_absolute_url }}?reftype={{reftype|iriencode}}&refid={{refid}}">#</a>
+    <a class="mr-1" href="{{ recipe.url }}?reftype={{reftype|iriencode}}&refid={{refid}}">#</a>
     <b class="d-flex-grow">
-        {{recipe.recipe.name }}
-        {% if recipe.amount != 1 %}
-        <span class="recipe-amount">({{ recipe.amount|floatformat:"-2" }}x)</span>
+        {{recipe.name }}
+        {% if recipe.amount and recipe.amount != 1 %}
+        <span class="recipe-amount">({{ recipe.amount|floatformat:"-2" }} {{recipe.unit.short_name|default:"x"}})</span>
         {% endif %}
     </b>
 </div>

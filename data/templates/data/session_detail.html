@@ -56,15 +56,15 @@
 
             <div class="border rounded-lg p-2 bg-light">
                 <h3>{% trans 'Ingredients' %}</h3>
-                {% include 'data/snippets/session_ingredients.html' with recipe=session_recipe  %}
+                {% include 'data/snippets/session_ingredients.html' with recipe=session_recipe reftype="session:detail" refid=object.pk  %}
             </div>
         </aside>
         <div class="col">
             {% for object in session_recipe.base_recipes %}
             <section>
                 {% for recipe in object %}
-                <div><b>{{ recipe.recipe.name }}</b></div>
-                <p class="my-3">{{ recipe.recipe.description|default:"..."|linebreaks }}
+                <div><b>{{ recipe.name }}</b></div>
+                <p class="my-3">{{ recipe.description|default:"..."|linebreaks }}
                 </p>
                 {% endfor %}
             </section>

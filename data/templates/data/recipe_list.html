@@ -27,7 +27,7 @@
   {% for object in object_list %}
   <div class="list-group-item">
     <div class="d-flex flex-wrap">
-      <a class="flex-grow-1" href=" {{ object.get_absolute_url }}">{{ object.name }}</a>
+      <a class="flex-grow-1" href=" {{ object.get_absolute_url }}">{{ object.title }}</a>
       <div class="btn-group align-self-center">
         <a class="btn btn-outline-success btn-sm" href="{% url 'data:recipe-update' object.pk %}">{% trans "Edit" %}</a>
         <a class="btn btn-outline-secondary btn-sm"

@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="d-flex align-items-center">
-  <h1>{{ object.name }}</h1>
+  <h1>{{ object.title }}</h1>
   <div class="btn-group ml-5 d-print-none">
     <a class="btn btn-outline-success btn-sm"
       href="{% url 'data:recipe-update' object.pk %}?{{request.META.QUERY_STRING}}">{% trans "Edit" %}</a>

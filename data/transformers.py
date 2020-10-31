@@ -12,13 +12,10 @@ from .converters import UnitConverter
 
 @dataclass(frozen=True, order=True, eq=True)
 class Ingredient:
-    name: str = field(init=False)
+    name: str
     amount: int = field(hash=False)
     unit: Unit
     product: Product = field(compare=False)
-
-    def __post_init__(self):
-        object.__setattr__(self, "name", self.product.name)
 
     def __eq__(self, other):
         if not isinstance(other, Ingredient):
@@ -64,13 +61,19 @@ class Ingredient:
             for price in self.product.prices.all()
             if self.unit_converter.has_conversion(price.unit, self.unit)
         ]
-        return min(prices, default=None,)
+        return min(
+            prices,
+            default=None,
+        )
 
 
 @dataclass
 class Recipe:
-    recipe: RecipeModel
+    name: str = "Unknown"
+    description: str = ""
+    url: str = None
     amount: int = 1
+    unit: Optional[Unit] = None
     valid: bool = True
     ingredients: List[Ingredient] = field(default_factory=list)
     base_recipes: List["Recipe"] = field(default_factory=list)
@@ -94,6 +97,7 @@ class RecipeTreeTransformer:
         self, ingredient: ProductIngredient, scale: int = 1
     ) -> Ingredient:
         return Ingredient(
+            name=ingredient.product.name,
             amount=ingredient.amount * scale,
             unit=Unit(ingredient.unit),
             product=ingredient.product,
@@ -101,8 +105,11 @@ class RecipeTreeTransformer:
 
     def transform_recipe(self, recipe: RecipeModel, scale: int = 1) -> Recipe:
         return Recipe(
-            amount=scale,
-            recipe=recipe,
+            name=recipe.name,
+            description=recipe.description,
+            url=recipe.get_absolute_url(),
+            amount=scale * (1 if recipe.amount is None else recipe.amount),
+            unit=Unit(recipe.unit) if recipe.amount is not None else None,
             ingredients=[
                 self.transform_product(p, scale=scale)
                 for p in recipe.productingredient_set.all()
