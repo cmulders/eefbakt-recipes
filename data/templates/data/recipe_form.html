@@ -24,7 +24,18 @@
   <input type="hidden" name="ref" value="{{request.GET.reftype}}">
   <input type="hidden" name="refid" value="{{request.GET.refid}}">
   {% endif %}
-  {{ form|crispy }}
+  <div class="form-row">
+    <div class="col-8">
+      {{ form.name|as_crispy_field }}
+    </div>
+    <div class="col-4">
+      <div class="input-group">
+        {{ form.amount|as_crispy_field }}
+        {{ form.unit|as_crispy_field }}
+      </div>
+    </div>
+  </div>
+  {{ form.description|as_crispy_field }}
 
 
   {% for name, formset in inlines.items %}

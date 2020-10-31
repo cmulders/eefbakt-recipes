@@ -102,7 +102,7 @@ class RecipeListView(ListView):
 
 class RecipeFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
     model = Recipe
-    fields = ["name", "description"]
+    fields = ["name", "description", "amount", "unit"]
 
     inlines = {
         "products": ProductIngredientInlineFormset,
@@ -187,7 +187,6 @@ class SessionDetailView(MixinObjectPageTitle, DetailView):
         transformer = RecipeTreeTransformer()
 
         return RecipeViewModel(
-            recipe=session,
             ingredients=[
                 transformer.transform_product(product)
                 for product in (session.ingredients.select_related("product").all())

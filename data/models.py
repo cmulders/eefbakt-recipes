@@ -94,7 +94,6 @@ def delete_image(sender, **kwargs):
         instance.image.delete(save=False)
 
 
-@receiver(models.signals.post_init, sender=ImageTag)
 @receiver(models.signals.post_init, sender=AlternateImageTag)
 def cleanup_removed(sender, **kwargs):
     instance = kwargs["instance"]
@@ -201,6 +200,9 @@ class Recipe(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
 
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.PIECE)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -208,14 +210,26 @@ class Recipe(models.Model):
     productingredient_set: List[ProductIngredient]
 
     recipes = models.ManyToManyField(
-        "Recipe", through=RecipeIngredient, through_fields=("recipe", "base_recipe",),
+        "Recipe",
+        through=RecipeIngredient,
+        through_fields=(
+            "recipe",
+            "base_recipe",
+        ),
     )
     recipeingredient_set: List[RecipeIngredient]
 
     images = GenericRelation(ImageTag, related_name="+")
 
+    @property
+    def title(self):
+        base_str = self.name
+        if self.amount is not None and self.unit:
+            base_str += f" ({self.amount} {Unit(self.unit).short_name})"
+        return base_str
+
     def __str__(self):
-        return self.name
+        return self.title
 
     def __repr__(self):
         return _("Recipe: %(name)s") % {"name": self.name}
