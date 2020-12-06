@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item active">{% trans 'Recipes' %}</li>
+<li class="breadcrumb-item active">{% translate 'Recepten' %}</li>
 {% endblock %}
 
 
@@ -22,18 +22,19 @@
   </div>
 
   <a class="list-group-item" href="{% url 'data:recipe-create' %}">
-    {% trans "+ Add recipe" %}
+    + {% translate "Nieuw recept" %}
   </a>
   {% for object in object_list %}
   <div class="list-group-item">
     <div class="d-flex flex-wrap">
       <a class="flex-grow-1" href=" {{ object.get_absolute_url }}">{{ object.title }}</a>
       <div class="btn-group align-self-center">
-        <a class="btn btn-outline-success btn-sm" href="{% url 'data:recipe-update' object.pk %}">{% trans "Edit" %}</a>
+        <a class="btn btn-outline-success btn-sm"
+          href="{% url 'data:recipe-update' object.pk %}">{% translate 'Wijzig' %}</a>
         <a class="btn btn-outline-secondary btn-sm"
-          href="{% url 'data:recipe-duplicate' object.pk %}">{% trans "Duplicate" %}</a>
+          href="{% url 'data:recipe-duplicate' object.pk %}">{% translate 'Dupliceer' %}</a>
         <a class="btn btn-outline-danger btn-sm"
-          href="{% url 'data:recipe-delete' object.pk %}">{% trans "Delete" %}</a>
+          href="{% url 'data:recipe-delete' object.pk %}">{% translate 'Verwijder' %}</a>
       </div>
     </div>
   </div>

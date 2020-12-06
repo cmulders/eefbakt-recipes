@@ -11,25 +11,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
+            {% translate 'Home' as home_title %}
+            {% translate 'Recepten' as recipe_title %}
+            {% translate 'Producten' as product_title %}
+            {% translate 'Sessies' as session_title %}
+
             {% with nav_template='snippets/navigation_item.html' %}
-            {% include nav_template with url_name='home' title='Home' %}
-            {% include nav_template with url_name='data:recipe-list' title='Recipes' %}
-            {% include nav_template with url_name='data:product-list' title='Products' %}
-            {% include nav_template with url_name='data:session-list' title='Sessions' %}
+            {% include nav_template with url_name='home' title=home_title %}
+            {% include nav_template with url_name='data:recipe-list' title=recipe_title %}
+            {% include nav_template with url_name='data:product-list' title=product_title %}
+            {% include nav_template with url_name='data:session-list' title=session_title %}
             {% endwith %}
-            {% comment %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown link
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>
-            {% endcomment %}
         </ul>
     </div>
 </nav>

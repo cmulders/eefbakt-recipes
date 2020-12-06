@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item"><a href="{% url 'data:recipe-list' %}">{% trans 'Recipes' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:recipe-list' %}">{% translate 'Recepten' %}</a></li>
 <li class="breadcrumb-item active">{{ object.name }}</li>
 {% endblock %}
 
@@ -13,17 +13,18 @@
   <h1>{{ object.title }}</h1>
   <div class="btn-group ml-5 d-print-none">
     <a class="btn btn-outline-success btn-sm"
-      href="{% url 'data:recipe-update' object.pk %}?{{request.META.QUERY_STRING}}">{% trans "Edit" %}</a>
+      href="{% url 'data:recipe-update' object.pk %}?{{request.META.QUERY_STRING}}">{% translate 'Wijzig' %}</a>
     <a class="btn btn-outline-secondary btn-sm"
-      href="{% url 'data:recipe-duplicate' object.pk %}">{% trans "Duplicate" %}</a>
-    <a class="btn btn-outline-danger btn-sm" href="{% url 'data:recipe-delete' object.pk %}">{% trans "Delete" %}</a>
+      href="{% url 'data:recipe-duplicate' object.pk %}">{% translate 'Dupliceer' %}</a>
+    <a class="btn btn-outline-danger btn-sm"
+      href="{% url 'data:recipe-delete' object.pk %}">{% translate 'Verwijder' %}</a>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-4 col-sm-12">
     <div class="border rounded-lg p-2 bg-light">
-      <h3>{% trans 'Ingredients' %}</h3>
+      <h3>{% translate 'Ingrediënten' %}</h3>
       {% include 'data/snippets/recipe_ingredients.html' with recipe=transformed_object only %}
     </div>
     {% for image in object.images.all %}

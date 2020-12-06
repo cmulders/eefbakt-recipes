@@ -4,8 +4,8 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-{# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li> #}
-<li class="breadcrumb-item active">{% trans 'Sessions' %}</li>
+{# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% translate 'Data' %}</a></li> #}
+<li class="breadcrumb-item active">{% translate 'Sessies' %}</li>
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
     </div>
 
     <a class="list-group-item" href="{% url 'data:session-create' %}">
-        {% trans "+ Add session" %}
+        + {% translate "Nieuwe sessie" %}
     </a>
     {% for object in object_list %}
     <a href="{{ object.get_absolute_url }}"

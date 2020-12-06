@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item active">{% trans 'Products' %}</li>
+<li class="breadcrumb-item active">{% translate 'Producten' %}</li>
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,8 @@
   <div class="list-group-item">
     <form method="GET">
       <div class="input-group mb-3">
-        <input type="search" class="form-control" placeholder="Search..." name="q" value="{{ request.GET.q }}">
+        <input type="search" class="form-control" placeholder="{% translate 'Zoek...'%}" name="q"
+          value="{{ request.GET.q }}">
         <div class="input-group-append">
           <input type="submit" class="btn btn-secondary" value="Search">
         </div>
@@ -21,7 +22,7 @@
   </div>
 
   <a class="list-group-item" href="{% url 'data:product-create' %}">
-    + {% trans 'New product' %}
+    + {% translate 'Nieuw product' %}
   </a>
   {% for object in object_list %}
   <div class="list-group-item">
@@ -29,9 +30,9 @@
       <a class="flex-grow-1" href=" {{ object.get_absolute_url }}">{{ object.name }}</a>
       <div class="btn-group align-self-sm-center">
         <a class="btn btn-outline-secondary btn-sm"
-          href="{% url 'data:product-update' object.pk %}">{% trans "Edit" %}</a>
+          href="{% url 'data:product-update' object.pk %}">{% translate 'Wijzig' %}</a>
         <a class="btn btn-outline-danger btn-sm"
-          href="{% url 'data:product-delete' object.pk %}">{% trans "Delete" %}</a>
+          href="{% url 'data:product-delete' object.pk %}">{% translate 'Verwijder' %}</a>
       </div>
     </div>
   </div>

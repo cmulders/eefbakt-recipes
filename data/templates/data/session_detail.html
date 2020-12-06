@@ -4,8 +4,8 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-{# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% trans 'Data' %}</a></li> #}
-<li class="breadcrumb-item"><a href="{% url 'data:session-list' %}">{% trans 'Sessions' %}</a></li>
+{# <li class="breadcrumb-item"><a href="{% url 'data:index' %}">{% translate 'Data' %}</a></li> #}
+<li class="breadcrumb-item"><a href="{% url 'data:session-list' %}">{% translate 'Sessies' %}</a></li>
 <li class="breadcrumb-item active" title="{{ object.title }}">{{ object.title|truncatewords:4 }}</li>
 {% endblock %}
 
@@ -14,15 +14,15 @@
     {% block session_actions %}
     <div class="btn-group d-print-none float-right">
         <a href="{%url 'data:session-export' object.pk%}"
-            class="btn btn-sm btn-outline-primary">{% trans 'Export' %}</a>
+            class="btn btn-sm btn-outline-primary">{% translate 'Export' %}</a>
         <a href="{%url 'data:session-ingredients' object.pk%}"
-            class="btn btn-sm btn-outline-primary">{% trans 'Grocery list' %}</a>
+            class="btn btn-sm btn-outline-primary">{% translate 'Grocery list' %}</a>
         <a class="btn btn-outline-success btn-sm"
-            href="{% url 'data:session-update' object.pk %}">{% trans "Edit" %}</a>
+            href="{% url 'data:session-update' object.pk %}">{% translate 'Wijzig' %}</a>
         <a class="btn btn-outline-secondary btn-sm"
-            href="{% url 'data:session-duplicate' object.pk %}">{% trans "Duplicate" %}</a>
+            href="{% url 'data:session-duplicate' object.pk %}">{% translate 'Dupliceer' %}</a>
         <a class="btn btn-outline-danger btn-sm"
-            href="{% url 'data:session-delete' object.pk %}">{% trans "Delete" %}</a>
+            href="{% url 'data:session-delete' object.pk %}">{% translate 'Verwijder' %}</a>
     </div>
     {% endblock %}
 
@@ -55,7 +55,7 @@
         <aside class="col-md-5 col-sm-12">
 
             <div class="border rounded-lg p-2 bg-light">
-                <h3>{% trans 'Ingredients' %}</h3>
+                <h3>{% translate 'Ingrediënten' %}</h3>
                 {% include 'data/snippets/session_ingredients.html' with recipe=session_recipe reftype="session:detail" refid=object.pk  %}
             </div>
         </aside>

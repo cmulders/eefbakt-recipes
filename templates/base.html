@@ -7,7 +7,8 @@
 {{ block.super }}
 <link rel="icon" href="{% static 'images/icon.svg' %}">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.css" integrity="sha256-7vIWE+OHz3pLhuONuFqSa/Oh/YUUHFIMooHMwN1Q2bk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.css"
+  integrity="sha256-7vIWE+OHz3pLhuONuFqSa/Oh/YUUHFIMooHMwN1Q2bk=" crossorigin="anonymous">
 <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 {% endblock %}
 
@@ -26,8 +27,8 @@ Recepten{% if page_title %} - {{ page_title }}{% endif %}
   <nav aria-label="breadcrumb" class="navbar">
     <ol class="breadcrumb bg-light">
       {% block breadcrumbs %}
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">{% trans 'Home' %}</a></li>
-  {% endblock %}
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">{% translate 'Home' %}</a></li>
+      {% endblock %}
     </ol>
   </nav>
   {% endblock %}
@@ -39,13 +40,19 @@ Recepten{% if page_title %} - {{ page_title }}{% endif %}
 
 {% block scripts %}
 {% if debug %}
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.js" integrity="sha256-dZQGyR/WIscd3lFxVjbKCIeJqRuBitt9yoQ7R7ZwKbc=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.js" integrity="sha256-JD6G73byZ/9SX4l9TIcaOPIwmX0oapf5ledVBG6rkS0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.js" integrity="sha256-3soYYYidbbsrmHXTGgxeCdgMfgt6IqWjWPKfuDWduqM=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.js"
+  integrity="sha256-dZQGyR/WIscd3lFxVjbKCIeJqRuBitt9yoQ7R7ZwKbc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.js"
+  integrity="sha256-JD6G73byZ/9SX4l9TIcaOPIwmX0oapf5ledVBG6rkS0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.js"
+  integrity="sha256-3soYYYidbbsrmHXTGgxeCdgMfgt6IqWjWPKfuDWduqM=" crossorigin="anonymous"></script>
 {% else %}
-<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.min.js" integrity="sha256-/irFIZmSo2CKXJ4rxHWfrI+yGJuI16Z005X/bENdpTY=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js" integrity="sha256-nAS1wDQBPBqa1fnZq8wd1Z6CN+PgmHXLFdMo0g2pYf0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js" integrity="sha256-8Ww0c1qKDMdHT2+3s3369kzSXcgIrvqzSwzjdZ5qHDs=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.min.js"
+  integrity="sha256-/irFIZmSo2CKXJ4rxHWfrI+yGJuI16Z005X/bENdpTY=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"
+  integrity="sha256-nAS1wDQBPBqa1fnZq8wd1Z6CN+PgmHXLFdMo0g2pYf0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"
+  integrity="sha256-8Ww0c1qKDMdHT2+3s3369kzSXcgIrvqzSwzjdZ5qHDs=" crossorigin="anonymous"></script>
 {% endif %}
 <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}

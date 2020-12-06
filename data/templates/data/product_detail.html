@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item"><a href="{% url 'data:product-list' %}">{% trans 'Products' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:product-list' %}">{% translate 'Producten' %}</a></li>
 <li class="breadcrumb-item active">{{ object.name }}</li>
 {% endblock %}
 
@@ -13,20 +13,20 @@
     <h1>{{ object.name }}</h1>
     <div class="btn-group ml-5 d-print-none">
         <a class="btn btn-outline-secondary btn-sm"
-            href="{% url 'data:product-update' object.pk %}">{% trans "Edit" %}</a>
+            href="{% url 'data:product-update' object.pk %}">{% translate 'Wijzig' %}</a>
         <a class="btn btn-outline-danger btn-sm"
-            href="{% url 'data:product-delete' object.pk %}">{% trans "Delete" %}</a>
+            href="{% url 'data:product-delete' object.pk %}">{% translate 'Verwijder' %}</a>
     </div>
 </div>
 <div>
     <h3>Prices</h3>
     <ul>
         {% for price in object.prices.all %}
-        <li>€ {{ price.normalized_price|floatformat:"3" }} per {{ price.unit }}
-            ({{ price.store|default:'<i>Unkown</i>' }}:
-            {{ price.amount }} {{ price.unit }} for
-            €
-            {{ price.price }})</li>
+        <li>
+            {% blocktranslate with normalized_price=price.normalized_price|floatformat:"-3" unit=price.unit store=price.store|default:'<i>Unkown</i>' price=price.price amount=price.amount %}
+            € {{ normalized_price }} per {{ unit }} ({{ store }}: {{ amount }} {{ unit }} voor € {{ price }})
+            {% endblocktranslate %}
+        </li>
         {% empty %}
         <li><i>No prices known</i></li>
         {% endfor %}
@@ -44,7 +44,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td>No prices known</td>
+            <td>{% translate 'Geen prijzen bekend' %}</td>
         </tr>
         {% endfor %}
     </table>
