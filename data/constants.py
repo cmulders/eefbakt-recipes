@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Unit(models.TextChoices):
+    EMPTY = "-", "-"
     ML = "mL", _("milliliter")
     GR = "g", _("gram")
     PIECE = "pcs", _("stuk")
@@ -11,7 +12,10 @@ class Unit(models.TextChoices):
 
     @property
     def short_name(self):
-        return {self.PIECE.value: "stk",}.get(self.value, self.value)
+        return {
+            self.PIECE.value: "stuk",
+            self.EMPTY.value: "",
+        }.get(self.value, self.value)
 
     def __lt__(self, other: "Unit") -> bool:
         """
