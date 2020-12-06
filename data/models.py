@@ -158,7 +158,7 @@ class ProductPrice(models.Model):
 
     store = models.CharField(max_length=80, blank=True)
 
-    amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
+    amount = models.DecimalField(default=1, max_digits=10, decimal_places=3)
     unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.GR)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2)
 
@@ -172,7 +172,7 @@ class ProductIngredient(models.Model):
     recipe = models.ForeignKey("Recipe", on_delete=models.CASCADE)
     product = models.ForeignKey("Product", on_delete=models.PROTECT)
 
-    amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
+    amount = models.DecimalField(default=1, max_digits=10, decimal_places=3)
     unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.GR)
     sort_key = models.IntegerField(default=1)
 
@@ -186,7 +186,7 @@ class RecipeIngredient(models.Model):
         "Recipe", on_delete=models.PROTECT, related_name="base_recipes"
     )
 
-    amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
+    amount = models.DecimalField(default=1, max_digits=10, decimal_places=3)
     sort_key = models.IntegerField(default=1)
 
     class Meta:
@@ -200,7 +200,7 @@ class Recipe(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
 
-    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
     unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.PIECE)
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -244,7 +244,7 @@ class SessionProduct(models.Model):
     )
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
 
-    amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
+    amount = models.DecimalField(default=1, max_digits=10, decimal_places=3)
     unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.GR)
     sort_key = models.IntegerField(default=1)
 
@@ -258,7 +258,7 @@ class SessionRecipe(models.Model):
     )
     recipe = models.ForeignKey(Recipe, on_delete=models.PROTECT)
 
-    amount = models.DecimalField(default=1, max_digits=10, decimal_places=2)
+    amount = models.DecimalField(default=1, max_digits=10, decimal_places=3)
     sort_key = models.IntegerField(default=1)
 
     class Meta:
