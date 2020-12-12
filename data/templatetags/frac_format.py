@@ -1,9 +1,41 @@
 from django import template
+from django.template import defaultfilters
+from django.utils.html import mark_safe
 from utils import fraction
 
 register = template.Library()
 
 
-@register.filter
-def fractionformat(value) -> str:
-    return fraction.format_fraction(value)
+@register.filter(is_safe=True)
+def fractionformat_html(value, significance=-3) -> str:
+    significance = int(significance)
+    significance_abs = abs(significance)
+    try:
+        frac = fraction.as_fraction(value)
+        prefix, nom, denom = fraction.as_tuple(frac)
+    except ValueError:
+        value = float(f"{value:.{significance_abs}g}")
+        return defaultfilters.floatformat(value, significance)
+
+    prefix = str(prefix) if prefix else ""
+    fraction_str = (
+        f"<sup>{nom}</sup>&frasl;<sub>{denom}</sub>"
+        if nom and len(prefix) < significance_abs
+        else ""
+    )
+    return mark_safe(f"{prefix} {fraction_str}".strip())
+
+
+@register.filter(is_safe=True)
+def fractionformat(value, errors="ignore") -> str:
+    try:
+        frac = fraction.as_fraction(value)
+        prefix, nom, denom = fraction.as_tuple(frac)
+    except ValueError:
+        if errors == "raise":
+            raise
+        return str(value)
+
+    prefix = str(prefix) if prefix else ""
+    fraction_str = f"{nom}/{denom}" if nom else ""
+    return f"{prefix} {fraction_str}".strip()

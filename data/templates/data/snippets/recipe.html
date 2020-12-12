@@ -1,9 +1,16 @@
+{% load frac_format %}
+
 <div class="d-flex">
     <a class="mr-1" href="{{ recipe.url }}?reftype={{reftype|iriencode}}&refid={{refid}}">#</a>
     <b class="d-flex-grow">
         {{recipe.name }}
         {% if recipe.amount and recipe.amount != 1 %}
-        <span class="recipe-amount">({{ recipe.amount|floatformat:"-2" }} {{recipe.unit.short_name|default:"x"}})</span>
+        <span class="recipe-amount">({% spaceless %}
+            {% if not recipe.unit %}
+            {{ recipe.amount|fractionformat_html:"-2" }}
+            {% else %}
+            {{ recipe.amount|fractionformat_html:"-3" }}
+            {% endif %}{% endspaceless %} {{recipe.unit.short_name|default:"x"}})</span>
         {% endif %}
     </b>
 </div>

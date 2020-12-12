@@ -4,6 +4,8 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from utils import fraction
 
+from .templatetags import frac_format
+
 
 class FractionField(forms.DecimalField):
     widget = forms.widgets.Input
@@ -14,7 +16,7 @@ class FractionField(forms.DecimalField):
 
     def prepare_value(self, value):
         try:
-            return fraction.format_fraction(value)
+            return frac_format.fractionformat(value, errors="raise")
         except ValueError:
             return super().prepare_value(value)
 

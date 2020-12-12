@@ -5,24 +5,29 @@ from django.test import TestCase
 from . import fraction
 
 
-class FormatFractionTestCase(TestCase):
-    def test_format_precision_error(self):
+class FractionTupleTestCase(TestCase):
+    def test_as_tuple_error(self):
         case = Fraction("5/17")
-        expected = "2 1/2"
-        with self.assertRaises(ValueError):
-            parsed = fraction.format_fraction(case)
 
-    def test_format_without_prefix(self):
+        with self.assertRaises(ValueError):
+            frac = fraction.as_fraction(case)
+            prefix, nom, denom = fraction.as_tuple(frac)
+
+    def test_tuple_without_prefix(self):
         case = Fraction("5/2")
-        expected = "2 1/2"
-        parsed = fraction.format_fraction(case)
+        expected = (2, 1, 2)
+
+        frac = fraction.as_fraction(case)
+        parsed = fraction.as_tuple(frac)
 
         self.assertEqual(expected, parsed)
 
-    def test_pformatwith_prefix(self):
+    def test_tuple_with_prefix(self):
         case = Fraction("1/2")
-        expected = "1/2"
-        parsed = fraction.format_fraction(case)
+        expected = (None, 1, 2)
+
+        frac = fraction.as_fraction(case)
+        parsed = fraction.as_tuple(frac)
 
         self.assertEqual(expected, parsed)
 

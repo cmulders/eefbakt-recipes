@@ -6,6 +6,7 @@
   text-align: right;
   width: 3em;
   padding: 0 0.1rem;
+  white-space: nowrap;
 }
 .ingredient-table td:nth-child(2) {
   font-size: smaller;
