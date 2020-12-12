@@ -29,8 +29,7 @@ class Ingredient:
     def __add__(self, other: Optional["Ingredient"]):
         if other is None:
             return self
-        print(self)
-        print(other)
+
         assert isinstance(other, Ingredient) and self == other
 
         # Select most appropiate unit to convert to
