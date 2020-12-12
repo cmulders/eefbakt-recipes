@@ -8,6 +8,7 @@ from utils.fields import CreatingModelChoiceField
 from utils.forms import OrderdedModelForm
 from utils.formsets import OrderFirstInlineFormSet
 
+from data.fields import FractionField
 from data.models import Product
 from data.widgets import ImageInput
 
@@ -56,6 +57,16 @@ def product_formfield_callback(f, **kwargs):
                 ).order_by("-use_count", "name"),
             }
         )
+    if f.name == "amount":
+        kwargs["form_class"] = FractionField
+
+    return f.formfield(**kwargs)
+
+
+def amount_formfield_callback(f, **kwargs):
+    if f.name == "amount":
+        kwargs["form_class"] = FractionField
+
     return f.formfield(**kwargs)
 
 
@@ -68,6 +79,7 @@ RecipeIngredientInlineFormset = forms.inlineformset_factory(
     fk_name="recipe",
     can_order=True,
     extra=3,
+    formfield_callback=amount_formfield_callback,
 )
 
 ProductIngredientInlineFormset = forms.inlineformset_factory(
@@ -98,6 +110,7 @@ SessionRecipeInlineFormset = forms.inlineformset_factory(
     ],
     can_order=True,
     extra=3,
+    formfield_callback=amount_formfield_callback,
 )
 
 SessionProductInlineFormset = forms.inlineformset_factory(
@@ -105,7 +118,6 @@ SessionProductInlineFormset = forms.inlineformset_factory(
     SessionProduct,
     formset=OrderFirstInlineFormSet,
     form=OrderdedModelForm,
-    formfield_callback=product_formfield_callback,
     fields=[
         "product",
         "amount",
@@ -113,6 +125,7 @@ SessionProductInlineFormset = forms.inlineformset_factory(
     ],
     can_order=True,
     extra=3,
+    formfield_callback=product_formfield_callback,
 )
 
 
