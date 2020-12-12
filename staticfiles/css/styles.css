@@ -21,8 +21,13 @@
   table-layout: fixed;
 }
 
+.inline-formset th {
+  font-size: 80%;
+  text-align: center;
+}
+
 .inline-formset [for$="-ORDER"] {
-  width: 5rem;
+  width: 4rem;
 }
 
 .inline-formset [for$="-amount"] {
@@ -30,11 +35,11 @@
 }
 
 .inline-formset [for$="-unit"] {
-  width: 10rem;
+  width: 8rem;
 }
 
 .inline-formset [for$="-DELETE"] {
-  width: 5rem;
+  width: 4rem;
 }
 
 .inline-formset .sortable tbody td[id$="-ORDER"] {

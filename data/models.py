@@ -225,7 +225,7 @@ class Recipe(models.Model):
     def title(self):
         base_str = self.name
         if self.amount is not None and self.unit:
-            base_str += f" ({self.amount} {Unit(self.unit).short_name})"
+            base_str += f" ({float(self.amount):g} {Unit(self.unit).short_name})"
         return base_str
 
     def __str__(self):

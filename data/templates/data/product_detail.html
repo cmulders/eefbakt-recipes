@@ -23,7 +23,7 @@
     <ul>
         {% for price in object.prices.all %}
         <li>
-            {% blocktranslate with normalized_price=price.normalized_price|floatformat:"-3" unit=price.unit store=price.store|default:'<i>Unkown</i>' price=price.price amount=price.amount %}
+            {% blocktranslate with normalized_price=price.normalized_price|floatformat:"-3" unit=price.unit store=price.store|default:'<i>Unkown</i>' price=price.price amount=price.amount|floatformat:"-2" %}
             € {{ normalized_price }} per {{ unit }} ({{ store }}: {{ amount }} {{ unit }} voor € {{ price }})
             {% endblocktranslate %}
         </li>
