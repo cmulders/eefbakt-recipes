@@ -11,15 +11,16 @@ urlpatterns = [
     path("recipes/", include([
         path("", views.RecipeListView.as_view(), name="recipe-list"),
         path("new/", views.RecipeCreateView.as_view(), name="recipe-create"),
+        path("<int:pk>/", views.RecipeDetailView.as_view(), name="recipe-detail"),
+        path("<int:pk>/export/", views.RecipeExportView.as_view(), name="recipe-export"),
         path("<int:pk>/edit/", views.RecipeUpdateView.as_view(), name="recipe-update"),
         path("<int:pk>/delete/", views.RecipeDeleteView.as_view(), name="recipe-delete"),
         path("<int:pk>/duplicate/", views.RecipeDuplicateView.as_view(), name="recipe-duplicate"),
-        path("<int:pk>/", views.RecipeDetailView.as_view(), name="recipe-detail"),
     ])),
     path("products/", include([
         path("", views.ProductListView.as_view(), name="product-list"),
-        path("<int:pk>/", views.ProductDetailView.as_view(), name="product-detail"),
         path("new/", views.ProductCreateView.as_view(), name="product-create"),
+        path("<int:pk>/", views.ProductDetailView.as_view(), name="product-detail"),
         path("<int:pk>/edit/", views.ProductUpdateView.as_view(), name="product-update"),
         path("<int:pk>/delete/", views.ProductDeleteView.as_view(), name="product-delete"),
     ])),

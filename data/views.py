@@ -7,22 +7,18 @@ from django.urls import NoReverseMatch, reverse_lazy
 from django.urls.base import reverse
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import DeleteView
-from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
+from utils.views import (DuplicateView, MixinObjectPageTitle,
+                         ModelFormWithInlinesView)
 
 from data.transformers import Recipe as RecipeViewModel
 from data.transformers import RecipeTreeTransformer
 
 from .constants import Unit
 from .converters import UnitConverter
-from .forms import (
-    ImageTagInlineFormset,
-    ProductIngredientInlineFormset,
-    ProductPriceInlineFormset,
-    RecipeIngredientInlineFormset,
-    SessionProductInlineFormset,
-    SessionRecipeInlineFormset,
-    UnitConversionInlineFormset,
-)
+from .forms import (ImageTagInlineFormset, ProductIngredientInlineFormset,
+                    ProductPriceInlineFormset, RecipeIngredientInlineFormset,
+                    SessionProductInlineFormset, SessionRecipeInlineFormset,
+                    UnitConversionInlineFormset)
 from .models import Product, Recipe, Session
 from .transformers import RecipeTreeTransformer
 
@@ -167,6 +163,9 @@ class RecipeDetailView(MixinObjectPageTitle, DetailView):
         transformer = RecipeTreeTransformer()
         kwargs["transformed_object"] = transformer.transform(self.object)
         return super().get_context_data(**kwargs)
+
+class RecipeExportView(RecipeDetailView):
+    template_name = "data/recipe_export.html"
 
 
 class SessionList(ListView):

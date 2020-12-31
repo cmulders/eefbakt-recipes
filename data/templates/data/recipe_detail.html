@@ -11,7 +11,9 @@
 {% block content %}
 <div class="d-flex align-items-center">
   <h1>{{ object.title }}</h1>
+  {% block actions %}
   <div class="btn-group ml-5 d-print-none">
+    <a class="btn btn-sm btn-outline-primary" href="{%url 'data:recipe-export' object.pk%}">{% translate 'Export'%}</a>
     <a class="btn btn-outline-success btn-sm"
       href="{% url 'data:recipe-update' object.pk %}?{{request.META.QUERY_STRING}}">{% translate 'Wijzig' %}</a>
     <a class="btn btn-outline-secondary btn-sm"
@@ -19,6 +21,7 @@
     <a class="btn btn-outline-danger btn-sm"
       href="{% url 'data:recipe-delete' object.pk %}">{% translate 'Verwijder' %}</a>
   </div>
+  {% endblock %}
 </div>
 
 <div class="row">
