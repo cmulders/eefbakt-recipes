@@ -151,3 +151,8 @@ tr.sortable-ghost {
   height: 100%;
   filter: blur(1rem);
 }
+
+.link-unstyled {
+  color: inherit;
+  text-decoration: inherit;
+}

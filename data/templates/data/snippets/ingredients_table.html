@@ -7,8 +7,7 @@
     <tr>
         <td>{{ ingredient.amount|fractionformat_html:"-3" }}</td>
         <td>{{ ingredient.unit.short_name }}</td>
-        <td>{{ ingredient.name }}</td>
-        {# <td><a href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.name }}</a> </td> #}
+        <td><a class="link-unstyled" href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.name }}</a></td>
     </tr>
     {% if forloop.last %}
 </table>

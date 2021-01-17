@@ -39,6 +39,15 @@
       </a>
     </div>
     {% endfor %}
+    {% if related_sessions %}
+    <hr>
+    <h4>Gerelateerde sessies</h4>
+    <ul>
+      {% for session in related_sessions|slice:":10" %}
+      <li><a href="{{ session.get_absolute_url }}">{{ session }}</a></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
   </div>
   <div class="col">
     {{ object.description|default:"No description"|linebreaks }}

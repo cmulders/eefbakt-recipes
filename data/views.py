@@ -7,18 +7,22 @@ from django.urls import NoReverseMatch, reverse_lazy
 from django.urls.base import reverse
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import DeleteView
-from utils.views import (DuplicateView, MixinObjectPageTitle,
-                         ModelFormWithInlinesView)
+from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
 
 from data.transformers import Recipe as RecipeViewModel
 from data.transformers import RecipeTreeTransformer
 
 from .constants import Unit
 from .converters import UnitConverter
-from .forms import (ImageTagInlineFormset, ProductIngredientInlineFormset,
-                    ProductPriceInlineFormset, RecipeIngredientInlineFormset,
-                    SessionProductInlineFormset, SessionRecipeInlineFormset,
-                    UnitConversionInlineFormset)
+from .forms import (
+    ImageTagInlineFormset,
+    ProductIngredientInlineFormset,
+    ProductPriceInlineFormset,
+    RecipeIngredientInlineFormset,
+    SessionProductInlineFormset,
+    SessionRecipeInlineFormset,
+    UnitConversionInlineFormset,
+)
 from .models import Product, Recipe, Session
 from .transformers import RecipeTreeTransformer
 
@@ -36,9 +40,17 @@ class ProductListView(ListView):
 class ProductDetailView(MixinObjectPageTitle, DetailView):
     model = Product
 
+    def get_related_recipes(self):
+        return self.object.recipes.order_by("-updated_at").all()
+
+    def get_related_sessions(self):
+        return self.object.sessions.order_by("-session_date").all()
+
     def get_context_data(self, **kwargs):
         converter = UnitConverter(self.object.unit_conversions.all())
         kwargs.update({"conversions": converter.conversion_matrix})
+        kwargs["related_recipes"] = self.get_related_recipes()
+        kwargs["related_sessions"] = self.get_related_sessions()
         return super().get_context_data(**kwargs)
 
 
@@ -159,13 +171,25 @@ class RecipeDuplicateView(DuplicateView):
 class RecipeDetailView(MixinObjectPageTitle, DetailView):
     model = Recipe
 
-    def get_context_data(self, **kwargs):
+    def get_related_sessions(self):
+        return self.object.sessions.order_by("-session_date").all()
+
+    def get_transformed_object(self):
         transformer = RecipeTreeTransformer()
-        kwargs["transformed_object"] = transformer.transform(self.object)
+        return transformer.transform(self.object)
+
+    def get_context_data(self, **kwargs):
+        kwargs["transformed_object"] = self.get_transformed_object()
+        kwargs["related_sessions"] = self.get_related_sessions()
         return super().get_context_data(**kwargs)
+
 
 class RecipeExportView(RecipeDetailView):
     template_name = "data/recipe_export.html"
+
+    def get_related_sessions(self):
+        # Hide related on export
+        return []
 
 
 class SessionList(ListView):

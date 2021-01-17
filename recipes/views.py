@@ -12,7 +12,7 @@ class IndexView(generic.TemplateView):
         return Recipe.objects.order_by("-updated_at").all()
 
     def get_last_sessions(self):
-        return Session.objects.order_by("-updated_at").all()
+        return Session.objects.order_by("-session_date").all()
 
     def get_random_images(self):
         return ImageTag.objects.order_by("?")

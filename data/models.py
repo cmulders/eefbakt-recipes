@@ -206,7 +206,9 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    products = models.ManyToManyField("Product", through=ProductIngredient)
+    products = models.ManyToManyField(
+        "Product", through=ProductIngredient, related_name="recipes"
+    )
     productingredient_set: List[ProductIngredient]
 
     recipes = models.ManyToManyField(

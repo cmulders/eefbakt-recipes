@@ -18,35 +18,60 @@
             href="{% url 'data:product-delete' object.pk %}">{% translate 'Verwijder' %}</a>
     </div>
 </div>
-<div>
-    <h3>Prices</h3>
-    <ul>
-        {% for price in object.prices.all %}
-        <li>
-            {% blocktranslate with normalized_price=price.normalized_price|floatformat:"-3" unit=price.unit store=price.store|default:'<i>Unkown</i>' price=price.price amount=price.amount|floatformat:"-2" %}
-            € {{ normalized_price }} per {{ unit }} ({{ store }}: {{ amount }} {{ unit }} voor € {{ price }})
-            {% endblocktranslate %}
-        </li>
-        {% empty %}
-        <li><i>No prices known</i></li>
-        {% endfor %}
-    </ul>
-
-    <h3>Conversions</h3>
-    <table class="table table-sm d-inline text-right">
-        {% for from_unit, to_units in conversions.items %}
-        <tr>
-            <th>1 {{ from_unit.short_name }} </th>
-            {% for to_unit, scale in to_units.items %}
-            <td>{{ scale|floatformat:'-2'|default:'-' }} {{ to_unit.short_name }}</td>
+<div class="row">
+    <div class="col-md-4 col-sm-12">
+        <h3>Prices</h3>
+        <ul>
+            {% for price in object.prices.all %}
+            <li>
+                {% blocktranslate with normalized_price=price.normalized_price|floatformat:"-3" unit=price.unit store=price.store|default:'<i>Unkown</i>' price=price.price amount=price.amount|floatformat:"-2" %}
+                € {{ normalized_price }} per {{ unit }} ({{ store }}: {{ amount }} {{ unit }} voor € {{ price }})
+                {% endblocktranslate %}
+            </li>
+            {% empty %}
+            <li><i>No prices known</i></li>
             {% endfor %}
-            </ul>
-        </tr>
-        {% empty %}
-        <tr>
-            <td>{% translate 'Geen prijzen bekend' %}</td>
-        </tr>
-        {% endfor %}
-    </table>
+        </ul>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <h3>Conversions</h3>
+        <table class="table table-sm d-inline text-right">
+            {% for from_unit, to_units in conversions.items %}
+            <tr>
+                <th>1 {{ from_unit.short_name }} </th>
+                {% for to_unit, scale in to_units.items %}
+                <td>{{ scale|floatformat:'-2'|default:'-' }} {{ to_unit.short_name }}</td>
+                {% endfor %}
+                </ul>
+            </tr>
+            {% empty %}
+            <tr>
+                <td>{% translate 'Geen prijzen bekend' %}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% if related_recipes or related_sessions %}
+    <div class="col-md-4 col-sm-12">
+        {% if related_recipes %}
+        <h4>Gerelateerde recepten</h4>
+        <ul>
+            {% for recipe in related_recipes|slice:":10" %}
+            <li><a href="{{ recipe.get_absolute_url }}">{{ recipe }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {# Add line if we have both sessions and recipes#}
+        {% if related_recipes and related_sessions %}<hr>{% endif %}
+        {% if related_sessions %}
+        <h4>Gerelateerde sessies</h4>
+        <ul>
+            {% for session in related_sessions|slice:":10" %}
+            <li><a href="{{ session.get_absolute_url }}">{{ session }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
