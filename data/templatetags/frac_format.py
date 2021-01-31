@@ -11,8 +11,8 @@ def fractionformat_html(value, significance=-3) -> str:
     significance = int(significance)
     significance_abs = abs(significance)
     try:
-        frac = fraction.as_fraction(value)
-        prefix, nom, denom = fraction.as_tuple(frac)
+        frac = fraction.ExtFraction(value)
+        prefix, nom, denom = frac.limit_denominator(10).as_tuple()
     except ValueError:
         value = float(f"{value:.{significance_abs}g}")
         return defaultfilters.floatformat(value, significance)
@@ -29,8 +29,8 @@ def fractionformat_html(value, significance=-3) -> str:
 @register.filter(is_safe=True)
 def fractionformat(value, errors="ignore") -> str:
     try:
-        frac = fraction.as_fraction(value)
-        prefix, nom, denom = fraction.as_tuple(frac)
+        frac = fraction.ExtFraction(value)
+        prefix, nom, denom = frac.limit_denominator(10).as_tuple()
     except ValueError:
         if errors == "raise":
             raise
