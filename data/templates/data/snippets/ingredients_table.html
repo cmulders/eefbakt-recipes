@@ -5,8 +5,13 @@
 <table class="ingredient-table">
     {% endif %}
     <tr>
-        <td>{{ ingredient.amount|fractionformat_html:"-3" }}</td>
+        {% if not ingredient.unit.no_quantity %}
+        <td>{{ ingredient.amount|fractionformat_html:"-2" }}</td>
         <td>{{ ingredient.unit.short_name }}</td>
+        {% else %}
+        <td colspan="2">{{ ingredient.unit.short_name }}</td>
+        {% endif %}
+
         <td><a class="link-unstyled" href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.name }}</a></td>
     </tr>
     {% if forloop.last %}

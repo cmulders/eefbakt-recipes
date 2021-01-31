@@ -26,6 +26,7 @@
             <table class="ingredient-table">
                 <tbody>
                     {% for ingredient in ingredients %}
+                    {% if not ingredient.unit.no_quantity %}
                     <tr>
                         <td class="text-right pr-1">{{ ingredient.amount|stringformat:"g" }}</td>
                         <td class="pr-2 pl-1">{{ ingredient.unit.short_name }}</td>
@@ -37,6 +38,7 @@
                             {% endif %}
                         </td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                 </tbody>
                 {% if ingredients_total %}
