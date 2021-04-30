@@ -10,6 +10,7 @@ class Unit(models.TextChoices):
     TBSP = "el", _("eetlepel")
     TSP = "tl", _("theelepel")
     SOME = "some", _("snufje")
+    CM = "cm", _("cm")
 
     @property
     def no_quantity(self):

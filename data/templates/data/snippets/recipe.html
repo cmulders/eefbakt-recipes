@@ -8,9 +8,12 @@
         <span class="recipe-amount">({% spaceless %}
             {% if not recipe.unit %}
             {{ recipe.amount|fractionformat_html:"-2" }}
+            {% elif recipe.unit == 'cm' and recipe.base_amount %}
+            {{ recipe.scale|fractionformat_html:"-3" }} × {{ recipe.base_amount|fractionformat_html:"-3" }}
             {% else %}
             {{ recipe.amount|fractionformat_html:"-3" }}
-            {% endif %}{% endspaceless %} {{recipe.unit.short_name|default:"x"}})</span>
+            {% endif %}
+            {% endspaceless %} {{recipe.unit.short_name|default:"×"}})</span>
         {% endif %}
     </b>
 </div>

@@ -71,7 +71,8 @@ class Recipe:
     name: str = "Unknown"
     description: str = ""
     url: str = None
-    amount: int = 1
+    base_amount: Optional[int] = None
+    scale: int = 1
     unit: Optional[Unit] = None
     valid: bool = True
     ingredients: List[Ingredient] = field(default_factory=list)
@@ -86,6 +87,16 @@ class Recipe:
     def iter_ingredients(self) -> Iterable["Ingredient"]:
         for recipe in iter(self):
             yield from recipe.ingredients
+
+    @property
+    def amount(self):
+        if self.base_amount is None:
+            return self.scale
+
+        if self.unit == Unit.CM:
+            return f"{self.scale} x {self.base_amount}"
+
+        return self.base_amount * self.scale
 
 
 class RecipeTreeTransformer:
@@ -107,7 +118,8 @@ class RecipeTreeTransformer:
             name=recipe.name,
             description=recipe.description,
             url=recipe.get_absolute_url(),
-            amount=scale * (1 if recipe.amount is None else recipe.amount),
+            base_amount=recipe.amount,
+            scale=scale,
             unit=Unit(recipe.unit) if recipe.amount is not None else None,
             ingredients=[
                 self.transform_product(p, scale=scale)
