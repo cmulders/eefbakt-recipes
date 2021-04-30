@@ -104,6 +104,13 @@ tr.sortable-ghost {
   max-width: 20rem;
 }
 
+.icon-img {
+  display: inline-block;
+  max-width: 1em;
+  max-height: 1em;
+  vertical-align: -0.125em;
+}
+
 .export .recipe-amount {
   display: none;
 }
