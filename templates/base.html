@@ -54,5 +54,7 @@ Recepten{% if page_title %} - {{ page_title }}{% endif %}
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"
   integrity="sha256-8Ww0c1qKDMdHT2+3s3369kzSXcgIrvqzSwzjdZ5qHDs=" crossorigin="anonymous"></script>
 {% endif %}
-<script src="{% static 'js/main.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@limetech/flatpickr@4.5.5/dist/l10n/nl.js"
+  integrity="sha256-FFQUUPPrDan3anxqXjazWxDLBgHEWfbI6g0WVB7PSTk=" crossorigin="anonymous"></script>
+<script src="{% static 'js/main_v2.js' %}"></script>
 {% endblock %}

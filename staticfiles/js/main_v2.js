@@ -17,8 +17,9 @@ function try_upgrade_dateinput() {
     $("input.dateinput").flatpickr({
       altInput: true,
       altFormat: "F j, Y",
-      dateFormat: "Y-m-d",
+      dateFormat: "d-m-Y",
       weekNumbers: true,
+      locale: 'nl',
     });
   } catch (error) {
     console.error(error);
