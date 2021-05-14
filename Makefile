@@ -50,4 +50,9 @@ migrate: makemigrations
 
 .PHONY: backup
 backup:
-	rsync -rt --delete --progress cesar.local:/var/opt/recipes/ remote
+	rsync -rt -h --delete --progress 192.168.178.17:/var/opt/recipes/ remote
+
+.PHONY: restore
+restore:
+	cp remote/db.sqlite3 db.sqlite3
+	cp -R remote/media/ media
