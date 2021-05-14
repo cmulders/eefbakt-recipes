@@ -10,6 +10,10 @@ class ExtFraction(Fraction):
     def limit_denominator(self, max_denominator: int) -> Fraction:
         limited = super().limit_denominator(max_denominator)
 
+        if limited == 0:
+            # Pevent a division by zero below
+            raise ValueError(f"Could not convert with enough precision.")
+
         offset = float(self / limited)
         if offset < 0.99:
             raise ValueError(
