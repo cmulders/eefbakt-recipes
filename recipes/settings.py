@@ -148,3 +148,6 @@ else:
 # Django crispy forms
 # https://django-crispy-forms.readthedocs.io/en/latest/
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
