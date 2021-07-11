@@ -88,20 +88,25 @@ tr.sortable-ghost {
   border-color: #ced4da !important;
 }
 
-.image-square-thumbnail-md {
+.thumbnail-md {
   max-height: 12rem;
   max-width: 12rem;
 }
 
-.image-square-thumbnail-sm {
+.thumbnail-sm {
   max-height: 8rem;
   max-width: 8rem;
 }
 
-.image-square-thumbnail-lg,
-.image-square-thumbnail {
+.thumbnail-lg,
+.thumbnail {
   max-height: 20rem;
   max-width: 20rem;
+}
+
+.fit-center {
+  object-fit: cover;
+  object-position: center;
 }
 
 .icon-img {
@@ -152,7 +157,7 @@ tr.sortable-ghost {
   height: 100%;
 }
 
-.square-element > img{
+.square-element > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
