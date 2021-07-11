@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends './base_export.html' %}
 
 {% load i18n image_tags %}
 {% load static %}
@@ -6,7 +6,68 @@
 {% block navigation %}{% endblock %}
 {% block breadcrumbs_container %}{% endblock %}
 
-{% block content %}
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block top_content %}
+<div>
+    <small class="text-muted">
+        <time datetime="{{ object.session_date|date:'c' }}">
+            {{ object.session_date|date }}
+        </time>
+    </small>
+
+</div>
+
+<section class="mb-4">
+    {{ object.description|linebreaks }}
+</section>
+
+<div class="d-flex overflow-auto">
+    {% for image in object.images.all|slice:":3" %}
+    <div class="p-2" style="max-width: 33%;">
+        <a href="{{ image.image.url }}">
+            <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
+                width="{{ image.width|default:25 }}px" height="{{ image.height|default:25 }}px" class="img-thumbnail">
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block left_sidebar %}
+<div class="border rounded-lg p-2 bg-light">
+    <h3>{% translate 'Ingrediënten' %}</h3>
+    {% with url='data/snippets/session_ingredients.html' %}
+    {% include url with recipe=session_recipe reftype="session:detail" refid=object.pk %}
+    {% endwith %}
+</div>
+{% endblock %}
+
+{% block right_content %}
+{% for object in session_recipe.base_recipes %}
+<section>
+    {% for recipe in object %}
+    <div><b>{{ recipe.name }}</b></div>
+    <p class="my-3">{{ recipe.description|default:"..."|linebreaks }}
+    </p>
+    {% endfor %}
+</section>
+{% if not forloop.last %}
+<hr>
+{% endif %}
+{% endfor %}
+
+{% if object.recipe_description %}
+<hr>
+<section>
+    <div><b>Extra</b></div>
+    <p class="my-3">{{ object.recipe_description|linebreaks }}
+    </p>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block content2 %}
 <article class="export pt-4">
     <div class="float-right" style="font-size: x-large;">
         <a href="http://instagram.com/eefbakt/" class="link-unstyled">
@@ -15,46 +76,18 @@
     </div>
     <h1>{{ object.title }}</h1>
 
-    <div>
-        <small class="text-muted">
-            <time datetime="{{ object.session_date|date:'c' }}">
-                {{ object.session_date|date }}
-            </time>
-        </small>
 
-    </div>
-
-    <section class="mb-4">
-        {{ object.description|linebreaks }}
-    </section>
-
-    <div class="d-flex overflow-auto">
-        {% for image in object.images.all|slice:":3" %}
-        <div class="p-2" style="max-width: 33%;">
-            <a href="{{ image.image.url }}">
-                <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
-                    width="{{ image.width|default:25 }}px" height="{{ image.height|default:25 }}px"
-                    class="img-thumbnail">
-            </a>
-        </div>
-        {% endfor %}
-    </div>
 
     <div class="row">
         <aside class="col-md-5 col-sm-12">
 
-            <div class="border rounded-lg p-2 bg-light">
-                <h3>{% translate 'Ingrediënten' %}</h3>
-                {% with url='data/snippets/session_ingredients.html' %}
-                {% include url with recipe=session_recipe reftype="session:detail" refid=object.pk %}
-                {% endwith %}
-            </div>
+
 
             <div class="media pt-4">
                 <img class="mr-3 rounded-circle align-self-center" src="{% static 'images/instagram_profile.jpg' %}"
                     alt="@eefbakt" height="64px" width="auto">
                 <div class="media-body">
-                    <blockquote class="text-muted font-italic m-0">
+                    <blockquote class="text-muted font-italic m-0 border-0">
                         <p class="mb-0">Leuk dat je met mijn recept aan de slag gaat, ik ben benieuwd naar het
                             resultaat!</p>
                         <footer class="blockquote-footer pt-2">
@@ -66,27 +99,7 @@
 
         </aside>
         <div class="col">
-            {% for object in session_recipe.base_recipes %}
-            <section>
-                {% for recipe in object %}
-                <div><b>{{ recipe.name }}</b></div>
-                <p class="my-3">{{ recipe.description|default:"..."|linebreaks }}
-                </p>
-                {% endfor %}
-            </section>
-            {% if not forloop.last %}
-            <hr>
-            {% endif %}
-            {% endfor %}
 
-            {% if object.recipe_description %}
-            <hr>
-            <section>
-                <div><b>Extra</b></div>
-                <p class="my-3">{{ object.recipe_description|linebreaks }}
-                </p>
-            </section>
-            {% endif %}
         </div>
     </div>
 </article>
