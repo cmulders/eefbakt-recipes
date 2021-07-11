@@ -1,11 +1,39 @@
-{% extends 'data/recipe_detail.html' %}
+{% extends './base_export.html' %}
+{# {% extends 'data/recipe_detail.html' %} #}
+
+{% load i18n image_tags %}
+{% load static %}
 
 {% block navigation %}{% endblock %}
 {% block breadcrumbs_container %}{% endblock %}
-{% block actions %}{% endblock %}
 
-{% block content %}
-<div class="export pt-4">
-    {{ block.super }}
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block top_content %}
+
+<div class="d-flex overflow-auto">
+    {% for image in object.images.all|slice:":3" %}
+    <div class="p-2" style="max-width: 33%;">
+        <a href="{{ image.image.url }}">
+            <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
+                width="{{ image.width|default:25 }}px" height="{{ image.height|default:25 }}px" class="img-thumbnail">
+        </a>
+    </div>
+    {% endfor %}
 </div>
+{% endblock %}
+
+{% block left_sidebar %}
+<div class="border rounded-lg p-2 bg-light">
+    <h3>{% translate 'Ingrediënten' %}</h3>
+    {% include 'data/snippets/recipe_ingredients.html' with recipe=transformed_object only %}
+</div>
+{% endblock %}
+
+{% block right_content %}
+<section>
+    <section class="mb-4">
+        {{ object.description|linebreaks }}
+    </section>
+</section>
 {% endblock %}

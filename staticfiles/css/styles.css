@@ -171,7 +171,8 @@ tr.sortable-ghost {
   filter: blur(1rem);
 }
 
-.link-unstyled {
+a.link-unstyled {
   color: inherit;
-  text-decoration: inherit;
+  /* prevent underline (with high enough specificty) */
+  text-decoration: inherit !important;
 }
