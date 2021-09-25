@@ -153,3 +153,26 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+# https://docs.djangoproject.com/en/3.2/ref/settings/#logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "weasyprint": {
+            "handlers": ["console"],
+            "level": "ERROR",
+        },
+        "weasyprint.progress": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}

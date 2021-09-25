@@ -5,11 +5,25 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Python: Django Export pdf",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": [
+        "generate_pdf",
+        "export-pdf/"
+      ],
+      "django": true,
+      "justMyCode": false
+    },
+    {
       "name": "Python: Django",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
-      "args": ["runserver"],
+      "args": [
+        "runserver"
+      ],
       "django": true,
       "justMyCode": false
     }
