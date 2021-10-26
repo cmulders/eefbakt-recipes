@@ -1,3 +1,5 @@
+from typing import Mapping
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -21,11 +23,12 @@ class Unit(models.TextChoices):
 
     @property
     def short_name(self):
-        return {
-            self.PIECE.value: "stuk",
-            self.SOME.value: "snufje",
-            self.EMPTY.value: "",
-        }.get(self.value, self.value)
+        short_names = {
+            str(self.PIECE.value): "stuk",
+            str(self.SOME.value): "snufje",
+            str(self.EMPTY.value): "",
+        }
+        return short_names.get(self.value, self.value)
 
     def __lt__(self, other: "Unit") -> bool:
         """

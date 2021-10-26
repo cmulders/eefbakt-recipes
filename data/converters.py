@@ -6,36 +6,36 @@ from .constants import Unit
 
 
 class UnitConverter:
-    _graph: Mapping[Unit, Set[Unit]]
-    _conversions: Mapping[Tuple[Unit, Unit], float]
+    _conversions: Mapping[Unit, Set[Unit]]
+    _scaling: Mapping[Tuple[Unit, Unit], float]
 
     def __init__(self, conversions: List):
-        self._conversions = {}
+        self._scaling = {}
 
-        self._graph = defaultdict(set)
+        self._conversions = defaultdict(set)
 
         for convert in conversions:
             from_unit = Unit(convert.from_unit)
             to_unit = Unit(convert.to_unit)
-            self._graph[from_unit].add(to_unit)
-            self._graph[to_unit].add(from_unit)
+            self._conversions[from_unit].add(to_unit)
+            self._conversions[to_unit].add(from_unit)
 
-            self._conversions[(from_unit, to_unit)] = convert.scale
-            self._conversions[(to_unit, from_unit)] = 1 / convert.scale
+            self._scaling[(from_unit, to_unit)] = convert.scale
+            self._scaling[(to_unit, from_unit)] = 1 / convert.scale
 
-    def search_conversion(self, from_unit: Unit, to_unit: Unit) -> Optional[List[Unit]]:
+    def search_conversion(self, start: Unit, end: Unit) -> Optional[List[Unit]]:
         """
         Depth first search algorithm to find a path between units
         """
-        stack = [(from_unit, [from_unit])]
+        stack = [(start, [start])]
         visited = set()
         while stack:
             (vertex, path) = stack.pop()
             if vertex not in visited:
-                if vertex == to_unit:
+                if vertex == end:
                     return path
                 visited.add(vertex)
-                for neighbor in self._graph[vertex]:
+                for neighbor in self._conversions[vertex]:
                     stack.append((neighbor, path + [neighbor]))
 
     def has_conversion(self, from_unit: Unit, to_unit: Unit) -> bool:
@@ -52,12 +52,12 @@ class UnitConverter:
 
         scale: float = 1
         for conversion in zip(path, path[1:]):
-            scale *= self._conversions.get(conversion, 1)
+            scale *= self._scaling.get(conversion, 1)
 
         return scale
 
     @cached_property
-    def conversion_matrix(self) -> Mapping[Unit, Mapping[Unit, int]]:
+    def conversion_matrix(self) -> Mapping[Unit, Mapping[Unit, Optional[float]]]:
         return {
             from_unit: {
                 to_unit: self.scale(from_unit, to_unit)

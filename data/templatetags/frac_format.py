@@ -1,6 +1,6 @@
 from django import template
 from django.template import defaultfilters
-from django.utils.html import mark_safe
+from django.utils.safestring import mark_safe
 from utils import fraction
 
 register = template.Library()
