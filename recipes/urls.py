@@ -26,4 +26,6 @@ urlpatterns = [
     path("home/", IndexView.as_view(), name="home"),
     path("admin/", admin.site.urls),
     path("data/", include("data.urls")),
+    path("savory/", include("savory.urls")),
+    path("sweet/", include("sweet.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True)
