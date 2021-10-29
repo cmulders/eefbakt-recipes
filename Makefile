@@ -4,7 +4,7 @@ VENVDIR?=$(WORKDIR)/.venv
 REQUIREMENTS_TXT?=$(wildcard requirements*.txt)  # Multiple paths are supported (space separated)
 MARKER=$(VENVDIR)/pyvenv.cfg
 
-ICLOUD_DIR = /Users/coenmulders/Library/Mobile\ Documents/com\~apple\~CloudDocs/Recepten
+ICLOUD_DIR = $(HOME)/Library/Mobile\ Documents/com\~apple\~CloudDocs/Recepten-site
 VENV=$(VENVDIR)/bin
 MANAGEPY=$(VENV)/python manage.py
 
@@ -58,7 +58,7 @@ restore:
 	rsync -rt -h --delete remote/media/ media
 
 .PHONY: gen-pdf
-gen-pdf: restore
+gen-pdf: backup restore
 	$(VENV)/python manage.py generate_pdf export-pdf/
 	
 .PHONY: sync-icloud
