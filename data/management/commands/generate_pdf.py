@@ -75,7 +75,7 @@ class Command(BaseCommand):
         to_export = Session.objects.count()
 
         session: Session
-        for idx, session in enumerate(Session.objects.all(), start=1):
+        for idx, session in enumerate(Session.objects.order_by("pk").all(), start=1):
             if not session.images.exists():
                 continue
             name = f"{session.pk}_{slugify(session.title)}.pdf"
