@@ -45,7 +45,7 @@ def update_baking_contentypes_reverse(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("baking", "0012_auto_20201013_1808"),
+        # ("baking", "0012_auto_20201013_1808"),
         ("data", "0010_auto_20200804_2110"),
     ]
 
@@ -77,7 +77,9 @@ class Migration(migrations.Migration):
                         ("created_at", models.DateTimeField(auto_now_add=True)),
                         ("updated_at", models.DateTimeField(auto_now=True)),
                     ],
-                    options={"ordering": ["-session_date", "-updated_at"],},
+                    options={
+                        "ordering": ["-session_date", "-updated_at"],
+                    },
                 ),
                 migrations.CreateModel(
                     name="SessionRecipe",
@@ -114,7 +116,9 @@ class Migration(migrations.Migration):
                             ),
                         ),
                     ],
-                    options={"ordering": ["sort_key"],},
+                    options={
+                        "ordering": ["sort_key"],
+                    },
                 ),
                 migrations.CreateModel(
                     name="SessionProduct",
@@ -166,7 +170,9 @@ class Migration(migrations.Migration):
                             ),
                         ),
                     ],
-                    options={"ordering": ["sort_key"],},
+                    options={
+                        "ordering": ["sort_key"],
+                    },
                 ),
                 migrations.AddField(
                     model_name="session",

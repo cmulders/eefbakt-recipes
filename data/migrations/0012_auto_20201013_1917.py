@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("contenttypes", "0002_remove_content_type_name"),
         ("data", "0011_auto_20201013_1808"),
-        ("common", "0009_auto_20201013_1917"),
+        # ("common", "0009_auto_20201013_1917"),
     ]
 
     operations = [

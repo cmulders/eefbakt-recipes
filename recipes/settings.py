@@ -46,9 +46,7 @@ INSTALLED_APPS = [
     ### Third party
     "crispy_forms",
     ### Apps
-    "common.apps.CommonConfig",
     "data.apps.DataConfig",
-    "baking.apps.BakingConfig",
 ]
 
 MIDDLEWARE = [
