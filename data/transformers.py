@@ -3,11 +3,10 @@ from decimal import Decimal
 from functools import cached_property
 from typing import *
 
-from data.models import Product, ProductIngredient, ProductPrice
-from data.models import Recipe as RecipeModel
-
 from .constants import Unit
 from .converters import UnitConverter
+from .models import Product, ProductIngredient
+from .models import Recipe as RecipeModel
 
 
 @dataclass(frozen=True, order=True, eq=True)

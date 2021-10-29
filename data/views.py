@@ -12,7 +12,6 @@ from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInline
 from data.transformers import Recipe as RecipeViewModel
 from data.transformers import RecipeTreeTransformer
 
-from .constants import Unit
 from .converters import UnitConverter
 from .forms import (
     ImageTagInlineFormset,
