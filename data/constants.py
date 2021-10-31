@@ -22,8 +22,8 @@ class Unit(models.TextChoices):
     @property
     def short_name(self):
         short_names = {
-            str(self.PIECE.value): "stuk",
-            str(self.SOME.value): "snufje",
+            str(self.PIECE.value): _("stuk"),
+            str(self.SOME.value): _("snufje"),
             str(self.EMPTY.value): "",
         }
         return short_names.get(self.value, self.value)
