@@ -37,3 +37,9 @@ class Unit(models.TextChoices):
             return member_list.index(self) < member_list.index(other)
 
         return super().__lt__(other)
+
+
+class RecipeKind(models.TextChoices):
+    SWEET = "sweet", _("Zoet")
+    SAVORY = "savory", _("Hartig")
+    BREAD = "bread", _("Brood")

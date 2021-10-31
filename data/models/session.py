@@ -4,10 +4,10 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from ..constants import RecipeKind, Unit
 from .image import ImageTag
 from .product import Product
 from .recipe import Recipe
-from .unit import Unit
 
 
 class SessionProduct(models.Model):
@@ -40,6 +40,9 @@ class SessionRecipe(models.Model):
 class Session(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+    kind = models.CharField(
+        max_length=10, choices=RecipeKind.choices, default=RecipeKind.SWEET
+    )
 
     recipe_description = models.TextField("Session recipe", blank=True)
 

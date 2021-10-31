@@ -5,9 +5,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from ..constants import RecipeKind, Unit
 from .image import ImageTag
 from .product import Product
-from .unit import Unit
 
 
 class ProductIngredient(models.Model):
@@ -42,6 +42,9 @@ class Recipe(models.Model):
 
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
+    kind = models.CharField(
+        max_length=10, choices=RecipeKind.choices, default=RecipeKind.SWEET
+    )
 
     amount = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
     unit = models.CharField(max_length=5, choices=Unit.choices, default=Unit.PIECE)
