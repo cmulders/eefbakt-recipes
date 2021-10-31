@@ -17,6 +17,17 @@ from ..forms import (
 from ..models import Session
 from ..transformers import RecipeTreeTransformer
 
+__all__ = [
+    "SessionList",
+    "SessionDetailView",
+    "SessionIngredientsDetailView",
+    "SessionCreateView",
+    "SessionUpdateView",
+    "SessionDeleteView",
+    "SessionDuplicateView",
+    "SessionExportView",
+]
+
 
 class SessionList(ListView):
     model = Session
@@ -49,10 +60,6 @@ class SessionDetailView(MixinObjectPageTitle, DetailView):
     def get_context_data(self, **kwargs):
         kwargs["session_recipe"] = self.session_recipe_viewmodel()
         return super().get_context_data(**kwargs)
-
-
-class SessionExportView(SessionDetailView):
-    template_name = "data/session_export.html"
 
 
 class SessionIngredientsDetailView(SessionDetailView):
@@ -110,3 +117,7 @@ class SessionDuplicateView(DuplicateView):
 class SessionDeleteView(DeleteView):
     model = Session
     success_url = reverse_lazy("data:session-list")
+
+
+class SessionExportView(SessionDetailView):
+    template_name = "data/session_export.html"

@@ -11,7 +11,6 @@ from ..models import Product
 __all__ = [
     "ProductListView",
     "ProductDetailView",
-    "ProductFormsetFormView",
     "ProductCreateView",
     "ProductUpdateView",
     "ProductDeleteView",

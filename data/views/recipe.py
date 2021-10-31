@@ -14,6 +14,16 @@ from ..forms import (
 from ..models import Recipe
 from ..transformers import RecipeTreeTransformer
 
+__all__ = [
+    "RecipeListView",
+    "RecipeDetailView",
+    "RecipeCreateView",
+    "RecipeUpdateView",
+    "RecipeDeleteView",
+    "RecipeDuplicateView",
+    "RecipeExportView",
+]
+
 
 class RecipeListView(ListView):
     model = Recipe
@@ -23,6 +33,22 @@ class RecipeListView(ListView):
         if "q" in self.request.GET:
             qs = qs.filter(name__icontains=self.request.GET["q"])
         return qs
+
+
+class RecipeDetailView(MixinObjectPageTitle, DetailView):
+    model = Recipe
+
+    def get_related_sessions(self):
+        return self.object.sessions.order_by("-session_date").all()
+
+    def get_transformed_object(self):
+        transformer = RecipeTreeTransformer()
+        return transformer.transform(self.object)
+
+    def get_context_data(self, **kwargs):
+        kwargs["transformed_object"] = self.get_transformed_object()
+        kwargs["related_sessions"] = self.get_related_sessions()
+        return super().get_context_data(**kwargs)
 
 
 class RecipeFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
@@ -83,22 +109,6 @@ class RecipeDeleteView(DeleteView):
 
 class RecipeDuplicateView(DuplicateView):
     model = Recipe
-
-
-class RecipeDetailView(MixinObjectPageTitle, DetailView):
-    model = Recipe
-
-    def get_related_sessions(self):
-        return self.object.sessions.order_by("-session_date").all()
-
-    def get_transformed_object(self):
-        transformer = RecipeTreeTransformer()
-        return transformer.transform(self.object)
-
-    def get_context_data(self, **kwargs):
-        kwargs["transformed_object"] = self.get_transformed_object()
-        kwargs["related_sessions"] = self.get_related_sessions()
-        return super().get_context_data(**kwargs)
 
 
 class RecipeExportView(RecipeDetailView):
