@@ -7,7 +7,6 @@ app_name = "data"
 
 # fmt: off
 urlpatterns = [
-    path("", RedirectView.as_view(pattern_name="root"), name="index"),
     path("recipes/", include([
         path("", views.RecipeListView.as_view(), name="recipe-list"),
         path("new/", views.RecipeCreateView.as_view(), name="recipe-create"),
