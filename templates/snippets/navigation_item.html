@@ -1,5 +1,5 @@
 {% load i18n %}
 {% url url_name as reversed_url %}
-<li class="nav-item {% if reversed_url in request.path %}active{% endif %}">
-    <a class="nav-link" href="{{ reversed_url }}">{% translate title %}</a>
+<li class="nav-item {% if reversed_url and reversed_url in request.path %}active{% endif %}">
+    <a class="nav-link" href="{{ reversed_url|default:'#' }}">{% translate title %}</a>
 </li>

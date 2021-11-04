@@ -25,5 +25,6 @@ urlpatterns = [
     path("", generic.RedirectView.as_view(pattern_name="home"), name="root"),
     path("home/", IndexView.as_view(), name="home"),
     path("admin/", admin.site.urls),
-    path("data/", include("data.urls")),
+    path("sweet_bread/", include("data.urls", namespace="sweet_bread")),
+    path("savory/", include("data.urls", namespace="savory")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True)
