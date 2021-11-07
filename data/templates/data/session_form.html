@@ -5,12 +5,14 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item"><a href="{% url 'data:session-list' %}">{% translate 'Sessies' %}</a></li>
 {% if not object %}
 <li class="breadcrumb-item active">{% translate "New session" %}</li>
 {% else %}
-<li class="breadcrumb-item"><a href="{% url 'data:session-detail' object.pk %}"
-    title="{{ object.title }}">{{ object.title|truncatewords:4 }}</a></li>
+<li class="breadcrumb-item">
+  <a href="{% url 'data:session-detail' object.pk %}" title="{{ object.title }}">
+    {{ object.title|truncatewords:4 }}
+  </a>
+</li>
 <li class="breadcrumb-item active">{% translate 'Wijzig' %} session</li>
 {% endif %}
 {% endblock %}

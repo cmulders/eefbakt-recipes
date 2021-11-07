@@ -4,7 +4,14 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item"><a href="{% url 'data:session-list' %}">{% translate 'Sessies' %}</a></li>
+{% if object.kind == "sweet" or object.kind == "bread" %}
+{% url 'sweet_bread:session-list' as list_url %}
+{% elif object.kind == "savory" %}
+{% url 'savory:session-list' as list_url %}
+{% else %}
+{% url 'session-list' as list_url %}
+{% endif %}
+<li class="breadcrumb-item"><a href="{{ list_url }}">{% translate 'Sessies' %}</a></li>
 <li class="breadcrumb-item active" title="{{ object.title }}">{{ object.title|truncatewords:4 }}</li>
 {% endblock %}
 
@@ -12,16 +19,21 @@
 <article>
     {% block actions %}
     <div class="btn-group d-print-none float-right">
-        <a href="{%url 'data:session-export' object.pk%}"
-            class="btn btn-sm btn-outline-primary">{% translate 'Export' %}</a>
-        <a href="{%url 'data:session-ingredients' object.pk%}"
-            class="btn btn-sm btn-outline-primary">{% translate 'Grocery list' %}</a>
-        <a class="btn btn-outline-success btn-sm"
-            href="{% url 'data:session-update' object.pk %}">{% translate 'Wijzig' %}</a>
-        <a class="btn btn-outline-secondary btn-sm"
-            href="{% url 'data:session-duplicate' object.pk %}">{% translate 'Dupliceer' %}</a>
-        <a class="btn btn-outline-danger btn-sm"
-            href="{% url 'data:session-delete' object.pk %}">{% translate 'Verwijder' %}</a>
+        <a href="{%url 'data:session-export' object.pk%}" class="btn btn-sm btn-outline-primary">
+            {% translate 'Export' %}
+        </a>
+        <a href="{%url 'data:session-ingredients' object.pk%}" class="btn btn-sm btn-outline-primary">
+            {% translate 'Grocery list' %}
+        </a>
+        <a class="btn btn-outline-success btn-sm" href="{% url 'data:session-update' object.pk %}">
+            {% translate 'Wijzig'%}
+        </a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'data:session-duplicate' object.pk %}">
+            {% translate 'Dupliceer' %}
+        </a>
+        <a class="btn btn-outline-danger btn-sm" href="{% url 'data:session-delete' object.pk %}">
+            {% translate 'Verwijder' %}
+        </a>
     </div>
     {% endblock %}
 
@@ -55,7 +67,9 @@
 
             <div class="border rounded-lg p-2 bg-light">
                 <h3>{% translate 'Ingrediënten' %}</h3>
-                {% include 'data/snippets/session_ingredients.html' with recipe=session_recipe reftype="session:detail" refid=object.pk  %}
+                {% with templ='data/snippets/session_ingredients.html' %}
+                {% include templ with recipe=session_recipe reftype="session:detail" refid=object.pk %}
+                {% endwith %}
             </div>
         </aside>
         <div class="col">

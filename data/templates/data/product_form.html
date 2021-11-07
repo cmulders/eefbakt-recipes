@@ -5,12 +5,10 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-<li class="breadcrumb-item"><a href="{% url 'data:product-list' %}">{% translate 'Producten' %}</a></li>
 {% if not object %}
 <li class="breadcrumb-item active">{% translate "New product" %}</li>
 {% else %}
 <li class="breadcrumb-item"><a href="{% url 'data:product-detail' object.pk %}">{{ object.name }}</a></li>
-</li>
 <li class="breadcrumb-item active">Edit</li>
 {% endif %}
 {% endblock %}
