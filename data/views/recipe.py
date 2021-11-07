@@ -53,7 +53,13 @@ class RecipeDetailView(MixinObjectPageTitle, DetailView):
 
 class RecipeFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
     model = Recipe
-    fields = ["name", "description", "amount", "unit"]
+    fields = [
+        "name",
+        "description",
+        "amount",
+        "unit",
+        "kind",
+    ]
 
     inlines = {
         "products": ProductIngredientInlineFormset,

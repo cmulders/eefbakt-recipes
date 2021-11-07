@@ -82,6 +82,7 @@ class SessionFormsetFormView(MixinObjectPageTitle, ModelFormWithInlinesView):
         "description",
         "recipe_description",
         "session_date",
+        "kind",
     ]
     inlines = {
         "products": SessionProductInlineFormset,
