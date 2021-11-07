@@ -176,3 +176,25 @@ a.link-unstyled {
   /* prevent underline (with high enough specificty) */
   text-decoration: inherit !important;
 }
+
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+.no-gutters > .col,
+.no-gutters > [class*="col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.navbar-group {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.navbar-group .navbar-group-title {
+  font-size: x-small;
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid;
+  color: var(--dark);
+}
