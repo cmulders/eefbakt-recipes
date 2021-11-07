@@ -37,6 +37,18 @@ class SessionRecipe(models.Model):
         ordering = ["sort_key"]
 
 
+class SessionQuerySet(models.QuerySet):
+    def for_kinds(self, *kinds: RecipeKind):
+        if not kinds:
+            return self
+
+        if len(kinds) == 1 and isinstance(kinds[0], (tuple, list)):
+            kinds = kinds[0]
+
+        kinds_values = [k.value for k in kinds]
+        return self.filter(kind__in=kinds_values)
+
+
 class Session(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
@@ -58,6 +70,8 @@ class Session(models.Model):
     )
 
     images = GenericRelation(ImageTag, related_name="+")
+
+    objects = SessionQuerySet.as_manager()
 
     def __str__(self):
         return self.title

@@ -36,6 +36,18 @@ class RecipeIngredient(models.Model):
         ordering = ["sort_key"]
 
 
+class RecipeQuerySet(models.QuerySet):
+    def for_kinds(self, *kinds: RecipeKind):
+        if not kinds:
+            return self
+
+        if len(kinds) == 1 and isinstance(kinds[0], (tuple, list)):
+            kinds = kinds[0]
+
+        kinds_values = [k.value for k in kinds]
+        return self.filter(kind__in=kinds_values)
+
+
 class Recipe(models.Model):
     class Meta:
         ordering = ["name"]
@@ -68,6 +80,8 @@ class Recipe(models.Model):
     recipeingredient_set: List[RecipeIngredient]
 
     images = GenericRelation(ImageTag, related_name="+")
+
+    objects = RecipeQuerySet.as_manager()
 
     @property
     def title(self):
