@@ -24,7 +24,7 @@
         + {% translate "Nieuwe sessie" %}
     </a>
     {% for object in object_list %}
-    <a href="{{ object.get_absolute_url }}"
+    <a href="{% url 'data:session-detail' object.pk %}"
         class="list-group-item list-group-item-action flex-column align-items-start">
         <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{ object.title }}</h5>

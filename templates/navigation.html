@@ -14,14 +14,23 @@
         <div class="navbar-group">
             <div class="navbar-group-title">{% translate 'Algemeen' %}</div>
             <ul class="navbar-nav">
-                {% include nav_template with url_name='data:product-list' title='Producten' %}
+                {% include nav_template with url_name='recipes:product-list' title='Producten' %}
+                {% include nav_template with url_name='recipes:recipe-list' title='Recepten' %}
+                {% include nav_template with url_name='recipes:session-list' title='Sessies' %}
             </ul>
         </div>
         <div class="navbar-group">
-            <div class="navbar-group-title">{% translate 'Zoet en brood' %}</div>
+            <div class="navbar-group-title">{% translate 'Zoet' %}</div>
             <ul class="navbar-nav">
-                {% include nav_template with url_name='sweet_bread:recipe-list' title='Recepten' %}
-                {% include nav_template with url_name='sweet_bread:session-list' title='Sessies' %}
+                {% include nav_template with url_name='sweet:recipe-list' title='Recepten' %}
+                {% include nav_template with url_name='sweet:session-list' title='Sessies' %}
+            </ul>
+        </div>
+        <div class="navbar-group">
+            <div class="navbar-group-title">{% translate 'Brood' %}</div>
+            <ul class="navbar-nav">
+                {% include nav_template with url_name='bread:recipe-list' title='Recepten' %}
+                {% include nav_template with url_name='bread:session-list' title='Sessies' %}
             </ul>
         </div>
 

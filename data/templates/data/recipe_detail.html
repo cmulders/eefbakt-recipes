@@ -56,7 +56,7 @@
     <h4>Gerelateerde sessies</h4>
     <ul>
       {% for session in related_sessions|slice:":10" %}
-      <li><a href="{{ session.get_absolute_url }}">{{ session }}</a></li>
+      <li><a href="{% url 'data:session-detail' session.pk %}">{{ session }}</a></li>
       {% endfor %}
     </ul>
     {% endif %}

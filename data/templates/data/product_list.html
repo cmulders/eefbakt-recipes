@@ -27,7 +27,7 @@
   {% for object in object_list %}
   <div class="list-group-item">
     <div class="d-flex flex-column flex-sm-row flex-wrap">
-      <a class="flex-grow-1" href=" {{ object.get_absolute_url }}">
+      <a class="flex-grow-1" href="{% url 'data:product-detail' object.pk %}">
         {{ object.name }}
       </a>
       <div class="btn-group align-self-sm-center">

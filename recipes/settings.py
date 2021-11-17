@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     "crispy_forms",
     ### Apps
     "data.apps.DataConfig",
-    "savory.apps.SavoryConfig",
-    "sweet_bread.apps.SweetBreadConfig",
 ]
 
 MIDDLEWARE = [
