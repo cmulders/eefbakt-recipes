@@ -16,6 +16,7 @@ from ..forms import (
 )
 from ..models import Session
 from ..transformers import RecipeTreeTransformer
+from .common import RecipeKindNamespaceMixin
 
 __all__ = [
     "SessionList",
@@ -29,11 +30,13 @@ __all__ = [
 ]
 
 
-class SessionList(ListView):
+class SessionList(RecipeKindNamespaceMixin, ListView):
     model = Session
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = super().get_queryset()  # type: ignore
+        qs = qs.filter(kind__in=self.recipe_kinds)
+
         if "q" in self.request.GET:
             qs = qs.filter(title__icontains=self.request.GET["q"])
         return qs

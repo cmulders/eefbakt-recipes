@@ -13,6 +13,7 @@ from ..forms import (
 )
 from ..models import Recipe
 from ..transformers import RecipeTreeTransformer
+from .common import RecipeKindNamespaceMixin
 
 __all__ = [
     "RecipeListView",
@@ -25,11 +26,13 @@ __all__ = [
 ]
 
 
-class RecipeListView(ListView):
+class RecipeListView(RecipeKindNamespaceMixin, ListView):
     model = Recipe
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = super().get_queryset()  # type: ignore
+        qs = qs.filter(kind__in=self.recipe_kinds)
+
         if "q" in self.request.GET:
             qs = qs.filter(name__icontains=self.request.GET["q"])
         return qs
