@@ -1,12 +1,14 @@
 import functools
 import itertools
 import operator
+from urllib.parse import urlencode
 
 from django.db.models.deletion import Collector, ProtectedError
 from django.urls import NoReverseMatch, reverse_lazy
 from django.urls.base import reverse
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import DeleteView
+from django.views.generic.list import MultipleObjectMixin
 from utils.views import DuplicateView, MixinObjectPageTitle, ModelFormWithInlinesView
 
 from data.transformers import Recipe as RecipeViewModel
@@ -27,8 +29,24 @@ from .models import Product, Recipe, Session
 from .transformers import RecipeTreeTransformer
 
 
-class ProductListView(ListView):
+class ElidedPaginatorContextMixin(MultipleObjectMixin):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context.get("paginator", False):
+            paginator = context["paginator"]
+            page_obj = context["page_obj"]
+            elided_range = paginator.get_elided_page_range(page_obj.number)
+            context["elided_page_range"] = elided_range
+            if hasattr(self, "request"):
+                context["query"] = urlencode(
+                    {"q": getattr(self, "request").GET.get("q", "")}
+                )
+        return context
+
+
+class ProductListView(ElidedPaginatorContextMixin, ListView):
     model = Product
+    paginate_by = 250
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -90,7 +108,8 @@ class ProductDeleteView(DeleteView):
     success_url = reverse_lazy("data:product-list")
 
     def get_context_data(self, **kwargs):
-        collector = Collector(using="default")
+        qs = self.get_queryset()
+        collector = Collector(using=qs.db)
         try:
             collector.collect([self.object])
         except ProtectedError as err:
@@ -98,8 +117,9 @@ class ProductDeleteView(DeleteView):
         return super().get_context_data(**kwargs)
 
 
-class RecipeListView(ListView):
+class RecipeListView(ElidedPaginatorContextMixin, ListView):
     model = Recipe
+    paginate_by = 100
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -156,7 +176,8 @@ class RecipeDeleteView(DeleteView):
     success_url = reverse_lazy("data:recipe-list")
 
     def get_context_data(self, **kwargs):
-        collector = Collector(using="default")
+        qs = self.get_queryset()
+        collector = Collector(using=qs.db)
         try:
             collector.collect([self.object])
         except ProtectedError as err:
@@ -192,8 +213,9 @@ class RecipeExportView(RecipeDetailView):
         return []
 
 
-class SessionList(ListView):
+class SessionList(ElidedPaginatorContextMixin, ListView):
     model = Session
+    paginate_by = 50
 
     def get_queryset(self):
         qs = super().get_queryset()
