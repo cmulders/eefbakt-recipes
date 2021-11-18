@@ -4,14 +4,7 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-{% if object.kind == "sweet" or object.kind == "bread" %}
-{% url 'sweet_bread:session-list' as list_url %}
-{% elif object.kind == "savory" %}
-{% url 'savory:session-list' as list_url %}
-{% else %}
-{% url 'session-list' as list_url %}
-{% endif %}
-<li class="breadcrumb-item"><a href="{{ list_url }}">{% translate 'Sessies' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:session-list' %}">{% translate 'Sessies' %}</a></li>
 <li class="breadcrumb-item active" title="{{ object.title }}">{{ object.title|truncatewords:4 }}</li>
 {% endblock %}
 

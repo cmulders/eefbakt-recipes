@@ -4,14 +4,7 @@
 
 {% block breadcrumbs %}
 {{ block.super }}
-{% if object.kind == "sweet" or object.kind == "bread" %}
-{% url 'sweet_bread:recipe-list' as list_url %}
-{% elif object.kind == "savory" %}
-{% url 'savory:recipe-list' as list_url %}
-{% else %}
-{% url 'recipe-list' as list_url %}
-{% endif %}
-<li class="breadcrumb-item"><a href="{{ list_url }}">{% translate 'Recepten' %}</a></li>
+<li class="breadcrumb-item"><a href="{% url 'data:recipe-list' %}">{% translate 'Recepten' %}</a></li>
 <li class="breadcrumb-item active">{{ object.name }}</li>
 {% endblock %}
 
