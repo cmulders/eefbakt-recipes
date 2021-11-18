@@ -72,7 +72,7 @@ class RecipeAdmin(admin.ModelAdmin):
 
 def thumbnail(obj, width=500, height=500):
     return format_html(
-        '<img src="{}" style="width: {}px; height:{}px; border-radius:5px" />',
+        '<img src="{}" style="max-width: {}px; max-height:{}px; border-radius:5px" />',
         obj.image.url,
         int(width),
         int(height),

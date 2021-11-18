@@ -54,12 +54,13 @@ class ImageTag(models.Model):
     def make_alternate(self, size):
         from io import BytesIO
 
-        from PIL import Image
+        from PIL import Image, ImageOps
 
         im = Image.open(self.image.open())
-        im.thumbnail((size, size))
+        transposed_im = ImageOps.exif_transpose(im)
+        transposed_im.thumbnail((size, size))
         thumb_image = BytesIO()
-        im.save(thumb_image, im.format)
+        transposed_im.save(thumb_image, im.format)
 
         original_path = PurePath(self.image.name)
         new_name = f"{original_path.stem}_{im.width}x{im.width}{original_path.suffix}"
