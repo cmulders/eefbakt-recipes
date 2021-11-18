@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from data.transformers import RecipeTreeTransformer
 from django.db.models.deletion import Collector, ProtectedError
 from django.urls import NoReverseMatch, reverse_lazy
@@ -28,6 +30,7 @@ __all__ = [
 
 class RecipeListView(RecipeKindNamespaceMixin, ListView):
     model = Recipe
+    paginate_by = 100
 
     def get_queryset(self):
         qs = super().get_queryset()  # type: ignore
@@ -36,6 +39,16 @@ class RecipeListView(RecipeKindNamespaceMixin, ListView):
         if "q" in self.request.GET:
             qs = qs.filter(name__icontains=self.request.GET["q"])
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context.get("paginator", False):
+            paginator = context["paginator"]
+            page_obj = context["page_obj"]
+            elided_range = paginator.get_elided_page_range(page_obj.number)
+            context["elided_page_range"] = elided_range
+            context["query"] = urlencode({"q": self.request.GET.get("q", "")})
+        return context
 
 
 class RecipeDetailView(MixinObjectPageTitle, DetailView):
@@ -108,7 +121,8 @@ class RecipeDeleteView(DeleteView):
     success_url = reverse_lazy("data:recipe-list")
 
     def get_context_data(self, **kwargs):
-        collector = Collector(using=self.queryset.db)
+        qs = self.get_queryset()
+        collector = Collector(using=qs.db)
         try:
             collector.collect([self.object])
         except ProtectedError as err:

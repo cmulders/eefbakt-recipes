@@ -1,6 +1,7 @@
 import functools
 import itertools
 import operator
+from urllib.parse import urlencode
 
 from data.transformers import Recipe as RecipeViewModel
 from data.transformers import RecipeTreeTransformer
@@ -32,6 +33,7 @@ __all__ = [
 
 class SessionList(RecipeKindNamespaceMixin, ListView):
     model = Session
+    paginate_by = 25
 
     def get_queryset(self):
         qs = super().get_queryset()  # type: ignore
@@ -40,6 +42,16 @@ class SessionList(RecipeKindNamespaceMixin, ListView):
         if "q" in self.request.GET:
             qs = qs.filter(title__icontains=self.request.GET["q"])
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if context.get("paginator", False):
+            paginator = context["paginator"]
+            page_obj = context["page_obj"]
+            elided_range = paginator.get_elided_page_range(page_obj.number)
+            context["elided_page_range"] = elided_range
+            context["query"] = urlencode({"q": self.request.GET.get("q", "")})
+        return context
 
 
 class SessionDetailView(MixinObjectPageTitle, DetailView):
