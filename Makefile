@@ -54,5 +54,13 @@ backup:
 
 .PHONY: restore
 restore:
-	cp remote/db.sqlite3 db.sqlite3
-	cp -R remote/media/ media
+	rsync remote/db.sqlite3 db.sqlite3
+	rsync -rt -h --delete remote/media/ media
+
+.PHONY: gen-pdf
+gen-pdf: backup restore
+	$(VENV)/python manage.py generate_pdf export-pdf/
+	
+.PHONY: sync-icloud
+sync-icloud: gen-pdf | backup
+	rsync -av export-pdf/ $(ICLOUD_DIR)
