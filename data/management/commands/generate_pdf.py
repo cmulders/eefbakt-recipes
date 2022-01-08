@@ -76,13 +76,27 @@ class Command(BaseCommand):
 
         session: Session
         for idx, session in enumerate(Session.objects.order_by("pk").all(), start=1):
-            if not session.images.exists():
-                continue
+            # if not session.images.exists():
+            #    continue
             name = f"{session.pk}_{slugify(session.title)}.pdf"
             filepath = root / name
 
-            for present in root.glob(f"{session.pk}_*.pdf"):
-                present.unlink(missing_ok=True)
+            present = list(root.glob(f"{session.pk}_*.pdf"))
+            if len(present) > 1:
+                # Multiple files, delete all
+                for f in present:
+                    f.unlink(missing_ok=True)
+            elif len(present) == 1:
+                # One file present, check creation date
+                if present[0].stat().st_mtime > session.updated_at.timestamp():
+                    self.stdout.write(
+                        f"{idx: 3}/{to_export: 3} Skipped, already present {filepath.name}",
+                        style_func=self.style.SUCCESS,
+                    )
+                    continue
+                else:
+                    # Stale, remove, and re-render
+                    present[0].unlink(missing_ok=True)
 
             html = self.render_view("data:session-export", pk=session.pk)
 
