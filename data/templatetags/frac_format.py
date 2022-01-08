@@ -7,6 +7,30 @@ register = template.Library()
 
 
 @register.filter(is_safe=True)
+def sigformat(value, significance=3) -> str:
+    significance = int(significance)
+
+    # Round value if within 1% accuracy
+    value = round(value) if 0.01 > abs(1 - round(value) / value) else value
+
+    try:
+        frac = fraction.ExtFraction(value)
+        prefix, nom, denom = frac.limit_denominator(10).as_tuple()
+    except ValueError:
+        value = float(f"{value:.{-significance}g}")
+        return defaultfilters.floatformat(value, significance)
+
+    decimal_digits = significance - len(str(prefix or ""))
+    if nom and decimal_digits > 0:
+        decimal = round(nom / denom * pow(10, decimal_digits))
+        if decimal == 0:
+            return f"{prefix}"
+        return f"{prefix}.{decimal}"
+    else:
+        return f"{prefix}"
+
+
+@register.filter(is_safe=True)
 def fractionformat_html(value, significance=-3) -> str:
     significance = int(significance)
     significance_abs = abs(significance)

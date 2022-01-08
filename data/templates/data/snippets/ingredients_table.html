@@ -5,14 +5,22 @@
 <table class="ingredient-table">
     {% endif %}
     <tr>
-        {% if not ingredient.unit.no_quantity %}
-        <td>{{ ingredient.amount|fractionformat_html:"-2" }}</td>
-        <td>{{ ingredient.unit.short_name }}</td>
+        {% with unit=ingredient.unit %}
+        {% if not unit.no_quantity %}
+        <td>
+            {% if unit == 'g' %}
+            {{ ingredient.amount|sigformat:"3" }}
+            {% else %}
+            {{ ingredient.amount|fractionformat_html:"-3" }}
+            {% endif %}
+        </td>
+        <td>{{ unit.short_name }}</td>
         {% else %}
-        <td colspan="2">{{ ingredient.unit.short_name }}</td>
+        <td colspan="2">{{ unit.short_name }}</td>
         {% endif %}
 
         <td><a class="link-unstyled" href="{{ ingredient.product.get_absolute_url }}">{{ ingredient.name }}</a></td>
+        {% endwith %}
     </tr>
     {% if forloop.last %}
 </table>
