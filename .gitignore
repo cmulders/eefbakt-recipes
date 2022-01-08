@@ -3,8 +3,8 @@
 
 /media/
 /remote/
+/export-pdf/
 
 *.sqlite3
 **/__pycache__/**
-
 /export-pdf/

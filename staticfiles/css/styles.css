@@ -176,3 +176,40 @@ a.link-unstyled {
   /* prevent underline (with high enough specificty) */
   text-decoration: inherit !important;
 }
+
+.ingredients-box {
+  /* border rounded-lg p-2 bg-light  */
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+}
+
+@media print {
+  @page {
+    margin: 75px 50px;
+  }
+
+  html {
+    font-size: 12pt;
+  }
+
+  .export {
+    page-break-inside: avoid;
+    font-family: -apple-system, "Segoe UI", "Open Sans", "Helvetica Neue",
+      sans-serif !important;
+  }
+
+  .export section {
+    page-break-inside: avoid;
+  }
+
+  a {
+    /* prevent underline (with high enough specificty) */
+    text-decoration: none !important;
+  }
+
+  .ingredients-box > div {
+    page-break-inside: avoid;
+  }
+}

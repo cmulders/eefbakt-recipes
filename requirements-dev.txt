@@ -6,3 +6,4 @@ pylint
 pylint-django
 rope
 ipython
+weasyprint

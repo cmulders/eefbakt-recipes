@@ -16,17 +16,17 @@
     <a class="btn btn-sm btn-outline-primary" href="{%url 'data:recipe-export' object.pk%}">{% translate 'Export'%}</a>
     <a class="btn btn-outline-success btn-sm"
       href="{% url 'data:recipe-update' object.pk %}?{{request.META.QUERY_STRING}}">{% translate 'Wijzig' %}</a>
-    <a class="btn btn-outline-secondary btn-sm"
-      href="{% url 'data:recipe-duplicate' object.pk %}">{% translate 'Dupliceer' %}</a>
-    <a class="btn btn-outline-danger btn-sm"
-      href="{% url 'data:recipe-delete' object.pk %}">{% translate 'Verwijder' %}</a>
+    <a class="btn btn-outline-secondary btn-sm" href="{% url 'data:recipe-duplicate' object.pk %}">{% translate
+      'Dupliceer' %}</a>
+    <a class="btn btn-outline-danger btn-sm" href="{% url 'data:recipe-delete' object.pk %}">{% translate 'Verwijder'
+      %}</a>
   </div>
   {% endblock %}
 </div>
 
 <div class="row">
   <div class="col-md-4 col-sm-12">
-    <div class="border rounded-lg p-2 bg-light">
+    <div class="ingredients-box">
       <h3>{% translate 'Ingrediënten' %}</h3>
       {% include 'data/snippets/recipe_ingredients.html' with recipe=transformed_object only %}
     </div>

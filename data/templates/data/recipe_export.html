@@ -9,31 +9,38 @@
 
 {% block title %}{{ object.title }}{% endblock %}
 
-{% block top_content %}
-
-<div class="d-flex overflow-auto">
-    {% for image in object.images.all|slice:":3" %}
-    <div class="p-2" style="max-width: 33%;">
-        <a href="{{ image.image.url }}">
-            <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
-                width="{{ image.width|default:25 }}px" height="{{ image.height|default:25 }}px" class="img-thumbnail">
-        </a>
-    </div>
-    {% endfor %}
-</div>
-{% endblock %}
-
 {% block left_sidebar %}
-<div class="border rounded-lg p-2 bg-light">
+<div class="ingredients-box">
     <h3>{% translate 'Ingrediënten' %}</h3>
     {% include 'data/snippets/recipe_ingredients.html' with recipe=transformed_object only %}
 </div>
 {% endblock %}
 
 {% block right_content %}
+
+<div class="d-flex overflow-auto">
+    {% for image_obj in object.images.all|slice:":3" %}
+    <div class="p-2" style="width: 33%;" class="border">
+        {% with image=image_obj.alternates.last|default:image_obj %}
+        <img src="{{ image.image.url }}" alt="{{ image.name }}" class="img-fluid">
+        {% endwith %}
+    </div>
+    {% endfor %}
+</div>
+
 <section>
     <section class="mb-4">
+        {% if object.recipes.exists %}
+        <div><b>{{ object.name }}</b></div>
+        {% endif %}
         {{ object.description|linebreaks }}
     </section>
+    {% for recipe in object.recipes.all %}
+    <section>
+        <div><b>{{ recipe.name }}</b></div>
+        <p class="my-3">{{ recipe.description|default:"..."|linebreaks }}
+        </p>
+    </section>
+    {% endfor %}
 </section>
 {% endblock %}

@@ -15,16 +15,16 @@
     </div>
     <h1>{% block title %}{% endblock %}</h1>
 
-    {% block top_content %}{% endblock %}
-
-    <div class="row">
-        <aside class="col-md-5 col-sm-12">
-
+    <div class="mb-2">
+        {% block top_content %}{% endblock %}
+    </div>
+    <div>
+        <aside class="col-4 float-left" style="width: 33%; page-break-inside: auto;">
             {% block left_sidebar %}{% endblock %}
 
             <div class="media pt-4">
-                <img class="mr-3 rounded-circle align-self-center" src="{% static 'images/instagram_profile.jpg' %}"
-                    alt="@eefbakt" height="64px" width="auto">
+                <img style="max-width: 64px; max-height: 64px;" class="mr-3 rounded-circle align-self-center"
+                    src="{% static 'images/instagram_profile.jpg' %}" alt="@eefbakt">
                 <div class="media-body">
                     <blockquote class="text-muted font-italic m-0 border-0">
                         <p class="mb-0">Leuk dat je met mijn recept aan de slag gaat, ik ben benieuwd naar het
@@ -37,7 +37,7 @@
             </div>
 
         </aside>
-        <div class="col">
+        <div class="col-8 offset-4" style="width: 66%; page-break-inside: auto;">
             {% block right_content %}{% endblock %}
         </div>
     </div>

@@ -9,33 +9,17 @@
 {% block title %}{{ object.title }}{% endblock %}
 
 {% block top_content %}
-<div>
+<div style="margin-top:-.5rem;">
     <small class="text-muted">
         <time datetime="{{ object.session_date|date:'c' }}">
             {{ object.session_date|date }}
         </time>
     </small>
-
-</div>
-
-<section class="mb-4">
-    {{ object.description|linebreaks }}
-</section>
-
-<div class="d-flex overflow-auto">
-    {% for image in object.images.all|slice:":3" %}
-    <div class="p-2" style="max-width: 33%;">
-        <a href="{{ image.image.url }}">
-            <img src="{{ image.image.url }}" srcset="{{ image|srcset }}" sizes="20rem" alt="{{ image.name }}"
-                width="{{ image.width|default:25 }}px" height="{{ image.height|default:25 }}px" class="img-thumbnail">
-        </a>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %}
 
 {% block left_sidebar %}
-<div class="border rounded-lg p-2 bg-light">
+<div class="ingredients-box">
     <h3>{% translate 'Ingrediënten' %}</h3>
     {% with url='data/snippets/session_ingredients.html' %}
     {% include url with recipe=session_recipe reftype="session:detail" refid=object.pk %}
@@ -44,14 +28,32 @@
 {% endblock %}
 
 {% block right_content %}
+<div class="d-flex overflow-auto">
+    {% for image_obj in object.images.all|slice:":3" %}
+    <div class="p-2" style="width: 33%;" class="border">
+        {% with image=image_obj.alternates.last|default:image_obj %}
+        <img src="{{ image.image.url }}" alt="{{ image.name }}" class="img-fluid">
+        {% endwith %}
+    </div>
+    {% endfor %}
+</div>
+<hr>
+
+{% if object.description %}
+<section class="mb-4">
+    {{ object.description|linebreaks }}
+</section>
+<hr>
+{% endif %}
+
 {% for object in session_recipe.base_recipes %}
+{% for recipe in object %}
 <section>
-    {% for recipe in object %}
     <div><b>{{ recipe.name }}</b></div>
     <p class="my-3">{{ recipe.description|default:"..."|linebreaks }}
     </p>
-    {% endfor %}
 </section>
+{% endfor %}
 {% if not forloop.last %}
 <hr>
 {% endif %}
