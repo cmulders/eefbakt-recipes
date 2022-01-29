@@ -1,4 +1,4 @@
-Django~=3.0
-django-crispy-forms~=1.9
-whitenoise~=5.1
-Pillow~=8.0
+Django~=4.0
+django-crispy-forms~=1.13
+whitenoise~=5.3
+Pillow~=9.0

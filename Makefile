@@ -33,7 +33,7 @@ shell: check
 	$(VENV)/python manage.py shell
 
 .PHONY: runserver
-runserver: venv
+runserver: check
 	$(VENV)/python manage.py runserver
 
 .PHONY: makemigrations
@@ -62,5 +62,5 @@ gen-pdf: backup restore
 	$(VENV)/python manage.py generate_pdf export-pdf/
 	
 .PHONY: sync-icloud
-sync-icloud: #gen-pdf | backup
+sync-icloud: gen-pdf | backup
 	rsync -av export-pdf/ $(ICLOUD_DIR)
