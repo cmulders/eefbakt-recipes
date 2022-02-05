@@ -10,8 +10,8 @@ register = template.Library()
 def sigformat(value, significance=3) -> str:
     significance = int(significance)
 
-    # Round value if within 1% accuracy
-    value = round(value) if 0.01 > abs(1 - round(value) / value) else value
+    # Round value if within .1% accuracy
+    value = round(value) if 0.001 > abs(1 - round(value) / value) else value
 
     try:
         frac = fraction.ExtFraction(value)
