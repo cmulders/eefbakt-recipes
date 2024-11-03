@@ -2,7 +2,6 @@ function try_upgrade_select2() {
   try {
     // Upgrade select inputs to select2 with search function
     $(".inline-formset.select2 tr:not(.empty-form) select").select2({
-      minimumResultsForSearch: 8,
       tags: true,
       width: "100%",
     });
