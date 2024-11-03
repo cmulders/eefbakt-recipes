@@ -13,19 +13,19 @@ class Unit(models.TextChoices):
     TSP = "tl", _("theelepel")
     SOME = "some", _("snufje")
     CM = "cm", _("cm")
+    PORTION = "ptn", _("portie")
+
 
     @property
     def no_quantity(self):
-        if self == self.SOME:
-            return True
-
-        return False
+        return self in (self.SOME, )
 
     @property
     def short_name(self):
         short_names = {
             str(self.PIECE.value): "stuk",
             str(self.SOME.value): "snufje",
+            str(self.PORTION.value): "portie",
             str(self.EMPTY.value): "",
         }
         return short_names.get(self.value, self.value)
