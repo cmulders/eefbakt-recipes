@@ -3,6 +3,9 @@
 
 /media/
 /remote/
+/remote_pre_RW15/
+/remote_pre_proxmox/
+
 /export-pdf/
 
 *.sqlite3

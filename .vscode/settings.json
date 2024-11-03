@@ -9,8 +9,10 @@
   ],
   "[python]": {
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+      "source.organizeImports": "explicit"
     }
   },
-  "python.sortImports.args": ["-sp isort.cfg"]
+  "python.sortImports.args": [
+    "-sp isort.cfg"
+  ]
 }

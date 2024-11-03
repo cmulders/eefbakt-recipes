@@ -50,7 +50,15 @@ migrate: makemigrations
 
 .PHONY: backup
 backup:
-	rsync -rt -h --delete --progress 192.168.178.17:/var/opt/recipes/ remote
+#	rsync -rt -h --delete --progress raspberrypi.local:/var/opt/recipes/ remote
+	rsync -rt -h --delete --progress recipes.local:/var/opt/recipes/ remote/recipes
+	rsync -rt -h --delete --progress savory.local:/var/opt/savory/ remote/savory
+
+.PHONY: restore-backup
+restore-backup:
+	rsync -rt -h --progress remote/recipes recipes.local:/var/opt/recipes/ 
+	rsync -rt -h --progress remote/savory savory.local:/var/opt/savory/ 
+
 
 .PHONY: restore
 restore:
